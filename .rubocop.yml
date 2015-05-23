@@ -1,0 +1,69 @@
+AllCops:
+  Excludes:
+    - db/schema.rb
+    - script/rails
+    - config/*
+    - tmp/*
+  Includes:
+    - '*.rake'
+    - Gemfile
+    - Guardfile
+    - Rakefile
+    - config.ru
+  RunRailsCops: true
+
+AssignmentInCondition:
+  Exclude:
+    - bin/spring
+
+ClassLength:
+  Enabled: false
+
+CollectionMethods:
+  PreferredMethods:
+    collect!: map!
+    collect: map
+    find: detect
+    find_all: select
+    reduce: inject
+
+Documentation:
+  Enabled: false
+
+HandleExceptions:
+  Exclude:
+    - bin/rails
+    - bin/rake
+
+IfUnlessModifier:
+  Enabled: false
+
+LineLength:
+  Max: 99
+  Exclude:
+    - db/seeds.rb
+
+MethodCalledOnDoEndBlock:
+  Enabled: true
+
+MethodLength:
+  Enabled: false
+
+PredicateName:
+  Exclude:
+    - spec/features/*
+    - spec/support/features/*
+    - spec/support/page_objects/*
+
+Output:
+  Exclude:
+    - bin/setup
+
+RegexpLiteral:
+  MaxSlashes: 0
+
+SymbolArray:
+  Enabled: false
+
+TrailingComma:
+  Enabled: false

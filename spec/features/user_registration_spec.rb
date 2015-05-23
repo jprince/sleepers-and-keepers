@@ -14,6 +14,8 @@ feature 'Non-authenticated user visits the application' do
 
     expect(page).to have_no_link 'Register'
 
+    fill_in 'First name', with: 'Test'
+    fill_in 'Last name', with: 'User'
     fill_in 'Email', with: 'test-user@example.com'
     fill_in 'Password', with: 'sufficientpassword'
     fill_in 'Password confirmation', with: 'sufficientpassword'

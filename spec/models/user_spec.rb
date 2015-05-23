@@ -1,23 +1,28 @@
 require 'spec_helper'
 
 describe User do
-  it 'can be created with an email address and password' do
+  it { should validate_presence_of(:first_name) }
+  it { should validate_presence_of(:last_name) }
+
+  it 'can be created with name, email address and password' do
     user = create(:user)
     expect(user).to be_valid
   end
 
-  context 'password' do
-    it 'requires eight or more characters' do
-      invalid_user = build(:user, password: '1234567')
-      expect(invalid_user).not_to be_valid
-      expect(password_validation_errors(invalid_user)).to include 'is too short'
-    end
+  it 'requires a password of eight or more characters' do
+    invalid_user = build(:user, password: '1234567')
+    expect(invalid_user).not_to be_valid
+    expect(password_validation_errors(invalid_user)).to include 'is too short'
   end
 
   it 'validates the format of email addresses' do
-    user = User.new(email: 'user_at_example.com')
-    expect(user).not_to be_valid
-    expect(user.errors).to include :email
+    invalid_user = build(:user, email: 'user_at_example.com')
+    expect(invalid_user).not_to be_valid
+    expect(email_validation_errors(invalid_user)).to include 'Invalid email address'
+  end
+
+  def email_validation_errors(user)
+    user.errors.messages[:email].join(' ')
   end
 
   def password_validation_errors(user)

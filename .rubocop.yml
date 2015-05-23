@@ -42,6 +42,7 @@ LineLength:
   Max: 99
   Exclude:
     - db/seeds.rb
+    - db/migrate/20150523204958_add_name_to_users.rb
 
 MethodCalledOnDoEndBlock:
   Enabled: true

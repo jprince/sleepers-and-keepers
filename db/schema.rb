@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150523204958) do
+ActiveRecord::Schema.define(version: 20150523224623) do
+
+  create_table "leagues", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.integer  "sport_id",   null: false
+    t.string   "password",   null: false
+    t.integer  "size",       null: false
+    t.integer  "rounds",     null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sports", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

@@ -1,0 +1,27 @@
+<h2>New League</h2>
+
+<%= form_for @league do |form| %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.label :sport %>
+    <%= form.text_field :sport %>
+  </div>
+  <div>
+    <%= form.label :password %>
+    <%= form.password_field :password %>
+  </div>
+  <div>
+    <%= form.label :size %>
+    <%= form.number_field :size %>
+  </div>
+  <div>
+    <%= form.label :rounds %>
+    <%= form.number_field :rounds %>
+  </div>
+  <div>
+    <%= form.submit "Create" %>
+  </div>
+<% end %>

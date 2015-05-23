@@ -18,5 +18,7 @@ RSpec.configure do |config|
   config.seed = srand % 0xFFFF
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.use_transactional_fixtures = false
+  config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
+  config.include Features::SessionHelpers, type: :feature
 end

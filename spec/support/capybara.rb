@@ -8,3 +8,4 @@ Capybara.register_driver :poltergeist do |app|
 end
 
 Capybara.javascript_driver = :poltergeist
+Capybara::Screenshot.prune_strategy = :keep_last_run

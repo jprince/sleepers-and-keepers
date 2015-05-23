@@ -40,6 +40,7 @@ GEM
     arel (6.0.0)
     ast (1.1.0)
     awesome_print (1.2.0)
+    bcrypt (3.1.10)
     better_errors (2.0.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -60,7 +61,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-screenshot (0.3.19)
+    capybara-screenshot (1.0.9)
       capybara (>= 1.0, < 3)
       launchy
     childprocess (0.5.5)
@@ -81,6 +82,13 @@ GEM
     columnize (0.9.0)
     database_cleaner (1.2.0)
     debug_inspector (0.0.2)
+    devise (3.4.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     dotenv (0.9.0)
     dotenv-rails (0.9.0)
@@ -124,6 +132,7 @@ GEM
       sass (>= 3.2)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    orm_adapter (0.5.0)
     parser (2.1.4)
       ast (~> 1.1)
       slop (~> 3.4, >= 3.4.5)
@@ -176,6 +185,8 @@ GEM
     rake (10.4.2)
     rdoc (4.2.0)
       json (~> 1.4)
+    responders (2.1.0)
+      railties (>= 4.2.0, < 5)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -243,6 +254,8 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    warden (1.2.3)
+      rack (>= 1.0)
     web-console (2.1.2)
       activemodel (>= 4.0)
       binding_of_caller (>= 0.7.2)
@@ -265,10 +278,11 @@ DEPENDENCIES
   bundler-audit
   byebug
   capybara
-  capybara-screenshot
+  capybara-screenshot (~> 1.0.9)
   coffee-rails (~> 4.1.0)
   coffeelint
   database_cleaner
+  devise (~> 3.4.1)
   dotenv-rails
   factory_girl_rails
   foreman

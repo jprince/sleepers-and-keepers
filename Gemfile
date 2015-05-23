@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'awesome_print'
+gem 'devise', '~> 3.4.1'
 gem 'dotenv-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
@@ -41,7 +42,7 @@ end
 group :test do
   gem 'byebug'
   gem 'capybara'
-  gem 'capybara-screenshot'
+  gem 'capybara-screenshot', '~> 1.0.9'
   gem 'database_cleaner'
   gem 'minitest'
   gem 'poltergeist'

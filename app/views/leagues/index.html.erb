@@ -1,0 +1,3 @@
+<% @leagues.each do |league| %>
+  <h2><%= link_to(league.name, league_path(league)) %></h2>
+<% end %>

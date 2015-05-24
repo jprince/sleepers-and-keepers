@@ -1,0 +1,15 @@
+<h2>New Team</h2>
+
+<%= form_for [@league, @team] do |form| %>
+  <div>
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.label :short_name %>
+    <%= form.text_field :short_name %>
+  </div>
+  <div>
+    <%= form.submit "Create" %>
+  </div>
+<% end %>

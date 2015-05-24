@@ -5,4 +5,5 @@ class League < ActiveRecord::Base
   validates :size, presence: true
   belongs_to :sport
   belongs_to :user
+  has_many :teams
 end

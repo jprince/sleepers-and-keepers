@@ -25,4 +25,15 @@ feature 'Teams' do
 
     expect(page).to have_no_content 'New Team'
   end
+
+  scenario 'can view a list of teams' do
+    create(:team)
+    @other_owner = create(:user, email: 'other-user@example.com')
+    @other_owner_team = create(:team, user_id: @other_owner.id, name: 'The Bad Guy')
+
+    navigate_to_league('Fantasy Sports Dojo')
+    click_link 'Teams'
+    expect(page).to have_content 'Frontrunners'
+    expect(page).to have_content 'The Bad Guy'
+  end
 end

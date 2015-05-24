@@ -9,6 +9,10 @@ class TeamsController < ApplicationController
     end
   end
 
+  def index
+    @teams = league.teams.all
+  end
+
   def new
     @league = league
     @team = @league.teams.build

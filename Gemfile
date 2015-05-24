@@ -44,6 +44,7 @@ group :test do
   gem 'capybara'
   gem 'capybara-screenshot', '~> 1.0.9'
   gem 'database_cleaner'
+  gem 'faker'
   gem 'minitest'
   gem 'poltergeist'
   gem 'rspec-instafail'

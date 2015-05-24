@@ -1,4 +1,10 @@
 FactoryGirl.define do
+  FactoryGirl.define do
+    sequence :email do |n|
+      "user-#{n}@example.com"
+    end
+  end
+
   factory :league do
     name 'Fantasy Sports Dojo'
     password 'password'
@@ -13,16 +19,16 @@ FactoryGirl.define do
   end
 
   factory :team do
-    name 'Frontrunners'
-    short_name 'Front'
+    name Faker::Commerce.product_name
+    short_name Faker::Commerce.product_name.slice(0, 9)
     user_id 1
     league_id 1
   end
 
   factory :user do
-    email 'test-user@example.com'
-    first_name 'Test'
-    last_name 'User'
+    email
+    first_name Faker::Name.first_name
+    last_name Faker::Name.last_name
     password 'sufficientpassword'
   end
 end

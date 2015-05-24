@@ -19,6 +19,7 @@ class LeaguesController < ApplicationController
 
   def show
     @league = League.find(league_id)
+    @user = current_user
   end
 
   private

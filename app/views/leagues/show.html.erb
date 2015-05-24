@@ -1,3 +1,5 @@
 <h2><%= @league.name %></h2>
 
-<%= link_to('New Team', new_league_team_path(@league.id)) %>
+<% unless @user.teams.any? { |team| team.league_id == @league.id } %>
+  <%= link_to('New Team', new_league_team_path(@league.id)) %>
+<% end %>

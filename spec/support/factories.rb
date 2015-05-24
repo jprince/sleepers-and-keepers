@@ -12,6 +12,13 @@ FactoryGirl.define do
     name 'Football'
   end
 
+  factory :team do
+    name 'Frontrunners'
+    short_name 'Front'
+    user_id 1
+    league_id 1
+  end
+
   factory :user do
     email 'test-user@example.com'
     first_name 'Test'

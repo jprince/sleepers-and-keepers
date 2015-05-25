@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature 'Teams' do
   before do
-    create(:league)
+    @league = create(:league)
     @first_owner = create(:user)
     sign_in @first_owner
   end
@@ -24,6 +24,16 @@ feature 'Teams' do
     create(:team)
     navigate_to_league('Fantasy Sports Dojo')
 
+    expect(page).to have_no_content 'New Team'
+  end
+
+  scenario 'cannot create another team once the league is full' do
+    @league.size.times do
+      owner = create(:user)
+      create(:team, user_id: owner.id)
+    end
+
+    navigate_to_league('Fantasy Sports Dojo')
     expect(page).to have_no_content 'New Team'
   end
 

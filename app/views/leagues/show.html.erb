@@ -2,6 +2,9 @@
 
 <%= link_to('Teams', league_teams_path(@league.id)) %>
 
-<% unless @user.teams.any? { |team| team.league_id == @league.id } %>
+<%
+  unless @user.teams.any? { |team| team.league_id == @league.id } ||
+    @league.teams.length >= @league.size
+%>
   <%= link_to('New Team', new_league_team_path(@league.id)) %>
 <% end %>

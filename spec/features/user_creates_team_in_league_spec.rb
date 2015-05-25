@@ -3,7 +3,8 @@ require 'spec_helper'
 feature 'Teams' do
   before do
     create(:league)
-    sign_in create(:user)
+    @first_owner = create(:user)
+    sign_in @first_owner
   end
 
   scenario 'can be created within a league' do
@@ -16,7 +17,7 @@ feature 'Teams' do
     click_button 'Create'
     expect(page).to have_content 'Created successfully'
     expect(page).to have_content 'My New Team'
-    expect(page).to have_content 'Owner: Test User'
+    expect(page).to have_content "Owner: #{ @first_owner.first_name } #{ @first_owner.last_name }"
   end
 
   scenario 'cannot create another team if they already have one' do
@@ -27,13 +28,13 @@ feature 'Teams' do
   end
 
   scenario 'can view a list of teams' do
-    create(:team)
-    @other_owner = create(:user, email: 'other-user@example.com')
-    @other_owner_team = create(:team, user_id: @other_owner.id, name: 'The Bad Guy')
+    @first_owner_team = create(:team)
+    @second_owner = create(:user)
+    @second_owner_team = create(:team, user_id: @second_owner.id)
 
     navigate_to_league('Fantasy Sports Dojo')
     click_link 'Teams'
-    expect(page).to have_content 'Frontrunners'
-    expect(page).to have_content 'The Bad Guy'
+    expect(page).to have_content @first_owner_team.name
+    expect(page).to have_content @second_owner_team.name
   end
 end

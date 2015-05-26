@@ -4,4 +4,8 @@ class Team < ActiveRecord::Base
 
   belongs_to :league
   belongs_to :user
+
+  def self.bulk_update(data)
+    Team.update(data.keys, data.values)
+  end
 end

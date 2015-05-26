@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature 'Leagues' do
+feature 'Leagues - ' do
   before do
     create(:sport)
     sign_in create(:user)

@@ -10,7 +10,7 @@ class TeamsController < ApplicationController
   end
 
   def index
-    @teams = league.teams.all
+    @teams = league.teams
   end
 
   def new

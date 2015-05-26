@@ -1,0 +1,17 @@
+<h2>Edit Draft Order</h2>
+
+<%= form_tag league_draft_order_path do %>
+  <ul id="draft-order">
+    <% @teams.each do |team| %>
+      <li>
+        <%= team.name %>
+        <%= fields_for "teams[#{team.id}]", team do |tf| %>
+          <%= tf.number_field :draft_pick, in: 1...@league.size + 1, id: "team-#{team.id}" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <div>
+    <input name="save" type="submit" value="Save" />
+  </div>
+<% end %>

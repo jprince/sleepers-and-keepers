@@ -1,8 +1,6 @@
 FactoryGirl.define do
   FactoryGirl.define do
-    sequence :email do |n|
-      "user-#{n}@example.com"
-    end
+    sequence(:email) { |n| "user-#{n}@example.com" }
   end
 
   factory :league do
@@ -19,10 +17,11 @@ FactoryGirl.define do
   end
 
   factory :team do
-    name Faker::Commerce.product_name
+    sequence(:name) { |n| Faker::Commerce.product_name }
     short_name Faker::Commerce.product_name.slice(0, 9)
     user_id 1
     league_id 1
+    draft_pick { League.last.size - League.last.teams.length }
   end
 
   factory :user do

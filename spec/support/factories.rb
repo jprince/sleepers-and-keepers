@@ -12,16 +12,30 @@ FactoryGirl.define do
     user_id 1
   end
 
+  factory :player do
+    first_name Faker::Name.first_name
+    headline 'New player news'
+    injury '2 weeks: Sprained ankle'
+    last_name Faker::Name.last_name
+    orig_id '1'
+    photo_url 'http://img1.nymag.com/imgs/daily/vulture/2013/09/19/19-keypeele.w529.h529.2x.jpg'
+    position 'RB'
+    pro_status 'A'
+    sport_id 1
+    team 'NYJ'
+  end
+
   factory :sport do
     name 'Football'
+    positions %w(QB RB WR TE K DST)
   end
 
   factory :team do
+    draft_pick { League.last.size - League.last.teams.length }
+    league_id 1
     sequence(:name) { |n| Faker::Commerce.product_name }
     short_name Faker::Commerce.product_name.slice(0, 9)
     user_id 1
-    league_id 1
-    draft_pick { League.last.size - League.last.teams.length }
   end
 
   factory :user do

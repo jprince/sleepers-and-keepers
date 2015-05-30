@@ -8,5 +8,5 @@ if user.blank?
   user.save validate: false
 end
 
-Sport.where(name: 'Football').first_or_create!
-Sport.where(name: 'Baseball').first_or_create!
+Sport.seed
+Player.update_player_pool

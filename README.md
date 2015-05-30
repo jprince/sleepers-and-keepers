@@ -62,5 +62,16 @@ variables according to the instructions provided.
 
 ## Run the test suite
 ```sh
-$bundle exec rake
+$ bundle exec rake
 ```
+
+## Update player data
+The data used for the player pool is sourced from the [CBS Sports API][]. 
+To update this data (e.g. updates to player teams, news, injuries, etc.) run the
+following rake task:
+
+```sh
+$ rake players:update
+```
+
+[CBS Sports API]: http://developer.cbssports.com/documentation/files/draft-config

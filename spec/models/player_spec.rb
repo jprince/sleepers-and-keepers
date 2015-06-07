@@ -5,12 +5,13 @@ describe Player do
   it { should validate_presence_of(:orig_id) }
   it { should validate_presence_of(:position) }
   it { should validate_presence_of(:team) }
+
   it { should belong_to(:sport) }
 end
 
 describe Player do
   before do
-    create(:sport)
+    @sport = create(:sport)
     player_data = "{
       \"body\":{
         \"players\":
@@ -44,7 +45,8 @@ describe Player do
     end
 
     it 'updates existing players' do
-      create(:player)
+      create(:player, sport_id: @sport.id)
+
       expect(Player.all.length).to eq 1
 
       Player.update_player_pool

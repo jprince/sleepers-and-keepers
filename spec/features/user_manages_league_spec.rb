@@ -2,19 +2,19 @@ require 'spec_helper'
 
 feature 'League creator' do
   before do
-    create(:sport)
-    sign_in create(:user)
+    @creator = create(:user)
+    sign_in @creator
   end
 
   scenario 'can set draft order' do
-    create(:league)
-    create(:team)
+    league = create(:league, user_id: @creator.id)
+    create(:team, league_id: league.id)
     11.times do
       owner = create(:user)
-      create(:team, user_id: owner.id)
+      create(:team, league_id: league.id, user_id: owner.id)
     end
-    navigate_to_league('Fantasy Sports Dojo')
 
+    navigate_to_league('Fantasy Sports Dojo')
     click_link 'Set draft order'
 
     fill_in 'teams[1][draft_pick]', with: 10
@@ -23,21 +23,65 @@ feature 'League creator' do
 
     expect(page).to have_revised_draft_order
   end
+
+  scenario 'can start the draft' do
+    create(:draft_status, description: 'In Progress')
+    create(:league, user_id: @creator.id)
+
+    navigate_to_league('Fantasy Sports Dojo')
+
+    click_link 'Start draft'
+    expect(page).to have_content 'Fantasy Sports Dojo Draft'
+  end
+
+  scenario 'can join a draft in progress' do
+    in_progress_status = create(:draft_status, description: 'In Progress')
+    create(:league, user_id: @creator.id, draft_status_id: in_progress_status.id)
+
+    navigate_to_league('Fantasy Sports Dojo')
+    expect(page).to have_link 'Join draft'
+  end
+
+  scenario 'cannot start or join a completed draft' do
+    completed_status = create(:draft_status, description: 'Complete')
+    create(:league, user_id: @creator.id, draft_status_id: completed_status.id)
+
+    navigate_to_league('Fantasy Sports Dojo')
+    expect(page).to have_no_link 'Start draft'
+    expect(page).to have_no_link 'Join draft'
+  end
 end
 
 feature 'League member' do
   before do
-    create(:sport)
-    create(:user)
-    create(:league)
+    draft_status = create(:draft_status, description: 'In Progress')
+    @league = create(:league, draft_status_id: draft_status.id)
     league_member = create(:user)
+    create(:team, league_id: @league.id, user_id: league_member.id)
     sign_in league_member
-    create(:team, user_id: league_member.id)
-    navigate_to_league('Fantasy Sports Dojo')
   end
 
   scenario 'cannot set draft order' do
-    expect(page).to have_no_content 'Set draft order'
+    navigate_to_league('Fantasy Sports Dojo')
+    expect(page).to have_no_link 'Set draft order'
+  end
+
+  scenario 'cannot start the draft' do
+    navigate_to_league('Fantasy Sports Dojo')
+    expect(page).to have_no_link 'Start draft'
+  end
+
+  scenario 'can join a draft in progress' do
+    navigate_to_league('Fantasy Sports Dojo')
+    expect(page).to have_link 'Join draft'
+  end
+
+  scenario 'cannot join a completed draft' do
+    completed_draft_status = create(:draft_status, description: 'Complete')
+    @league.draft_status_id = completed_draft_status.id
+    @league.save
+    navigate_to_league('Fantasy Sports Dojo')
+    expect(page).to have_no_link 'Join draft'
   end
 end
 

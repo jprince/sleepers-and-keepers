@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Sport do
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name) }
+
   it { should have_many(:leagues) }
+  it { should have_many(:players) }
 end
 
 describe Sport, '.seed' do
@@ -20,6 +22,6 @@ describe Sport, '.seed' do
     sport = create(:sport, name: 'Football', positions: [])
 
     Sport.seed
-    expect(Sport.find_by_name(sport.name).positions).to eq sport.positions
+    expect(Sport.find_by(name: sport.name).positions).to eq sport.positions
   end
 end

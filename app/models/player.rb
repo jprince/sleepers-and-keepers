@@ -11,7 +11,7 @@ class Player < ActiveRecord::Base
     logger = Logger.new(STDOUT)
 
     Sport.supported_sports.each do |sport|
-      sport = Sport.find_by_name(sport[:name])
+      sport = Sport.find_by(name: sport[:name])
 
       unless sport.nil?
         api = CBSSportsAPI.new(sport.name)
@@ -20,7 +20,7 @@ class Player < ActiveRecord::Base
         filtered_players = data.select { |player| allowed_positions.include? player['position'] }
         filtered_players.each do |player|
           player_orig_id = player['id']
-          player_record = Player.find_by_orig_id(player_orig_id)
+          player_record = Player.find_by(orig_id: player_orig_id)
 
           if player_record.blank?
             logger.info "Added #{ player['lastname'] }, #{ player['firstname'] }"

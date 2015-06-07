@@ -8,7 +8,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation, { except: %w[reports measures] }
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do

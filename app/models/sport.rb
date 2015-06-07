@@ -1,11 +1,12 @@
 class Sport < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   has_many :leagues
+  has_many :players
   serialize :positions, Array
 
   def self.seed
     supported_sports.each do |sport|
-      sport_record = Sport.find_by_name(sport[:name])
+      sport_record = Sport.find_by(name: sport[:name])
       if sport_record.blank?
         sport_record = Sport.new
         sport_record.name = sport[:name]

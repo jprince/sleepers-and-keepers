@@ -11,4 +11,12 @@
 
 <% if @user.id == @owner_id %>
   <%= link_to('Set draft order', league_draft_order_path(@league.id)) %>
+
+  <% if @draft_status == 'Not Started' %>
+    <%= link_to('Start draft', league_draft_path(@league.id)) %>
+  <% end %>
+<% end %>
+
+<% if @draft_status == 'In Progress' %>
+  <%= link_to('Join draft', league_draft_path(@league.id)) %>
 <% end %>

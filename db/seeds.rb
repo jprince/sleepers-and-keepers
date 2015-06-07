@@ -8,5 +8,8 @@ if user.blank?
   user.save validate: false
 end
 
+DraftStatus.where(description: 'Not Started').first_or_create!
+DraftStatus.where(description: 'In Progress').first_or_create!
+DraftStatus.where(description: 'Complete').first_or_create!
 Sport.seed
 Player.update_player_pool

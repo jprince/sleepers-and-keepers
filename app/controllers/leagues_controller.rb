@@ -19,6 +19,7 @@ class LeaguesController < ApplicationController
 
   def show
     @league = League.find(league_id)
+    @draft_status = DraftStatus.find_by(id: @league.draft_status_id).description
     @owner_id = @league.user_id
     @user = current_user
   end
@@ -31,7 +32,8 @@ class LeaguesController < ApplicationController
 
   def league_params
     params.require(:league).permit(:name, :password, :size, :rounds)
+      .merge(draft_status_id: DraftStatus.find_by(description: 'Not Started').id)
+      .merge(sport_id: Sport.find_by(name: params[:league][:sport]).id)
       .merge(user_id: current_user.id)
-      .merge(sport_id: Sport.find_by_name(params[:league][:sport]).id)
   end
 end

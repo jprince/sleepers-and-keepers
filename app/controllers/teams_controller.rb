@@ -19,14 +19,14 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @team = league.teams.find_by_id(params[:id])
-    @owner = User.find_by_id(@team[:user_id])
+    @team = league.teams.find(params[:id])
+    @owner = User.find(@team[:user_id])
   end
 
   private
 
   def league
-    League.find_by_id(params[:league_id])
+    League.find(params[:league_id])
   end
 
   def team_params

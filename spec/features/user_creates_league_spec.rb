@@ -2,6 +2,7 @@ require 'spec_helper'
 
 feature 'Leagues - ' do
   before do
+    create(:draft_status)
     create(:sport)
     sign_in create(:user)
   end

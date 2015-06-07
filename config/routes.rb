@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   resources :leagues do
     resources :teams
+    get 'draft',
+      to: 'draft#show'
     get 'draft_order',
       to: 'draft_order#edit'
     post 'draft_order',

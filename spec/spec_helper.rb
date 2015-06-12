@@ -20,6 +20,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
+  config.include Features::DataPreparationHelpers, type: :feature
   config.include Features::NavigationHelpers, type: :feature
   config.include Features::SessionHelpers, type: :feature
 end

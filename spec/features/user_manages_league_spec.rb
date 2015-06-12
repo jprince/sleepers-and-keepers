@@ -24,12 +24,15 @@ feature 'League creator' do
     expect(page).to have_revised_draft_order
   end
 
-  scenario 'can start the draft' do
+  scenario 'can start the draft when the league is full' do
     create(:draft_status, description: 'In Progress')
-    create(:league, user_id: @creator.id)
+    league = create(:league, user_id: @creator.id)
 
     navigate_to_league('Fantasy Sports Dojo')
+    expect(page).to have_no_link 'Start draft'
+    fill_league(league)
 
+    visit current_path
     click_link 'Start draft'
     expect(page).to have_content 'Fantasy Sports Dojo Draft'
   end

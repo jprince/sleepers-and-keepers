@@ -28,11 +28,7 @@ feature 'Teams' do
   end
 
   scenario 'cannot create another team once the league is full' do
-    @league.size.times do
-      owner = create(:user)
-      create(:team, league_id: @league.id, user_id: owner.id)
-    end
-
+    fill_league(@league)
     navigate_to_league('Fantasy Sports Dojo')
     expect(page).to have_no_link 'New Team'
   end

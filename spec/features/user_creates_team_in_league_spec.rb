@@ -3,7 +3,7 @@ require 'spec_helper'
 feature 'Teams' do
   before do
     @first_owner = create(:user)
-    @league = create(:league, user_id: @first_owner.id)
+    @league = create(:football_league, user: @first_owner)
     sign_in @first_owner
   end
 
@@ -21,22 +21,22 @@ feature 'Teams' do
   end
 
   scenario 'cannot create another team if they already have one' do
-    create(:team, league_id: @league.id, user_id: @first_owner.id)
+    create(:team, league: @league, user: @first_owner)
     navigate_to_league
 
     expect(page).to have_no_link 'New Team'
   end
 
   scenario 'cannot create another team once the league is full' do
-    fill_league(@league)
+    fill_league @league
     navigate_to_league
     expect(page).to have_no_link 'New Team'
   end
 
   scenario 'can view a list of teams' do
-    @first_owner_team = create(:team, league_id: @league.id,  user_id: @first_owner.id)
+    @first_owner_team = create(:team, league: @league,  user: @first_owner)
     @second_owner = create(:user)
-    @second_owner_team = create(:team, league_id: @league.id,  user_id: @second_owner.id)
+    @second_owner_team = create(:team, league: @league,  user: @second_owner)
 
     navigate_to_league
     click_link 'Teams'

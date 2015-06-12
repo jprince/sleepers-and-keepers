@@ -5,6 +5,7 @@ class DraftController < ApplicationController
       start_draft
     end
     @teams = @league.teams.sort_by(&:draft_pick)
+    @players = Sport.find(@league.sport_id).players.sort_by { |p| [p.last_name, p.first_name] }
   end
 
   private

@@ -1,1 +1,19 @@
 <h2><%= @league.name %> Draft</h2>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Position</th>
+    <th>Team</th>
+    <th>Injury</th>
+    <th>News</th>
+  </tr>
+  <% @players.each do |player| %>
+    <tr class="player">
+      <td><%= player.last_name %>, <%= player.first_name %></td>
+      <td><%= player.position %></td>
+      <td><%= player.team %></td>
+      <td><%= player.injury %></td>
+      <td><%= player.headline %></td>
+    </tr>
+  <% end %>
+</table>

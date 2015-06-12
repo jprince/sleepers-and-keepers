@@ -45,7 +45,7 @@ describe Player do
     end
 
     it 'updates existing players' do
-      create(:player, sport_id: @sport.id)
+      create(:player, sport: @sport)
 
       expect(Player.all.length).to eq 1
 

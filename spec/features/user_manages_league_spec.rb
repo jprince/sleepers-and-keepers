@@ -7,11 +7,11 @@ feature 'League creator' do
   end
 
   scenario 'can set draft order' do
-    league = create(:league, user_id: @creator.id)
-    create(:team, league_id: league.id)
+    league = create(:football_league, user: @creator)
+    create(:team, league: league)
     11.times do
       owner = create(:user)
-      create(:team, league_id: league.id, user_id: owner.id)
+      create(:team, league: league, user: owner)
     end
 
     navigate_to_league
@@ -26,11 +26,11 @@ feature 'League creator' do
 
   scenario 'can start the draft when the league is full' do
     create(:draft_status, description: 'In Progress')
-    league = create(:league, user_id: @creator.id)
+    league = create(:football_league, user: @creator)
 
     navigate_to_league
     expect(page).to have_no_link 'Start draft'
-    fill_league(league)
+    fill_league league
 
     visit current_path
     click_link 'Start draft'
@@ -38,16 +38,14 @@ feature 'League creator' do
   end
 
   scenario 'can join a draft in progress' do
-    in_progress_status = create(:draft_status, description: 'In Progress')
-    create(:league, user_id: @creator.id, draft_status_id: in_progress_status.id)
+    create(:football_league, :with_draft_in_progress, user: @creator)
 
     navigate_to_league
     expect(page).to have_link 'Join draft'
   end
 
   scenario 'cannot start or join a completed draft' do
-    completed_status = create(:draft_status, description: 'Complete')
-    create(:league, user_id: @creator.id, draft_status_id: completed_status.id)
+    create(:football_league, :with_draft_complete, user: @creator)
 
     navigate_to_league
     expect(page).to have_no_link 'Start draft'
@@ -56,36 +54,45 @@ feature 'League creator' do
 end
 
 feature 'League member' do
-  before do
-    draft_status = create(:draft_status, description: 'In Progress')
-    @league = create(:league, draft_status_id: draft_status.id)
-    league_member = create(:user)
-    create(:team, league_id: @league.id, user_id: league_member.id)
-    sign_in league_member
-  end
-
   scenario 'cannot set draft order' do
+    create_and_sign_in_league_member_with_draft('not started')
     navigate_to_league
     expect(page).to have_no_link 'Set draft order'
   end
 
   scenario 'cannot start the draft' do
+    create_and_sign_in_league_member_with_draft('not started')
     navigate_to_league
     expect(page).to have_no_link 'Start draft'
   end
 
   scenario 'can join a draft in progress' do
+    create_and_sign_in_league_member_with_draft('in progress')
     navigate_to_league
     expect(page).to have_link 'Join draft'
   end
 
   scenario 'cannot join a completed draft' do
-    completed_draft_status = create(:draft_status, description: 'Complete')
-    @league.draft_status_id = completed_draft_status.id
-    @league.save
+    create_and_sign_in_league_member_with_draft('complete')
     navigate_to_league
     expect(page).to have_no_link 'Join draft'
   end
+end
+
+def create_and_sign_in_league_member_with_draft(draft_status)
+  factory_trait =
+    case draft_status
+    when 'in progress'
+      :with_draft_in_progress
+    when 'complete'
+      :with_draft_complete
+    else
+      nil
+    end
+  league = create(:football_league, factory_trait)
+  league_member = create(:user)
+  create(:team, league: league, user: league_member)
+  sign_in league_member
 end
 
 def has_revised_draft_order?

@@ -14,7 +14,7 @@ feature 'League creator' do
       create(:team, league_id: league.id, user_id: owner.id)
     end
 
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     click_link 'Set draft order'
 
     fill_in 'teams[1][draft_pick]', with: 10
@@ -28,7 +28,7 @@ feature 'League creator' do
     create(:draft_status, description: 'In Progress')
     league = create(:league, user_id: @creator.id)
 
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     expect(page).to have_no_link 'Start draft'
     fill_league(league)
 
@@ -41,7 +41,7 @@ feature 'League creator' do
     in_progress_status = create(:draft_status, description: 'In Progress')
     create(:league, user_id: @creator.id, draft_status_id: in_progress_status.id)
 
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     expect(page).to have_link 'Join draft'
   end
 
@@ -49,7 +49,7 @@ feature 'League creator' do
     completed_status = create(:draft_status, description: 'Complete')
     create(:league, user_id: @creator.id, draft_status_id: completed_status.id)
 
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     expect(page).to have_no_link 'Start draft'
     expect(page).to have_no_link 'Join draft'
   end
@@ -65,17 +65,17 @@ feature 'League member' do
   end
 
   scenario 'cannot set draft order' do
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     expect(page).to have_no_link 'Set draft order'
   end
 
   scenario 'cannot start the draft' do
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     expect(page).to have_no_link 'Start draft'
   end
 
   scenario 'can join a draft in progress' do
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     expect(page).to have_link 'Join draft'
   end
 
@@ -83,7 +83,7 @@ feature 'League member' do
     completed_draft_status = create(:draft_status, description: 'Complete')
     @league.draft_status_id = completed_draft_status.id
     @league.save
-    navigate_to_league('Fantasy Sports Dojo')
+    navigate_to_league
     expect(page).to have_no_link 'Join draft'
   end
 end

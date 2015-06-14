@@ -1,6 +1,7 @@
 <h2><%= @league.name %></h2>
 
 <%= link_to('Teams', league_teams_path(@league.id)) %>
+<%= link_to("#{ if @draft_status == 'Not Started' then 'View draft order' else 'View draft results' end }", league_draft_results_path(@league.id)) %>
 
 <%
   unless @user.teams.any? { |team| team.league_id == @league.id } ||

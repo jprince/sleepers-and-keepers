@@ -1,4 +1,4 @@
-class DraftController < ApplicationController
+class DraftsController < ApplicationController
   def show
     @league = League.find(draft_params)
     if @league.draft_status_id == DraftStatus.find_by(description: 'Not Started').id

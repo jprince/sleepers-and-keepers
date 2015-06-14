@@ -4,6 +4,8 @@ class Team < ActiveRecord::Base
 
   belongs_to :league
   belongs_to :user
+  has_many :picks, dependent: :delete_all
+  has_many :players, through: :picks
 
   def self.bulk_update(data)
     Team.update(data.keys, data.values)

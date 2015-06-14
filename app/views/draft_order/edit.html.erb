@@ -15,3 +15,12 @@
     <input name="save" type="submit" value="Save" />
   </div>
 <% end %>
+
+<% if @league_full %>
+  <%= button_to('Generate draft picks', league_draft_results_path(@league.id)) %>
+  <p>
+    **Note** You should only generate draft picks once - after the draft order is finalized.
+    Re-generating them will remove any existing picks, therefore undoing any trades that you've
+    executed.
+  <p>
+<% end %>

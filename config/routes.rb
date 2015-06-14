@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   root to: 'home#show'
 
   resources :leagues do
+    resource :draft, only: :show
+    resource :draft_results, only: [:create, :show]
     resources :teams
-    get 'draft',
-      to: 'draft#show'
     get 'draft_order',
       to: 'draft_order#edit'
     post 'draft_order',

@@ -10,5 +10,6 @@ describe League do
   it { should belong_to(:draft_status) }
   it { should belong_to(:sport) }
   it { should belong_to(:user) }
+  it { should have_many(:picks) }
   it { should have_many(:teams) }
 end

@@ -1,0 +1,16 @@
+<table>
+  <tr>
+    <th>Round</th>
+    <th>Pick</th>
+    <th>Team</th>
+    <th>Player</th>
+  </tr>
+  <% @picks.each do |pick| %>
+    <tr class="pick">
+      <td class="round"><%= pick.round %></td>
+      <td class="round-pick"><%= pick.round_pick %></td>
+      <td class="team"><%= pick.team.name %></td>
+      <td class="player"><%= pick.player_id %></td>
+    </tr>
+  <% end %>
+</table>

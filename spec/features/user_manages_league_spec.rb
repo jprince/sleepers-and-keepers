@@ -24,6 +24,20 @@ feature 'League creator' do
     expect(page).to have_revised_draft_order
   end
 
+  scenario 'can generate draft picks when the league is full' do
+    league = create(:football_league, user: @creator)
+    navigate_to_league
+    click_link 'Set draft order'
+    expect(page).to have_no_button 'Generate draft picks'
+
+    fill_league league
+    navigate_home
+    navigate_to_league
+    click_link 'Set draft order'
+    click_button 'Generate draft picks'
+    expect(league_on_page).to have_empty_draft_results
+  end
+
   scenario 'can start the draft when the league is full' do
     create(:draft_status, description: 'In Progress')
     league = create(:football_league, user: @creator)
@@ -109,4 +123,8 @@ def has_revised_draft_order?
     draft_order_inputs[11] == team_three_pick
 
   teams_have_correct_draft_picks_set && teams_in_correct_order
+end
+
+def league_on_page
+  @league_on_page ||= Pages::League.new
 end

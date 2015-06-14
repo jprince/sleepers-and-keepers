@@ -2,6 +2,7 @@ class DraftOrderController < ApplicationController
   def edit
     @league = League.find(edit_params)
     @teams = @league.teams.sort_by(&:draft_pick)
+    @league_full = @league.teams.length == @league.size
   end
 
   def update

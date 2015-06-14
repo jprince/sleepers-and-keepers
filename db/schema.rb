@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150607201925) do
+ActiveRecord::Schema.define(version: 20150614221958) do
 
   create_table "draft_statuses", force: :cascade do |t|
     t.string   "description"
@@ -29,6 +29,16 @@ ActiveRecord::Schema.define(version: 20150607201925) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "draft_status_id"
+  end
+
+  create_table "picks", force: :cascade do |t|
+    t.integer  "overall_pick", null: false
+    t.integer  "player_id"
+    t.integer  "round",        null: false
+    t.integer  "round_pick",   null: false
+    t.integer  "team_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "players", force: :cascade do |t|

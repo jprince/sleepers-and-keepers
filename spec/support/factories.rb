@@ -50,7 +50,7 @@ FactoryGirl.define do
   factory :team do
     draft_pick { League.last.size - League.last.teams.length }
     league
-    sequence(:name) { |n| Faker::Commerce.product_name }
+    sequence(:name) { |n| Faker::Commerce.product_name + " (#{n})" }
     short_name { Faker::Commerce.product_name.slice(0, 9) }
     user
   end

@@ -10,7 +10,11 @@
       <td class="round"><%= pick.round %></td>
       <td class="round-pick"><%= pick.round_pick %></td>
       <td class="team"><%= pick.team.name %></td>
-      <td class="player"><%= pick.player_id %></td>
+      <td class="player">
+        <% unless pick.player.nil? %>
+          <%= pick.player.last_name %>, <%= pick.player.first_name %>
+        <% end %>
+      </td>
     </tr>
   <% end %>
 </table>

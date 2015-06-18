@@ -6,6 +6,7 @@ class Player < ActiveRecord::Base
   validates :position, presence: true
   validates :team, presence: true
   belongs_to :sport
+  has_many :picks
   has_many :teams, through: :picks
 
   def self.update_player_pool

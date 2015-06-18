@@ -20,6 +20,7 @@ class LeaguesController < ApplicationController
   def show
     @league = League.find(league_id)
     @draft_status = DraftStatus.find(@league.draft_status_id).description
+    @has_generated_picks = @league.picks.any?
     @league_full = @league.teams.length == @league.size
     @owner_id = @league.user_id
     @user = current_user

@@ -48,7 +48,7 @@ group :test do
   gem 'database_cleaner'
   gem 'faker'
   gem 'minitest'
-  gem 'poltergeist'
+  gem 'poltergeist', git: 'git://github.com/teampoltergeist/poltergeist', ref: '063fb3f'
   gem 'rspec-instafail'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'

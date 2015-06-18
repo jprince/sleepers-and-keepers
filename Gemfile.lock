@@ -1,3 +1,14 @@
+GIT
+  remote: git://github.com/teampoltergeist/poltergeist
+  revision: 063fb3fae978bab97fdddd4a3ffc8e021ae186ae
+  ref: 063fb3f
+  specs:
+    poltergeist (1.6.0)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -143,11 +154,6 @@ GEM
     parser (2.1.4)
       ast (~> 1.1)
       slop (~> 3.4, >= 3.4.5)
-    poltergeist (1.6.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      multi_json (~> 1.0)
-      websocket-driver (>= 0.2.0)
     powerpack (0.0.9)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -235,7 +241,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    selenium-webdriver (2.43.0)
+    selenium-webdriver (2.45.0)
       childprocess (~> 0.5)
       multi_json (~> 1.0)
       rubyzip (~> 1.0)
@@ -276,7 +282,7 @@ GEM
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
     websocket (1.2.1)
-    websocket-driver (0.5.4)
+    websocket-driver (0.6.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     xpath (2.0.0)
@@ -307,7 +313,7 @@ DEPENDENCIES
   launchy
   minitest
   neat
-  poltergeist
+  poltergeist!
   pry
   quiet_assets
   rails (= 4.2.1)

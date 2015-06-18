@@ -6,6 +6,20 @@ feature 'League creator' do
     sign_in @creator
   end
 
+  scenario 'can generate draft picks when the league is full' do
+    league = create(:football_league, user: @creator)
+    navigate_to_league
+    expect(page).to have_no_link 'Set draft order'
+
+    fill_league league
+    navigate_home
+    navigate_to_league
+
+    click_link 'Set draft order'
+    click_button 'Generate draft picks'
+    expect(league_on_page).to have_empty_draft_results
+  end
+
   scenario 'can set draft order' do
     league = create(:football_league, user: @creator)
     create(:team, league: league)
@@ -24,18 +38,46 @@ feature 'League creator' do
     expect(page).to have_revised_draft_order
   end
 
-  scenario 'can generate draft picks when the league is full' do
+  scenario 'can associate keepers with teams after picks are generated', js: true do
     league = create(:football_league, user: @creator)
-    navigate_to_league
-    click_link 'Set draft order'
-    expect(page).to have_no_button 'Generate draft picks'
-
     fill_league league
-    navigate_home
+    create_player_pool
     navigate_to_league
+    expect(page).to have_no_link 'Set keepers'
+
     click_link 'Set draft order'
     click_button 'Generate draft picks'
-    expect(league_on_page).to have_empty_draft_results
+
+    navigate_home
+    navigate_to_league
+    click_link 'Set keepers'
+
+    first_team = Team.first
+    first_qb = Player.where(position: 'QB').first
+    first_qb_name = "#{first_qb.last_name}, #{first_qb.first_name}"
+
+    expect(page).to have_select('team-select', selected: first_team.name)
+    expect(page).to have_select('position-select', selected: 'QB')
+    expect(page).to have_select('player-select', selected: first_qb_name)
+    expect(page).to have_select('pick-select', selected: 'Rd: 1, Pick: 12 (12 overall)')
+
+    last_team = Team.last
+    first_rb = Player.where(position: 'RB').first
+    first_rb_name = "#{first_rb.last_name}, #{first_rb.first_name}"
+    last_teams_first_pick = 'Rd: 1, Pick: 1 (1 overall)'
+
+    select(last_team.name, from: 'team-select')
+    select('RB', from: 'position-select')
+    expect(page).to have_select('player-select', selected: first_rb_name)
+    expect(page).to have_select('pick-select', selected: last_teams_first_pick)
+
+    click_button 'Save'
+    expect(page).to have_css('.keeper', text: "#{first_rb_name} - #{last_teams_first_pick}")
+
+    navigate_home
+    navigate_to_league
+    click_link 'View draft order'
+    expect(page).to have_css('.player', text: first_rb_name)
   end
 
   scenario 'can start the draft when the league is full' do
@@ -68,45 +110,17 @@ feature 'League creator' do
 end
 
 feature 'League member' do
-  scenario 'cannot set draft order' do
-    create_and_sign_in_league_member_with_draft('not started')
+  scenario 'cannot do admin actions' do
+    league = create(:football_league)
+    league_member = create(:user)
+    create(:team, league: league, user: league_member)
+    sign_in league_member
+
     navigate_to_league
     expect(page).to have_no_link 'Set draft order'
-  end
-
-  scenario 'cannot start the draft' do
-    create_and_sign_in_league_member_with_draft('not started')
-    navigate_to_league
+    expect(page).to have_no_link 'Set keepers'
     expect(page).to have_no_link 'Start draft'
   end
-
-  scenario 'can join a draft in progress' do
-    create_and_sign_in_league_member_with_draft('in progress')
-    navigate_to_league
-    expect(page).to have_link 'Join draft'
-  end
-
-  scenario 'cannot join a completed draft' do
-    create_and_sign_in_league_member_with_draft('complete')
-    navigate_to_league
-    expect(page).to have_no_link 'Join draft'
-  end
-end
-
-def create_and_sign_in_league_member_with_draft(draft_status)
-  factory_trait =
-    case draft_status
-    when 'in progress'
-      :with_draft_in_progress
-    when 'complete'
-      :with_draft_complete
-    else
-      nil
-    end
-  league = create(:football_league, factory_trait)
-  league_member = create(:user)
-  create(:team, league: league, user: league_member)
-  sign_in league_member
 end
 
 def has_revised_draft_order?

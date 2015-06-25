@@ -78,4 +78,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Which React.js build (development, production, with or without add-ons) to serve
+  config.react.variant = :production
 end

@@ -33,7 +33,7 @@ feature 'Teams' do
     expect(page).to have_no_link 'New Team'
   end
 
-  scenario 'can view a list of teams' do
+  scenario 'can view a list of teams', js: true do
     @first_owner_team = create(:team, league: @league,  user: @first_owner)
     @second_owner = create(:user)
     @second_owner_team = create(:team, league: @league,  user: @second_owner)

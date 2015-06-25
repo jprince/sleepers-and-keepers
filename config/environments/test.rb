@@ -41,4 +41,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.action_mailer.default_url_options = { host: ENV.fetch('APP_NAME', 'localhost:3000') }
+
+  # Which React.js build (development, production, with or without add-ons) to serve
+  config.react.variant = :development
 end

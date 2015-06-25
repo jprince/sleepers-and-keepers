@@ -9,6 +9,7 @@ task :coffeelint do
       level: 'error',
       value: 99
     },
+    no_backticks: { level: 'ignore' },
     no_empty_param_list: { level: 'error' },
     prefer_english_operator: { level: 'error' }
   }

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature 'League draft ' do
+feature 'League draft', js: true do
   before do
     league = create(:football_league, :with_draft_in_progress)
     league_member = create(:user)

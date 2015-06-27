@@ -1,1 +1,4 @@
-<%= react_component('TeamsIndex', render(template: 'teams/index.json.jbuilder')) %>
+<h2>Teams</h2>
+<% @teams.each do |team| %>
+  <h3><%= team.name %></h3>
+<% end %>

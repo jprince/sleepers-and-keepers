@@ -21,8 +21,8 @@ getFirstOption = (options) ->
       dataType: 'json'
       type: 'POST'
       data:
-        pick_id: @state.selectedPick
-        player_id: @state.selectedPlayer
+        pickId: @state.selectedPick
+        playerId: @state.selectedPlayer
       success: (updatedData, status) =>
         @props.afterSubmit(updatedData)
       error: ((xhr, status, err) -> console.error @props.url, status, err.toString()).bind(@)

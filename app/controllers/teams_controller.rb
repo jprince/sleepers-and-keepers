@@ -10,7 +10,8 @@ class TeamsController < ApplicationController
   end
 
   def index
-    @teams = league.teams
+    @league = league
+    @teams = @league.teams
   end
 
   def new
@@ -19,7 +20,8 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @team = league.teams.find(params[:id])
+    @league = league
+    @team = @league.teams.find(params[:id])
     @owner = User.find(@team[:user_id])
   end
 

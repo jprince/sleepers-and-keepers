@@ -1,2 +1,4 @@
+<%= link_to('League Home', league_path(@league)) %>
+
 <h2><%= @league.name %> Draft</h2>
 <%= react_component 'PlayersIndex', render(template: 'drafts/show.json.jbuilder') %>

@@ -5,7 +5,8 @@ class DraftResultsController < ApplicationController
   end
 
   def show
-    @picks = League.find(league_id).picks
+    @league = League.find(league_id)
+    @picks = @league.picks
   end
 
   private

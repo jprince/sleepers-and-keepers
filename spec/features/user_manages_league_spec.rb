@@ -12,8 +12,7 @@ feature 'League creator' do
     expect(page).to have_no_link 'Set draft order'
 
     fill_league league
-    navigate_home
-    navigate_to_league
+    visit current_path
 
     click_link 'Set draft order'
     click_button 'Generate draft picks'
@@ -48,8 +47,7 @@ feature 'League creator' do
     click_link 'Set draft order'
     click_button 'Generate draft picks'
 
-    navigate_home
-    navigate_to_league
+    click_link 'League Home'
     click_link 'Set keepers'
 
     first_team = Team.first
@@ -74,8 +72,7 @@ feature 'League creator' do
     click_button 'Save'
     expect(page).to have_css('.keeper', text: "#{first_rb_name} - #{last_teams_first_pick}")
 
-    navigate_home
-    navigate_to_league
+    click_link 'League Home'
     click_link 'View draft order'
     expect(page).to have_css('.player', text: first_rb_name)
   end

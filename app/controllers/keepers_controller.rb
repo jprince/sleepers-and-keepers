@@ -6,9 +6,21 @@ class KeepersController < ApplicationController
 
     if keeper_pick.save
       flash.alert = 'Saved successfully'
-      redirect_to edit_league_keepers_path(league_id)
+      redirect_to :back
     else
       flash.alert = 'Unable to save keeper'
+    end
+  end
+
+  def destroy
+    keeper_pick = Pick.find(destroy_params)
+    keeper_pick.player_id = nil
+    keeper_pick.keeper = false
+    if keeper_pick.save
+      flash.alert = 'Removed successfully'
+      redirect_to action: :edit, status: 303
+    else
+      flash.alert = 'Unable to remove keeper'
     end
   end
 
@@ -27,6 +39,10 @@ class KeepersController < ApplicationController
 
   def create_params
     params.permit(:pick_id, :player_id)
+  end
+
+  def destroy_params
+    params.require(:pick_id)
   end
 
   def league_id

@@ -2,6 +2,7 @@ json.keepers(@keepers) do |keeper|
   pick = @league.picks.find_by(player_id: keeper.id)
 
   json.pick "Rd: #{pick.round}, Pick: #{pick.round_pick} (#{pick.overall_pick} overall)"
+  json.pick_id pick.id
   json.player_name keeper.first_name.empty? ? keeper.last_name : "#{keeper.last_name}, #{keeper.first_name}"
   json.team pick.team_id
 end

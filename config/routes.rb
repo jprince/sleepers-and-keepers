@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :leagues do
     resource :draft, only: :show
     resource :draft_results, only: [:create, :show]
-    resource :keepers, only: [:create, :edit]
+    resource :keepers, only: [:create, :destroy, :edit]
     resources :teams
     get 'draft_order',
       to: 'draft_order#edit'

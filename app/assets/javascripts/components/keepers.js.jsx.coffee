@@ -1,5 +1,4 @@
-getFirstOption = (options) ->
-  if _(options).any() then options[0].value else null
+getFirstOption = (options) -> if _(options).any() then options[0].value else null
 
 @KeepersForm = React.createClass
   componentWillReceiveProps: (newProps) ->
@@ -16,16 +15,16 @@ getFirstOption = (options) ->
     _(@props.players).filter({position: (position or @state.selectedPosition)})
   handleKeeperSubmit: (e) ->
     e.preventDefault()
+    url = "/leagues/#{@props.league}/keepers"
     $.ajax
-      url: @props.url
       dataType: 'json'
-      type: 'POST'
       data:
         pickId: @state.selectedPick
         playerId: @state.selectedPlayer
-      success: (updatedData, status) =>
-        @props.afterSubmit(updatedData)
-      error: ((xhr, status, err) -> console.error @props.url, status, err.toString()).bind(@)
+      method: 'POST'
+      url: url
+      success: (updatedData, status) => @props.afterSubmit(updatedData)
+      error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPick: (selection) -> @setState({ selectedPick: selection })
   selectPlayer: (selection) -> @setState({ selectedPlayer: selection })
   selectPosition: (selection) ->
@@ -52,11 +51,29 @@ getFirstOption = (options) ->
     </form>`
 
 @KeeperList = React.createClass
+  componentWillReceiveProps: (newProps) ->
+    @setState({ selectedTeamKeepers: @getKeepersForTeam(newProps.keepers, newProps.selectedTeam) })
+  getInitialState: ->
+    selectedTeamKeepers: @getKeepersForTeam(@props.keepers, @props.selectedTeam)
+  getKeepersForTeam: (keepers, selectedTeam) ->
+    _(keepers).filter(team: parseInt(selectedTeam))
+  handleKeeperRemove: (index, e) ->
+    e.preventDefault()
+    url = "/leagues/#{@props.league}/keepers"
+    $.ajax
+      dataType: 'json'
+      method: 'DELETE'
+      url: url + '?' + $.param({ 'pickId': @state.selectedTeamKeepers[index].pick_id })
+      success: (updatedData, status) => @props.afterRemove(updatedData)
+      error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   render: ->
-    filteredKeepers = _(@props.keepers).filter(team: parseInt(@props.selectedTeam))
-    keepers = filteredKeepers.map (player, i) ->
+    keepers = @state.selectedTeamKeepers.map ((player, i) ->
       keeperText = "#{player.player_name} - #{player.pick}"
-      `<li className="keeper" key={i}>{keeperText}</li>`
+      `<li className="keeper" key={i}>
+          {keeperText}
+          <a className="remove" onClick={this.handleKeeperRemove.bind(this, i)}>X</a>
+        </li>`
+    ).bind(@)
 
     `<div>
       <ol>
@@ -81,12 +98,18 @@ getFirstOption = (options) ->
       <hr />
       <KeepersForm
         afterSubmit={this.refreshData}
+        league={this.props.league}
         picks={this.state.picks}
         players={this.state.players}
         positions={this.props.positions}
         selectedTeam={this.state.selectedTeam}
         teams={this.props.teams}
-        url={"/leagues/" + this.props.league + "/keepers"} />
+      />
       <hr />
-      <KeeperList keepers={this.state.keepers} selectedTeam={this.state.selectedTeam} />
+      <KeeperList
+        afterRemove={this.refreshData}
+        keepers={this.state.keepers}
+        league={this.props.league}
+        selectedTeam={this.state.selectedTeam}
+      />
      </div>`

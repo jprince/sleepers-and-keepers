@@ -1,3 +1,6 @@
+a.remove {
+  cursor: pointer;
+}
 ul.hmenu {
   list-style: none;
   margin: 0 0 2em;

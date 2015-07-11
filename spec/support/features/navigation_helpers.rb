@@ -8,5 +8,9 @@ module Features
       click_link 'View Existing Leagues'
       click_link name
     end
+
+    def reload_page
+      visit current_path
+    end
   end
 end

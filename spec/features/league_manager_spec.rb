@@ -9,10 +9,10 @@ feature 'League manager' do
   scenario 'can generate draft picks when the league is full' do
     league = create(:football_league, user: @manager)
     navigate_to_league
-    expect(page).to have_no_link 'Set draft order'
+    expect(league_on_page).to have_no_link 'Set draft order'
 
     fill_league league
-    visit current_path
+    reload_page
 
     click_link 'Set draft order'
     click_button 'Generate draft picks'
@@ -37,16 +37,15 @@ feature 'League manager' do
     expect(page).to have_revised_draft_order
   end
 
-  scenario 'can associate keepers with teams after picks are generated', js: true do
+  scenario 'can manage keepers after picks are generated', js: true do
     league = create(:football_league, user: @manager)
     fill_league league
     create_player_pool
     navigate_to_league
-    expect(page).to have_no_link 'Set keepers'
+    expect(league_on_page).to have_no_link 'Set keepers'
 
     click_link 'Set draft order'
     click_button 'Generate draft picks'
-
     click_link 'League Home'
     click_link 'Set keepers'
 
@@ -54,27 +53,36 @@ feature 'League manager' do
     first_qb = Player.where(position: 'QB').first
     first_qb_name = "#{first_qb.last_name}, #{first_qb.first_name}"
 
-    expect(page).to have_select('team-select', selected: first_team.name)
-    expect(page).to have_select('position-select', selected: 'QB')
-    expect(page).to have_select('player-select', selected: first_qb_name)
-    expect(page).to have_select('pick-select', selected: 'Rd: 1, Pick: 12 (12 overall)')
+    expect(keeper_page).to have_selected_team(first_team.name)
+    expect(keeper_page).to have_selected_position('QB')
+    expect(keeper_page).to have_selected_player(first_qb_name)
+    expect(keeper_page).to have_selected_pick('Rd: 1, Pick: 12 (12 overall)')
 
     last_team = Team.last
     first_rb = Player.where(position: 'RB').first
     first_rb_name = "#{first_rb.last_name}, #{first_rb.first_name}"
     last_teams_first_pick = 'Rd: 1, Pick: 1 (1 overall)'
 
-    select(last_team.name, from: 'team-select')
-    select('RB', from: 'position-select')
-    expect(page).to have_select('player-select', selected: first_rb_name)
-    expect(page).to have_select('pick-select', selected: last_teams_first_pick)
+    keeper_page.select_team(last_team.name)
+    keeper_page.select_position('RB')
+    expect(keeper_page).to have_selected_player(first_rb_name)
+    expect(keeper_page).to have_selected_pick(last_teams_first_pick)
 
     click_button 'Save'
-    expect(page).to have_css('.keeper', text: "#{first_rb_name} - #{last_teams_first_pick}")
+    expect(keeper_page).to have_keeper(first_rb_name, last_teams_first_pick)
 
     click_link 'League Home'
     click_link 'View draft order'
-    expect(page).to have_css('.player', text: first_rb_name)
+    expect(league_on_page).to have_drafted_player(first_rb_name)
+
+    click_link 'League Home'
+    click_link 'Set keepers'
+    expect(keeper_page).to have_no_keepers
+
+    keeper_page.select_team(last_team.name)
+    expect(keeper_page).to have_keeper(first_rb_name, last_teams_first_pick)
+    keeper_page.remove_first_keeper
+    expect(keeper_page).to have_no_keepers
   end
 
   scenario 'can start the draft when the league is full' do
@@ -82,27 +90,27 @@ feature 'League manager' do
     league = create(:football_league, user: @manager)
 
     navigate_to_league
-    expect(page).to have_no_link 'Start draft'
+    expect(league_on_page).to have_no_link 'Start draft'
     fill_league league
 
-    visit current_path
+    reload_page
     click_link 'Start draft'
-    expect(page).to have_content 'Fantasy Sports Dojo Draft'
+    expect(league_on_page).to have_content 'Fantasy Sports Dojo Draft'
   end
 
   scenario 'can join a draft in progress' do
     create(:football_league, :with_draft_in_progress, user: @manager)
 
     navigate_to_league
-    expect(page).to have_link 'Join draft'
+    expect(league_on_page).to have_link 'Join draft'
   end
 
   scenario 'cannot start or join a completed draft' do
     create(:football_league, :with_draft_complete, user: @manager)
 
     navigate_to_league
-    expect(page).to have_no_link 'Start draft'
-    expect(page).to have_no_link 'Join draft'
+    expect(league_on_page).to have_no_link 'Start draft'
+    expect(league_on_page).to have_no_link 'Join draft'
   end
 end
 
@@ -120,6 +128,10 @@ def has_revised_draft_order?
     draft_order_inputs[11] == team_three_pick
 
   teams_have_correct_draft_picks_set && teams_in_correct_order
+end
+
+def keeper_page
+  @keeper_page ||= Pages::KeeperPage.new
 end
 
 def league_on_page

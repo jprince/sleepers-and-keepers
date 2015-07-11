@@ -73,7 +73,7 @@ getFirstOption = (options) ->
   refreshData: (updatedData) ->
     @setState({ picks: updatedData.picks })
     @setState({ players: updatedData.players })
-    @setState({ keepers: _(updatedData.keepers) })
+    @setState({ keepers: updatedData.keepers })
   selectTeam: (teamID) -> @setState({ selectedTeam: parseInt(teamID) })
   render: ->
     `<div>

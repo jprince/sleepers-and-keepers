@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-feature 'League creator' do
+feature 'League manager' do
   before do
-    @creator = create(:user)
-    sign_in @creator
+    @manager = create(:user)
+    sign_in @manager
   end
 
   scenario 'can generate draft picks when the league is full' do
-    league = create(:football_league, user: @creator)
+    league = create(:football_league, user: @manager)
     navigate_to_league
     expect(page).to have_no_link 'Set draft order'
 
@@ -20,7 +20,7 @@ feature 'League creator' do
   end
 
   scenario 'can set draft order' do
-    league = create(:football_league, user: @creator)
+    league = create(:football_league, user: @manager)
     create(:team, league: league)
     11.times do
       owner = create(:user)
@@ -38,7 +38,7 @@ feature 'League creator' do
   end
 
   scenario 'can associate keepers with teams after picks are generated', js: true do
-    league = create(:football_league, user: @creator)
+    league = create(:football_league, user: @manager)
     fill_league league
     create_player_pool
     navigate_to_league
@@ -79,7 +79,7 @@ feature 'League creator' do
 
   scenario 'can start the draft when the league is full' do
     create(:draft_status, description: 'In Progress')
-    league = create(:football_league, user: @creator)
+    league = create(:football_league, user: @manager)
 
     navigate_to_league
     expect(page).to have_no_link 'Start draft'
@@ -91,32 +91,18 @@ feature 'League creator' do
   end
 
   scenario 'can join a draft in progress' do
-    create(:football_league, :with_draft_in_progress, user: @creator)
+    create(:football_league, :with_draft_in_progress, user: @manager)
 
     navigate_to_league
     expect(page).to have_link 'Join draft'
   end
 
   scenario 'cannot start or join a completed draft' do
-    create(:football_league, :with_draft_complete, user: @creator)
+    create(:football_league, :with_draft_complete, user: @manager)
 
     navigate_to_league
     expect(page).to have_no_link 'Start draft'
     expect(page).to have_no_link 'Join draft'
-  end
-end
-
-feature 'League member' do
-  scenario 'cannot do admin actions' do
-    league = create(:football_league)
-    league_member = create(:user)
-    create(:team, league: league, user: league_member)
-    sign_in league_member
-
-    navigate_to_league
-    expect(page).to have_no_link 'Set draft order'
-    expect(page).to have_no_link 'Set keepers'
-    expect(page).to have_no_link 'Start draft'
   end
 end
 

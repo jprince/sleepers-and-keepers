@@ -1,0 +1,4 @@
+<%= link_to('League Home', league_path(@league)) %>
+
+<h2>Trade Picks</h2>
+<%= react_component 'TradePicksForm', render(template: 'draft_picks/edit.json.jbuilder') %>

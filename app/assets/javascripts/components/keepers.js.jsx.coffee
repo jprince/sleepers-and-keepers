@@ -13,7 +13,7 @@ getFirstOption = (options) -> if _(options).any() then options[0].value else nul
     _(@props.picks).filter({team: (selectedTeam or @props.selectedTeam)})
   getPlayersForSelectedPosition: (position) ->
     _(@props.players).filter({position: (position or @state.selectedPosition)})
-  handleKeeperSubmit: (e) ->
+  handleSubmit: (e) ->
     e.preventDefault()
     url = "/leagues/#{@props.league}/keepers"
     $.ajax
@@ -31,22 +31,22 @@ getFirstOption = (options) -> if _(options).any() then options[0].value else nul
     @setState({ selectedPosition: selection })
     @selectPlayer(getFirstOption(@getPlayersForSelectedPosition(selection)))
   render: ->
-    `<form onSubmit={this.handleKeeperSubmit}>
+    `<form onSubmit={this.handleSubmit}>
       <Select
         class="position-select"
         onChange={this.selectPosition}
         options={this.props.positions}
-       />
+      />
       <Select
         class="player-select"
         onChange={this.selectPlayer}
         options={this.getPlayersForSelectedPosition()}
-       />
+      />
       <Select
         class="pick-select"
         onChange={this.selectPick}
         options={this.getPicksForSelectedTeam()}
-       />
+      />
       <input type="submit" value="Save" />
     </form>`
 

@@ -23,6 +23,23 @@ class Pick < ActiveRecord::Base
     end
   end
 
+  def self.execute_trade(params)
+    team_one = Pick.find(params['team_one_picks'].first).team_id
+    team_two = Pick.find(params['team_two_picks'].first).team_id
+
+    params['team_one_picks'].each do |pick|
+      pick = Pick.find(pick)
+      pick.team_id = team_two
+      pick.save
+    end
+
+    params['team_two_picks'].each do |pick|
+      pick = Pick.find(pick)
+      pick.team_id = team_one
+      pick.save
+    end
+  end
+
   private
 
   def self.remove_picks(league)

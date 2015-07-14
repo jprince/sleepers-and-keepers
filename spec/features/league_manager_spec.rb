@@ -37,6 +37,26 @@ feature 'League manager' do
     expect(page).to have_revised_draft_order
   end
 
+  scenario 'can trade draft picks after picks are generated', js: true do
+    league = create(:football_league, user: @manager)
+    fill_league league
+    navigate_to_league
+    expect(league_on_page).to have_no_link 'Trade picks'
+
+    click_link 'Set draft order'
+    click_button 'Generate draft picks'
+    click_link 'League Home'
+    click_link 'Trade picks'
+
+    trade_picks_page.select_first_team_pick('Rd: 1, Pick: 1 (1 overall)')
+    trade_picks_page.select_first_team_pick('Rd: 2, Pick: 12 (24 overall)')
+    trade_picks_page.select_second_team_pick('Rd: 1, Pick: 2 (2 overall)')
+    trade_picks_page.select_second_team_pick('Rd: 2, Pick: 11 (23 overall)')
+    click_button 'Perform Trade'
+
+    expect(trade_picks_page).to have_updated_team_picks
+  end
+
   scenario 'can manage keepers after picks are generated', js: true do
     league = create(:football_league, user: @manager)
     fill_league league
@@ -136,4 +156,8 @@ end
 
 def league_on_page
   @league_on_page ||= Pages::League.new
+end
+
+def trade_picks_page
+  @trade_picks_page ||= Pages::TradePicksPage.new
 end

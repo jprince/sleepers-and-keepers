@@ -74,9 +74,11 @@ feature 'League manager' do
     first_qb_name = "#{first_qb.last_name}, #{first_qb.first_name}"
 
     expect(keeper_page).to have_selected_team(first_team.name)
-    expect(keeper_page).to have_selected_position('QB')
-    expect(keeper_page).to have_selected_player(first_qb_name)
     expect(keeper_page).to have_selected_pick('Rd: 1, Pick: 12 (12 overall)')
+    expect(keeper_page).to have_selected_position('ALL')
+
+    keeper_page.select_position('QB')
+    expect(keeper_page).to have_selected_player(first_qb_name)
 
     last_team = Team.last
     first_rb = Player.where(position: 'RB').first
@@ -84,9 +86,9 @@ feature 'League manager' do
     last_teams_first_pick = 'Rd: 1, Pick: 1 (1 overall)'
 
     keeper_page.select_team(last_team.name)
+    expect(keeper_page).to have_selected_pick(last_teams_first_pick)
     keeper_page.select_position('RB')
     expect(keeper_page).to have_selected_player(first_rb_name)
-    expect(keeper_page).to have_selected_pick(last_teams_first_pick)
 
     click_button 'Save'
     expect(keeper_page).to have_keeper(first_rb_name, last_teams_first_pick)

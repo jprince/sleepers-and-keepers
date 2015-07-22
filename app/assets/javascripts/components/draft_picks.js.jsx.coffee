@@ -1,9 +1,14 @@
-getFirstOption = (options) -> if _(options).any() then options[0].value else null
-getSecondOption = (options) -> if _(options).any() then options[1].value else null
-getSelection = (options) ->
-  selection = []
-  selection.push(parseInt(option.value)) for option in options when option.selected
-  selection
+@Pick = React.createClass
+  render: ->
+    pick = @props.pick
+    elementClass = "pick#{ if @props.currentPickId is pick.id then ' active' else '' }"
+    `<div className={elementClass}>
+      Overall: {pick.overallPick}<br/>
+      Round: {pick.round}<br/>
+      Pick: {pick.roundPick}<br/>
+      Team: {this.props.teamName}<br/>
+      Player: {pick.player}
+    </div>`
 
 @TradePicksForm = React.createClass
   getAllTeamsExcept: (teamID) -> _(@props.teams).reject (team) -> team.value is teamID

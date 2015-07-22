@@ -4,6 +4,10 @@ class Sport < ActiveRecord::Base
   has_many :players
   serialize :positions, Array
 
+  def self.get_positions(sport)
+    sport.positions.unshift 'ALL'
+  end
+
   def self.seed
     supported_sports.each do |sport|
       sport_record = Sport.find_by(name: sport[:name])

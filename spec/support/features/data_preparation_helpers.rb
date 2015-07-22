@@ -16,5 +16,9 @@ module Features
         FactoryGirl.create(:team, league: league, user: owner)
       end
     end
+
+    def generate_draft_picks(league)
+      Pick.create_picks(League.find(league.id))
+    end
   end
 end

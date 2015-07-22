@@ -10,3 +10,13 @@ ul.hmenu {
 ul.hmenu li {
   display: inline;
 }
+
+.active { background-color: yellow; }
+.clear { clear: both; }
+#on-the-clock { padding-bottom: 2em; }
+.pick {
+  border: 1px solid black;
+  float: left;
+  padding: 0.5em;
+  width: 12em;
+}

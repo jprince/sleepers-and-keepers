@@ -31,7 +31,7 @@ class KeepersController < ApplicationController
     @keepers = @league.picks.where(keeper: true).map(&:player)
     kept_player_ids = @keepers.map(&:id)
     @available_players = sport.players.where.not(id: kept_player_ids)
-    @positions = sport.positions
+    @positions = Sport.get_positions(sport)
     @teams = @league.teams
   end
 

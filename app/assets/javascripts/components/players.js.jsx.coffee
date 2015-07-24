@@ -1,14 +1,14 @@
 @Player = React.createClass
   render: ->
     player = @props.player
-    playerName =
-      if !!player.first_name
-        "#{player.last_name}, #{player.first_name}"
-      else
-        player.last_name
+    playerName = getPlayerName(player)
 
     `<tr className="player">
-      <td>{playerName}</td>
+      <td>
+        <a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
+          {playerName}
+        </a>
+      </td>
       <td>{player.position}</td>
       <td>{player.team}</td>
       <td>{player.injury}</td>
@@ -17,7 +17,10 @@
 
 @PlayersIndex = React.createClass
   render: ->
-    players = @props.players.map (player, i) -> `<Player key={i} player={player} />`
+    players = @props.players.map ((player, i) ->
+      `<Player key={i} player={player} onSelect={this.props.selectPlayer} />`
+    ).bind(@)
+
     `<table>
       <thead>
         <tr>

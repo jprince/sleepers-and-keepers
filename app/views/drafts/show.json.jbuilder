@@ -8,7 +8,7 @@ json.picks(@picks) do |pick|
 end
 
 json.players(@players) do |player|
-  json.extract! player, :first_name, :last_name, :position, :team, :injury, :headline
+  json.extract! player, :first_name, :id, :last_name, :position, :team, :injury, :headline
 end
 
 json.positions(@positions) do |position|

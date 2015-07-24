@@ -29,6 +29,15 @@ FactoryGirl.define do
     end
   end
 
+  factory :pick do
+    overall_pick 1
+    player
+    round 1
+    round_pick 1
+    team
+    keeper false
+  end
+
   factory :player do
     first_name { Faker::Name.first_name }
     headline 'New player news'

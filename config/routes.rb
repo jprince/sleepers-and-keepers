@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :leagues do
     resource :draft, only: :show
-    resource :draft_picks, only: [:edit, :update]
+    resource :draft_picks, only: [:create, :edit, :update]
     resource :draft_results, only: [:create, :show]
     resource :keepers, only: [:create, :destroy, :edit]
     resources :teams

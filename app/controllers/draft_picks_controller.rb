@@ -1,4 +1,14 @@
 class DraftPicksController < ApplicationController
+  def create
+    pick = Pick.find(create_params['pick_id'])
+    pick.player_id = create_params['player_id']
+    if pick.save
+      redirect_to :back
+    else
+      flash.alert = 'Unable to save pick'
+    end
+  end
+
   def edit
     @league = League.find(edit_params)
     @available_picks = @league.picks.where(player_id: nil)
@@ -11,6 +21,10 @@ class DraftPicksController < ApplicationController
   end
 
   private
+
+  def create_params
+    params.require(:pick).permit(:pick_id, :player_id)
+  end
 
   def edit_params
     params.require(:league_id)

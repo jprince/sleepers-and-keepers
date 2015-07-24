@@ -9,6 +9,12 @@ class Player < ActiveRecord::Base
   has_many :picks
   has_many :teams, through: :picks
 
+  def self.undrafted(league)
+    players = league.sport.players
+    drafted_players = league.picks.map(&:player)
+    players - drafted_players
+  end
+
   def self.update_player_pool
     logger = Logger.new(STDOUT)
 

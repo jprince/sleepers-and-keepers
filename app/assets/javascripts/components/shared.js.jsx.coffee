@@ -1,4 +1,9 @@
 @getFirstOption = (options) -> if _(options).any() then options[0].value else null
+@getPlayerName = (player) ->
+  if !!player.first_name
+    "#{player.last_name}, #{player.first_name}"
+  else
+    player.last_name
 @getSecondOption = (options) -> if _(options).any() then options[1].value else null
 @getSelection = (options) ->
   selection = []

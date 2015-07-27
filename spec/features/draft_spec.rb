@@ -98,6 +98,17 @@ feature 'League draft room', js: true do
       end
     end
   end
+
+  scenario 'team not on the clock cannot draft a player' do
+    team_with_second_pick = @league.teams.where(draft_pick: 2).first
+    user_with_second_pick = team_with_second_pick.user
+    sign_in user_with_second_pick
+    navigate_to_league
+    league_on_page.enter_draft
+
+    first_player_name = "#{ Player.first.last_name}, #{ Player.first.first_name }"
+    expect(draft_room).to have_no_link first_player_name
+  end
 end
 
 def draft_room

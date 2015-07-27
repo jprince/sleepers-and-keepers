@@ -41,7 +41,12 @@
 @PlayersIndex = React.createClass
   render: ->
     players = @props.players.map ((player, i) ->
-      `<Player key={i} player={player} onSelect={this.props.selectPlayer} userIsPicking={this.props.userIsPicking} />`
+      `<Player
+        key={i}
+        player={player}
+        onSelect={this.props.selectPlayer}
+        userIsPicking={this.props.userIsPicking}
+      />`
     ).bind(@)
 
     `<table className="hoverable">

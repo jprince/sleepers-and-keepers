@@ -3,20 +3,25 @@
   getFirstUnusedPick: (picks) -> _(picks).filter(player: null)[0]
   getInitialState: ->
     picks = @props.picks
+    currentPick = @getFirstUnusedPick(picks)
     selectedPosition = getFirstOption(@props.positions)
 
-    currentPick: @getFirstUnusedPick(picks)
+    currentPick: currentPick
     draftStatus: @props.draftStatus
     picks: picks
     players: @filterPlayersByPosition(selectedPosition)
     selectedPosition: selectedPosition
+    userIsPicking: @props.currentTeamId is currentPick.teamId
   filterPlayersByPosition: (selectedPosition, players = @props.players) ->
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   refreshData: (updatedData) ->
-    @setState({ currentPick: @getFirstUnusedPick(updatedData.picks) })
+    currentPick = @getFirstUnusedPick(updatedData.picks)
+
+    @setState({ currentPick: currentPick })
     @setState({ draftStatus: updatedData.draftStatus })
     @setState({ picks: updatedData.picks })
     @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedData.players) })
+    @setState({ userIsPicking: @props.currentTeamId is currentPick.teamId })
   selectPlayer: (selectedPlayerId, e) ->
     e.preventDefault()
     player = _(@state.players).findWhere({id: selectedPlayerId})
@@ -75,8 +80,12 @@
             onChange={this.selectPosition}
           />
         </div>
-        <PlayersIndex players={this.state.players} selectPlayer={this.selectPlayer}/>
-       </div>`
+        <PlayersIndex
+          players={this.state.players}
+          selectPlayer={this.selectPlayer}
+          userIsPicking={this.state.userIsPicking}
+        />
+      </div>`
 
 @DraftTicker = React.createClass
   componentWillReceiveProps: (newProps) -> @setState({ currentPickId: newProps.currentPick.id })

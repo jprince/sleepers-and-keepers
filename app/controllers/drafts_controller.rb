@@ -1,6 +1,7 @@
 class DraftsController < ApplicationController
   def show
     @league = League.find(draft_params)
+    @current_team_id = @league.teams.find_by(user_id: current_user.id).id
     @teams = @league.teams.sort_by(&:draft_pick)
     @picks = @league.picks.joins('LEFT JOIN players ON picks.player_id = players.id').select(
       'picks.*, players.first_name as player_first_name, players.last_name as player_last_name'

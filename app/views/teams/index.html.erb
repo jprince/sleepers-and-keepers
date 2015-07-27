@@ -2,5 +2,5 @@
 
 <h2>Teams</h2>
 <% @teams.each do |team| %>
-  <h3><%= team.name %></h3>
+  <h3><%= link_to(team.name, league_team_path(@league, team)) %></h3>
 <% end %>

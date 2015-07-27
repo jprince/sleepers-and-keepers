@@ -22,6 +22,7 @@ class TeamsController < ApplicationController
   def show
     @league = league
     @team = @league.teams.find(params[:id])
+    @players = @team.players
     @owner = User.find(@team[:user_id])
   end
 

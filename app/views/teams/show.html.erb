@@ -2,3 +2,13 @@
 
 <h2><%= @team.name %></h2>
 <h3>Owner: <%= @owner.first_name %> <%= @owner.last_name %></h3>
+<% @league.sport.positions.each do |position| %>
+  <h4><%= position %></h4>
+  <div class="<%= position.downcase %>">
+    <% @players.select{|player| player['position'] == position}.each do |player| %>
+      <p>
+        <%= player.first_name.blank? ? player.last_name : "#{player.last_name}, #{player.first_name}" %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

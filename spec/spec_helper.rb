@@ -23,4 +23,5 @@ RSpec.configure do |config|
   config.include Features::DataPreparationHelpers, type: :feature
   config.include Features::NavigationHelpers, type: :feature
   config.include Features::SessionHelpers, type: :feature
+  config.include Features::TimingHelpers, type: :feature
 end

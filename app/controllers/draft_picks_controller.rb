@@ -16,8 +16,18 @@ class DraftPicksController < ApplicationController
   end
 
   def update
-    Pick.execute_trade(update_params)
-    redirect_to action: :edit, status: 303
+    if trade_params.any?
+      Pick.execute_trade(trade_params)
+      redirect_to action: :edit, status: 303
+    else
+      last_pick = League.find(undo_params).picks.where.not(player_id: nil, keeper: true).last
+      last_pick.player_id = nil
+      if last_pick.save
+        redirect_to league_draft_path(undo_params), status: 303
+      else
+        flash.alert = 'Unable to undo pick'
+      end
+    end
   end
 
   private
@@ -30,7 +40,11 @@ class DraftPicksController < ApplicationController
     params.require(:league_id)
   end
 
-  def update_params
-    params.permit(picks: [team_one_picks: [], team_two_picks: []]).require(:picks)
+  def trade_params
+    params.permit(picks: [team_one_picks: [], team_two_picks: []])
+  end
+
+  def undo_params
+    params.require(:league_id)
   end
 end

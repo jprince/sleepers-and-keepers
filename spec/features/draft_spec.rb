@@ -37,17 +37,16 @@ feature 'League draft room', js: true do
   end
 
   scenario 'team on the clock can draft a player' do
-    team_with_first_pick = @league.teams.where(draft_pick: 1).first
+    team_with_first_pick = league_on_page.league_team_with_pick(@league, 1)
     user_with_first_pick = team_with_first_pick.user
     sign_in user_with_first_pick
     navigate_to_league
     league_on_page.enter_draft
 
-    first_player_name = "#{ Player.first.last_name}, #{ Player.first.first_name }"
-    click_link first_player_name
-    expect(draft_room).to have_selected_player(first_player_name)
+    draft_room.select_player(draft_room.first_player_name)
+    expect(draft_room).to have_selected_player(draft_room.first_player_name)
 
-    team_with_second_pick = @league.teams.where(draft_pick: 2).first.name
+    team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name
     expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
   end
 end

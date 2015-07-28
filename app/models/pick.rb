@@ -24,6 +24,8 @@ class Pick < ActiveRecord::Base
   end
 
   def self.execute_trade(params)
+    params = params.require(:picks)
+
     team_one = Pick.find(params['team_one_picks'].first).team_id
     team_two = Pick.find(params['team_two_picks'].first).team_id
 

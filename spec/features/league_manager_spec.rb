@@ -110,6 +110,7 @@ feature 'League manager' do
   scenario 'can start the draft when the league is full' do
     create(:draft_status, description: 'In Progress')
     league = create(:football_league, user: @manager)
+    create(:team, league: league, user: @manager)
 
     navigate_to_league
     expect(league_on_page).to have_no_link 'Start draft'
@@ -134,6 +135,27 @@ feature 'League manager' do
     expect(league_on_page).to have_no_link 'Start draft'
     expect(league_on_page).to have_no_link 'Join draft'
   end
+
+  scenario 'can undo picks during the draft', js: true do
+    league = create(:football_league, :with_draft_in_progress, rounds: 2, user: @manager)
+    create(:team, league: league, user: @manager)
+    create_player_pool
+    fill_league league
+    generate_draft_picks(league)
+    draft_room.select_player_with_first_pick
+
+    sign_in @manager
+    navigate_to_league
+    league_on_page.enter_draft
+    team_with_second_pick = league_on_page.league_team_with_pick(league, 2).name
+    expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
+    expect(draft_room).to have_selected_player(draft_room.first_player_name)
+
+    draft_room.undo_last_pick
+    team_with_first_pick = league_on_page.league_team_with_pick(league, 1).name
+    expect(draft_room).to have_team_on_the_clock(team_with_first_pick)
+    expect(draft_room).to have_no_selected_player(draft_room.first_player_name)
+  end
 end
 
 def has_revised_draft_order?
@@ -150,6 +172,10 @@ def has_revised_draft_order?
     draft_order_inputs[11] == team_three_pick
 
   teams_have_correct_draft_picks_set && teams_in_correct_order
+end
+
+def draft_room
+  @draft_room ||= Pages::DraftRoom.new
 end
 
 def keeper_page

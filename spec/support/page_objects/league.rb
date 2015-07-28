@@ -14,5 +14,9 @@ module Pages
       has_text_in_column?('team', Team.first.name) &&
       has_text_in_column?('player', '')
     end
+
+    def league_team_with_pick(league, round_pick_number)
+      league.teams.where(draft_pick: round_pick_number).first
+    end
   end
 end

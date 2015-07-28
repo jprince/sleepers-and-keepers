@@ -45,6 +45,28 @@ feature 'League members' do
     expect(page).to have_no_link 'Set keepers'
     expect(page).to have_no_link 'Start draft'
   end
+
+  scenario 'cannot undo picks during the draft', js: true do
+    league = create(:football_league, :with_draft_in_progress, rounds: 2)
+    create(:team, league: league, user: @member)
+    create_player_pool
+    fill_league league
+    generate_draft_picks(league)
+
+    navigate_to_league
+    league_on_page.enter_draft
+    wait_for_page_ready do
+      expect(draft_room).to have_no_button 'Undo last pick'
+    end
+  end
+end
+
+def draft_room
+  @draft_room ||= Pages::DraftRoom.new
+end
+
+def league_on_page
+  @league_on_page ||= Pages::League.new
 end
 
 def team_page

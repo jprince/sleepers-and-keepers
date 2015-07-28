@@ -29,7 +29,7 @@
         playerId: @state.selectedPlayer
       method: 'POST'
       url: url
-      success: (updatedData, status) => @props.afterSubmit(updatedData)
+      success: ((updatedData) => @props.afterSubmit(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPick: (selection) -> @setState({ selectedPick: selection })
   selectPlayer: (selection) -> @setState({ selectedPlayer: selection })
@@ -72,7 +72,7 @@
       dataType: 'json'
       method: 'DELETE'
       url: url + '?' + $.param({ 'pickId': @state.selectedTeamKeepers[index].pickId })
-      success: (updatedData, status) => @props.afterRemove(updatedData)
+      success: ((updatedData) => @props.afterRemove(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   render: ->
     keepers = @state.selectedTeamKeepers.map ((player, i) ->

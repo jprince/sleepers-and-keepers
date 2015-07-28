@@ -35,7 +35,7 @@
           teamTwoPicks: @state.selectedTeamTwoPicks
       method: 'PUT'
       url: url
-      success: (updatedData, status) => @refreshData(updatedData)
+      success: ((updatedData) => @refreshData(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   refreshData: (updatedData) ->
     @setState({ picks: updatedData.picks })

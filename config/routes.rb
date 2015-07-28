@@ -18,5 +18,7 @@ Rails.application.routes.draw do
     delete '/keepers/edit', to: 'keepers#edit'
     # league_manager_spec/can trade picks after picks are generated will fail without this route
     put '/draft_picks/edit', to: 'draft_picks#edit'
+    # draft_spec/can undo picks will fail without this route
+    put '/draft', to: 'drafts#show'
   end
 end

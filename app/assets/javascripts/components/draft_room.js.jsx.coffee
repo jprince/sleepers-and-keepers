@@ -29,17 +29,27 @@
           playerId: selectedPlayerId
       method: 'POST'
       url: url
-      success: (updatedData, status) => @refreshData(updatedData)
+      success: ((updatedData) => @refreshData(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPosition: (selectedPosition) ->
     @setState(players: @filterPlayersByPosition(selectedPosition))
     @setState(selectedPosition: selectedPosition)
+  undoLastPick: ->
+    url = "/leagues/#{@props.league}/draft_picks"
+    $.ajax
+      dataType: 'json'
+      method: 'PUT'
+      url: url
+      success: ((updatedData) => @refreshData(updatedData)).bind(@)
+      error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   render: ->
     `<div>
       <DraftTicker
         currentPick={this.state.currentPick}
         picks={this.state.picks}
+        showUndoButton={this.props.userIsLeagueManager}
         teams={this.props.teams}
+        undoLastPick={this.undoLastPick}
       />
       <div className="clear"></div>
       <hr />
@@ -68,10 +78,18 @@
       teamName = @getTeamNameById(pick.teamId)
       `<Pick currentPickId={this.state.currentPickId} key={i} pick={pick} teamName={teamName} />`
     ).bind(@)
+    undoButton =
+      if @props.showUndoButton
+        `<div>
+          <button type="button" onClick={this.props.undoLastPick}>Undo last pick</button>
+        </div>`
+      else
+        null
 
     `<div className="draft-ticker">
       <div id="on-the-clock">
         On the clock: {this.getTeamNameById(this.props.currentPick.teamId)}
+        {undoButton}
       </div>
       {picks}
     </div>`

@@ -25,7 +25,7 @@ module Pages
     end
 
     def remove_first_keeper
-      find('a.remove').click
+      find('i.remove').click
     end
 
     def select_position(position)

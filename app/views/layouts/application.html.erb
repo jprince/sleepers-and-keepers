@@ -6,11 +6,12 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="container">
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
 
   <%= render 'devise/shared/links' %>
+  <div class="clear-floats"></div>
 
   <%= yield %>
 </body>

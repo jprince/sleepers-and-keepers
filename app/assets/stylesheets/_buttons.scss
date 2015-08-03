@@ -1,0 +1,13 @@
+.btn {
+  background-color: $grey-darken-2;
+
+  &:focus { background-color: $grey-lighten-1; }
+
+  &:hover { background-color: $grey; }
+}
+
+.btn-icon {
+  height: 40px;
+  padding: 0;
+  width: 40px;
+}

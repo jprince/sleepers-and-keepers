@@ -1,0 +1,29 @@
+<%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
+  <i class="material-icons">arrow_back</i>
+<% end %>
+
+<h3>Draft Results</h3>
+<table class="hoverable">
+  <thead>
+    <tr>
+      <th>Round</th>
+      <th>Pick</th>
+      <th>Team</th>
+      <th>Player</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @picks.each do |pick| %>
+      <tr class="pick">
+        <td class="round"><%= pick.round %></td>
+        <td class="round-pick"><%= pick.round_pick %></td>
+        <td class="team"><%= pick.team.name %></td>
+        <td class="player">
+          <% unless pick.player.nil? %>
+            <%= pick.player.last_name %>, <%= pick.player.first_name %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

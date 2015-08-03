@@ -1,28 +1,38 @@
-a.remove {
-  cursor: pointer;
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+
+@import 'materialize';
+@import 'variables';
+@import 'buttons';
+@import 'draft-results';
+@import 'draft-room';
+@import 'forms';
+@import 'leagues';
+@import 'selects';
+@import 'teams';
+
+a { color: $grey-darken-1; }
+
+h1 { margin: 4.2rem 0 3.4rem 0; }
+
+nav { background-color: $grey-lighten-1; }
+
+table {
+  thead {
+    background-color: $grey-lighten-3;
+    border: none;
+  }
 }
+
 ul.hmenu {
   list-style: none;
   margin: 0 0 2em;
   padding: 0;
 }
 
-ul.hmenu li {
-  display: inline;
-}
+ul.hmenu li { display: inline; }
 
-.active { background-color: yellow; }
-.clear { clear: both; }
+.clear-floats { clear: both; }
 
-.draft-ticker {
-  #on-the-clock {
-    padding-bottom: 2em;
-  }
+.collection a.collection-item { color: $grey-darken-3; }
 
-  .pick {
-    border: 1px solid black;
-    float: left;
-    padding: 0.5em;
-    width: 11em;
-  }
-}
+.warning { font-style: italic; }

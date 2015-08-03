@@ -14,8 +14,8 @@ feature 'League manager' do
     fill_league league
     reload_page
 
-    click_link 'Set draft order'
-    click_button 'Generate draft picks'
+    click_link 'Set Draft Order'
+    click_link 'Generate Draft Picks'
     expect(league_on_page).to have_empty_draft_results
   end
 
@@ -28,7 +28,7 @@ feature 'League manager' do
     end
 
     navigate_to_league
-    click_link 'Set draft order'
+    click_link 'Set Draft Order'
 
     fill_in 'teams[1][draft_pick]', with: 10
     fill_in 'teams[3][draft_pick]', with: 12
@@ -41,12 +41,12 @@ feature 'League manager' do
     league = create(:football_league, user: @manager)
     fill_league league
     navigate_to_league
-    expect(league_on_page).to have_no_link 'Trade picks'
+    expect(league_on_page).to have_no_link 'Trade Picks'
 
-    click_link 'Set draft order'
-    click_button 'Generate draft picks'
-    click_link 'League Home'
-    click_link 'Trade picks'
+    click_link 'Set Draft Order'
+    click_link 'Generate Draft Picks'
+    navigate_to_league_home
+    click_link 'Trade Picks'
 
     trade_picks_page.select_first_team_pick('Rd: 1, Pick: 1 (1 overall)')
     trade_picks_page.select_first_team_pick('Rd: 2, Pick: 12 (24 overall)')
@@ -64,10 +64,10 @@ feature 'League manager' do
     navigate_to_league
     expect(league_on_page).to have_no_link 'Set keepers'
 
-    click_link 'Set draft order'
-    click_button 'Generate draft picks'
-    click_link 'League Home'
-    click_link 'Set keepers'
+    click_link 'Set Draft Order'
+    click_link 'Generate Draft Picks'
+    navigate_to_league_home
+    click_link 'Set Keepers'
 
     first_team = Team.first
     first_qb = Player.where(position: 'QB').first
@@ -93,12 +93,12 @@ feature 'League manager' do
     click_button 'Save'
     expect(keeper_page).to have_keeper(first_rb_name, last_teams_first_pick)
 
-    click_link 'League Home'
-    click_link 'View draft order'
+    navigate_to_league_home
+    click_link 'View Draft Order'
     expect(league_on_page).to have_drafted_player(first_rb_name)
 
-    click_link 'League Home'
-    click_link 'Set keepers'
+    navigate_to_league_home
+    click_link 'Set Keepers'
     expect(keeper_page).to have_no_keepers
 
     keeper_page.select_team(last_team.name)
@@ -107,17 +107,22 @@ feature 'League manager' do
     expect(keeper_page).to have_no_keepers
   end
 
-  scenario 'can start the draft when the league is full' do
+  scenario 'can start the draft when the league is full and picks have been generated' do
     create(:draft_status, description: 'In Progress')
     league = create(:football_league, user: @manager)
     create(:team, league: league, user: @manager)
 
     navigate_to_league
-    expect(league_on_page).to have_no_link 'Start draft'
+    expect(league_on_page).to have_no_link 'Start Draft'
     fill_league league
 
     reload_page
-    click_link 'Start draft'
+    expect(league_on_page).to have_no_link 'Start Draft'
+
+    click_link 'Set Draft Order'
+    click_link 'Generate Draft Picks'
+    navigate_to_league_home
+    click_link 'Start Draft'
     expect(league_on_page).to have_content 'Fantasy Sports Dojo Draft'
   end
 
@@ -125,15 +130,15 @@ feature 'League manager' do
     create(:football_league, :with_draft_in_progress, user: @manager)
 
     navigate_to_league
-    expect(league_on_page).to have_link 'Join draft'
+    expect(league_on_page).to have_link 'Join Draft'
   end
 
   scenario 'cannot start or join a completed draft' do
     create(:football_league, :with_draft_complete, user: @manager)
 
     navigate_to_league
-    expect(league_on_page).to have_no_link 'Start draft'
-    expect(league_on_page).to have_no_link 'Join draft'
+    expect(league_on_page).to have_no_link 'Start Draft'
+    expect(league_on_page).to have_no_link 'Join Draft'
   end
 
   scenario 'can undo picks during the draft', js: true do

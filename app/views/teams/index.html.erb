@@ -1,6 +1,10 @@
-<%= link_to('League Home', league_path(@league)) %>
-
-<h2>Teams</h2>
-<% @teams.each do |team| %>
-  <h3><%= link_to(team.name, league_team_path(@league, team)) %></h3>
+<%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
+  <i class="material-icons">arrow_back</i>
 <% end %>
+
+<h3>Teams</h3>
+<div class="collection">
+<% @teams.each do |team| %>
+  <h5><%= link_to team.name, league_team_path(@league, team), class: "collection-item" %></h5>
+<% end %>
+</div>

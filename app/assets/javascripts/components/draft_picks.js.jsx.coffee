@@ -1,13 +1,11 @@
 @Pick = React.createClass
   render: ->
     pick = @props.pick
-    elementClass = "pick#{ if @props.currentPickId is pick.id then ' active' else '' }"
-    `<div className={elementClass}>
-      Overall: {pick.overallPick}<br/>
-      Round: {pick.round}<br/>
-      Pick: {pick.roundPick}<br/>
+    player = if @props.showPlayer then "Player: #{pick.player}" else null
+    `<div className="pick">
+      Round {pick.round} | Pick {pick.roundPick} ({pick.overallPick} overall)<br/>
       Team: {this.props.teamName}<br/>
-      Player: {pick.player}
+      {player}
     </div>`
 
 @TradePicksForm = React.createClass
@@ -57,34 +55,45 @@
     $('#team-two-pick-select option:selected').removeAttr('selected')
   render: ->
     `<form onSubmit={this.handleSubmit}>
-      <Select
-        class="team-select"
-        id="team-one-select"
-        onChange={this.selectTeamOne}
-        options={this.state.firstTeamSelectOptions}
-        preSelectedValue={this.state.selectedTeamOne}
-      />
-      <Select
-        class="pick-select"
-        id="team-one-pick-select"
-        multiple="true"
-        onChange={this.selectPickOne}
-        options={this.getPicksForSelectedTeam(this.state.selectedTeamOne)}
-      />
-      <hr />
-      <Select
-        class="team-select"
-        id="team-two-select"
-        onChange={this.selectTeamTwo}
-        options={this.state.secondTeamSelectOptions}
-        preSelectedValue={this.state.selectedTeamTwo}
-      />
-      <Select
-        class="pick-select"
-        id="team-two-pick-select"
-        multiple="true"
-        onChange={this.selectPickTwo}
-        options={this.getPicksForSelectedTeam(this.state.selectedTeamTwo)}
-      />
-      <input type="submit" value="Perform Trade" />
+      <div className="row">
+        <div className="col s6">
+          <Select
+            class="team-select"
+            id="team-one-select"
+            label="Team"
+            onChange={this.selectTeamOne}
+            options={this.state.firstTeamSelectOptions}
+            preSelectedValue={this.state.selectedTeamOne}
+          />
+          <Select
+            class="pick-select"
+            id="team-one-pick-select"
+            label="Pick"
+            multiple="true"
+            onChange={this.selectPickOne}
+            options={this.getPicksForSelectedTeam(this.state.selectedTeamOne)}
+          />
+        </div>
+        <div className="col s6">
+          <Select
+            class="team-select"
+            id="team-two-select"
+            label="Team"
+            onChange={this.selectTeamTwo}
+            options={this.state.secondTeamSelectOptions}
+            preSelectedValue={this.state.selectedTeamTwo}
+          />
+          <Select
+            class="pick-select"
+            id="team-two-pick-select"
+            label="Pick"
+            multiple="true"
+            onChange={this.selectPickTwo}
+            options={this.getPicksForSelectedTeam(this.state.selectedTeamTwo)}
+          />
+        </div>
+      </div>
+      <div className="center-align row">
+        <button className="btn waves-effect waves-light" type="submit">Perform Trade</button>
+      </div>
     </form>`

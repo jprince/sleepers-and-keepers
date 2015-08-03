@@ -1,4 +1,6 @@
-<%= link_to('League Home', league_path(@league)) %>
+<%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
+  <i class="material-icons">arrow_back</i>
+<% end %>
 
-<h2>Trade Picks</h2>
+<h3>Trade Picks</h3>
 <%= react_component 'TradePicksForm', render(template: 'draft_picks/edit.json.jbuilder') %>

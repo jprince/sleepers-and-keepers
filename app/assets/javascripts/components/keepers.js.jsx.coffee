@@ -41,21 +41,24 @@
   render: ->
     `<form onSubmit={this.handleSubmit}>
       <Select
+        class="pick-select"
+        label="Pick"
+        onChange={this.selectPick}
+        options={this.getPicksForSelectedTeam()}
+      />
+      <Select
         class="position-select"
+        label="Position"
         onChange={this.selectPosition}
         options={this.props.positions}
       />
       <Select
         class="player-select"
+        label="Player"
         onChange={this.selectPlayer}
         options={this.state.players}
       />
-      <Select
-        class="pick-select"
-        onChange={this.selectPick}
-        options={this.getPicksForSelectedTeam()}
-      />
-      <input type="submit" value="Save" />
+      <button className="btn waves-effect waves-light" type="submit">Save</button>
     </form>`
 
 @KeeperList = React.createClass
@@ -79,7 +82,12 @@
       keeperText = "#{player.playerName} - #{player.pick}"
       `<li className="keeper" key={i}>
           {keeperText}
-          <a className="remove" onClick={this.handleKeeperRemove.bind(this, i)}>X</a>
+          <i
+            className="remove material-icons red-text text-darken-4"
+            onClick={this.handleKeeperRemove.bind(this, i)}
+          >
+            remove_circle_outline
+          </i>
         </li>`
     ).bind(@)
 
@@ -102,8 +110,12 @@
   selectTeam: (teamID) -> @setState({ selectedTeam: parseInt(teamID) })
   render: ->
     `<div>
-      <Select class="team-select" options={this.props.teams} onChange={this.selectTeam} />
-      <hr />
+      <Select
+        class="team-select"
+        label="Team"
+        onChange={this.selectTeam}
+        options={this.props.teams}
+      />
       <KeepersForm
         afterSubmit={this.refreshData}
         league={this.props.league}
@@ -113,7 +125,7 @@
         selectedTeam={this.state.selectedTeam}
         teams={this.props.teams}
       />
-      <hr />
+      <div className="divider"></div>
       <KeeperList
         afterRemove={this.refreshData}
         keepers={this.state.keepers}

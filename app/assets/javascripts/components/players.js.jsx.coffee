@@ -2,16 +2,26 @@
   render: ->
     player = @props.player
     playerName = getPlayerName(player)
+    icons =
+      if player.injury
+        `<i
+           className="injury material-icons red-text text-darken-4"
+           title={player.injury}
+         >
+           add_box
+         </i>`
+      else
+        null
 
     `<tr className="player">
       <td>
         <a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
           {playerName}
         </a>
+        {icons}
       </td>
       <td>{player.position}</td>
       <td>{player.team}</td>
-      <td>{player.injury}</td>
       <td>{player.headline}</td>
     </tr>`
 
@@ -21,13 +31,12 @@
       `<Player key={i} player={player} onSelect={this.props.selectPlayer} />`
     ).bind(@)
 
-    `<table>
+    `<table className="hoverable">
       <thead>
         <tr>
           <th>Name</th>
           <th>Position</th>
           <th>Team</th>
-          <th>Injury</th>
           <th>News</th>
         </tr>
       </thead>

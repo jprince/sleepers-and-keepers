@@ -1,7 +1,7 @@
 module Pages
   class League < Base
     def enter_draft
-      click_link 'Join draft'
+      click_link 'Join Draft'
     end
 
     def has_drafted_player?(player_name)

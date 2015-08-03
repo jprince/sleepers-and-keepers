@@ -11,7 +11,7 @@ class TeamsController < ApplicationController
 
   def index
     @league = league
-    @teams = @league.teams
+    @teams = @league.teams.sort_by(&:name)
   end
 
   def new

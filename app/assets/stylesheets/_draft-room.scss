@@ -1,0 +1,29 @@
+#draft-ticker {
+  .btn-icon { margin-top: 16px; }
+
+  #current-pick { font-weight: 500; }
+
+  .pick {
+    border: 1px solid $grey-lighten-1;
+    float: left;
+    font-size: 0.8em;
+    margin: 0.1em;
+    padding: 0.5em;
+    width: 18em;
+  }
+
+  .row {
+    &:first-of-type { margin-bottom: 0; }
+  }
+}
+
+.player {
+  td { padding: 5px; }
+
+  .material-icons {
+    cursor: pointer;
+    margin-left: 5px;
+    position: relative;
+    top: 7px;
+  }
+}

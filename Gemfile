@@ -16,6 +16,7 @@ gem 'unicorn'
 # Asset related gems
 gem 'bourbon'
 gem 'coffee-rails', '~> 4.1.0'
+gem 'materialize-sass'
 gem 'neat'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'

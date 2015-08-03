@@ -1,4 +1,5 @@
-<h1>Welcome Home</h1>
-
-<%= link_to('New League', new_league_path) %>
-<%= link_to('View Existing Leagues', leagues_path) %>
+<div class="row">
+  <h1 class="center-align">Sleepers and Keepers</h1>
+  <%= link_to 'New League', new_league_path, class: "col s3 offset-s2 btn waves-effect waves-light" %>
+  <%= link_to 'View Existing Leagues', leagues_path, class: "col s3 offset-s2 btn waves-effect waves-light" %>
+</div>

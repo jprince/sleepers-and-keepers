@@ -1,6 +1,8 @@
-<%= link_to('League Home', league_path(@league)) %>
+<%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
+  <i class="material-icons">arrow_back</i>
+<% end %>
 
-<h2>New Team</h2>
+<h3>New Team</h3>
 
 <%= form_for [@league, @team] do |form| %>
   <div>
@@ -12,6 +14,6 @@
     <%= form.text_field :short_name %>
   </div>
   <div>
-    <%= form.submit "Create" %>
+    <%= form.submit "Create", class: "btn waves-effect waves-light" %>
   </div>
 <% end %>

@@ -1,4 +1,4 @@
-<h2>New League</h2>
+<h3>New League</h3>
 
 <%= form_for @league do |form| %>
   <div>
@@ -22,6 +22,6 @@
     <%= form.number_field :rounds %>
   </div>
   <div>
-    <%= form.submit "Create" %>
+    <%= form.submit "Create", class: "btn waves-effect waves-light" %>
   </div>
 <% end %>

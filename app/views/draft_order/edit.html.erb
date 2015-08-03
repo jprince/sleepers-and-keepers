@@ -1,6 +1,8 @@
-<%= link_to('League Home', league_path(@league)) %>
+<%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
+  <i class="material-icons">arrow_back</i>
+<% end %>
 
-<h2>Edit Draft Order</h2>
+<h3>Edit Draft Order</h3>
 
 <%= form_tag league_draft_order_path do %>
   <ul id="draft-order">
@@ -14,15 +16,15 @@
     <% end %>
   </ul>
   <div>
-    <input name="save" type="submit" value="Save" />
+    <button class="btn waves-effect waves-light" type="submit">Save</button>
   </div>
 <% end %>
-
+<div class="divider"></div>
 <% if @league_full %>
-  <%= button_to('Generate draft picks', league_draft_results_path(@league.id)) %>
-  <p>
-    **Note** You should only generate draft picks once - after the draft order is finalized.
+  <%= link_to 'Generate Draft Picks', league_draft_results_path(@league.id), method: :post, id: "generate-picks-button", class: "btn waves-effect waves-light" %>
+  <p class="warning">
+    You should only generate draft picks once - after the draft order is finalized.
     Re-generating them will remove any existing picks, therefore undoing any trades that you've
-    executed.
+    executed or keepers that you've saved.
   <p>
 <% end %>

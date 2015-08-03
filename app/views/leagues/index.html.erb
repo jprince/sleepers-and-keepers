@@ -1,3 +1,5 @@
-<% @leagues.each do |league| %>
-  <h2><%= link_to(league.name, league_path(league)) %></h2>
-<% end %>
+<div class="collection">
+  <% @leagues.each do |league| %>
+    <h5><%= link_to league.name, league_path(league), class: "collection-item" %></h5>
+  <% end %>
+</div>

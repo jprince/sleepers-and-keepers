@@ -9,6 +9,10 @@ module Features
       click_link name
     end
 
+    def navigate_to_league_home
+      find('#league-home-button').click
+    end
+
     def reload_page
       visit current_path
     end

@@ -25,7 +25,7 @@ feature 'League members' do
     create(:team, league: league, user: @member)
 
     navigate_to_league
-    expect(page).to have_link 'Join draft'
+    expect(page).to have_link 'Join Draft'
   end
 
   scenario 'cannot join a completed draft' do
@@ -33,7 +33,7 @@ feature 'League members' do
     create(:team, league: league, user: @member)
 
     navigate_to_league
-    expect(page).to have_no_link 'Join draft'
+    expect(page).to have_no_link 'Join Draft'
   end
 
   scenario 'has no admin rights' do
@@ -56,7 +56,7 @@ feature 'League members' do
     navigate_to_league
     league_on_page.enter_draft
     wait_for_page_ready do
-      expect(draft_room).to have_no_button 'Undo last pick'
+      expect(draft_room).to have_no_undo_pick_button
     end
   end
 end

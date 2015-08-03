@@ -18,7 +18,8 @@
   render: ->
     options = @props.options.map (option, i) ->
       `<option key={i} value={option.value}>{option.name}</option>`
-    `<div>
+    `<div className="select-wrapper">
+      <span className="select-label">{this.props.label}:</span>
       <select multiple={this.props.multiple}
         className={this.props.class}
         id={this.props.id}
@@ -28,4 +29,5 @@
       >
         {options}
       </select>
+      <div className="clear-floats"></div>
     </div>`

@@ -1,14 +1,21 @@
-<%= link_to('League Home', league_path(@league)) %>
-
-<h2><%= @team.name %></h2>
-<h3>Owner: <%= @owner.first_name %> <%= @owner.last_name %></h3>
-<% @league.sport.positions.each do |position| %>
-  <h4><%= position %></h4>
-  <div class="<%= position.downcase %>">
-    <% @players.select{|player| player['position'] == position}.each do |player| %>
-      <p>
-        <%= player.first_name.blank? ? player.last_name : "#{player.last_name}, #{player.first_name}" %>
-      </p>
-    <% end %>
-  </div>
+<%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
+  <i class="material-icons">arrow_back</i>
 <% end %>
+
+<div class="row">
+  <h3><%= @team.name %></h3>
+  <h5>Owner: <%= @owner.first_name %> <%= @owner.last_name %></h5>
+</div>
+<div class="row divider"></div>
+<div class="row">
+  <% @league.sport.positions.each do |position| %>
+    <h5><%= position %></h5>
+    <div class="position-section <%= position.downcase %>">
+      <% @players.select{|player| player['position'] == position}.each do |player| %>
+        <ul>
+          <li><%= player.first_name.blank? ? player.last_name : "#{player.last_name}, #{player.first_name}" %></li>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+</div>

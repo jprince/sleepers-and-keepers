@@ -51,17 +51,16 @@
         teams={this.props.teams}
         undoLastPick={this.undoLastPick}
       />
-      <div className="clear"></div>
-      <hr />
+      <div className="clear-floats"></div>
+      <div className="divider"></div>
       <div>
-        Position:
         <Select
           class="position-select"
+          label="Position"
           options={this.props.positions}
           onChange={this.selectPosition}
         />
       </div>
-      <hr />
       <PlayersIndex players={this.state.players} selectPlayer={this.selectPlayer}/>
      </div>`
 
@@ -71,25 +70,42 @@
   getTeamNameById: (id) -> _(@props.teams).findWhere(id: id).name
   render: ->
     indexOfCurrentPick = (@props.picks.map (pick) -> pick.id).indexOf(@state.currentPickId)
-    startingPick = _([0, indexOfCurrentPick - 3]).max()
-    endingPick = _([@props.picks.length, startingPick + 7]).min()
-    recentPicks = @props.picks.slice(startingPick, endingPick)
-    picks = recentPicks.map ((pick, i) ->
-      teamName = @getTeamNameById(pick.teamId)
-      `<Pick currentPickId={this.state.currentPickId} key={i} pick={pick} teamName={teamName} />`
+    startingPick = _([0, indexOfCurrentPick - 8]).max()
+    recentPicksArray = @props.picks.slice(startingPick, indexOfCurrentPick)
+    upcomingPicksArray = @props.picks.slice(indexOfCurrentPick + 1, indexOfCurrentPick + 9)
+    recentPicks = recentPicksArray.map ((pick, i) ->
+      `<Pick key={i} pick={pick} showPlayer="true" teamName={this.getTeamNameById(pick.teamId)} />`
+    ).bind(@)
+    upcomingPicks = upcomingPicksArray.map ((pick, i) ->
+      `<Pick key={i} pick={pick} teamName={this.getTeamNameById(pick.teamId)} />`
     ).bind(@)
     undoButton =
       if @props.showUndoButton
         `<div>
-          <button type="button" onClick={this.props.undoLastPick}>Undo last pick</button>
+          <button
+            className="btn btn-icon waves-effect waves-light"
+            id="undo-last-pick"
+            onClick={this.props.undoLastPick}
+            type="button"
+          >
+            <i className="material-icons">undo</i>
+          </button>
         </div>`
       else
         null
 
-    `<div className="draft-ticker">
-      <div id="on-the-clock">
-        On the clock: {this.getTeamNameById(this.props.currentPick.teamId)}
-        {undoButton}
+    `<div id="draft-ticker">
+      <div className="row recent-picks">{recentPicks}</div>
+      <div className="row clear-floats"></div>
+      <div id="current-pick" className="row valign-wrapper">
+        <div className="col s4 offset-s4 center-align valign">
+          <div>Round {this.props.currentPick.round} | Pick {this.props.currentPick.roundPick}</div>
+          <div>On the clock: {this.getTeamNameById(this.props.currentPick.teamId)}</div>
+          <div>Time remaining: 2:00</div>
+        </div>
+        <div className="col s1 valign">{undoButton}</div>
+        <div className="col s3"></div>
       </div>
-      {picks}
+      <div className="clear-floats"></div>
+      <div className="row upcoming-picks">{upcomingPicks}</div>
     </div>`

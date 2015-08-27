@@ -13,7 +13,7 @@
     <%= form.label :short_name %>
     <%= form.text_field :short_name %>
   </div>
-  <div>
-    <%= form.submit "Create", class: "btn waves-effect waves-light" %>
-  </div>
+  <%= content_tag :button, type: :submit, class: "btn waves-effect waves-light" do %>
+    Create
+  <% end %>
 <% end %>

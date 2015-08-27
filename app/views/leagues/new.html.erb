@@ -21,7 +21,7 @@
     <%= form.label :rounds %>
     <%= form.number_field :rounds %>
   </div>
-  <div>
-    <%= form.submit "Create", class: "btn waves-effect waves-light" %>
-  </div>
+  <%= content_tag :button, type: :submit, class: "btn waves-effect waves-light" do %>
+    Create
+  <% end %>
 <% end %>

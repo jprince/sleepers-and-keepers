@@ -9,6 +9,8 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "Send me reset password instructions", class: "btn waves-effect waves-light" %>
+    <%= content_tag :button, type: :submit, class: "btn waves-effect waves-light" do %>
+      Send me reset password instructions
+    <% end %>
   </div>
 <% end %>

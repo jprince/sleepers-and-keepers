@@ -3,13 +3,15 @@
 
   #current-pick { font-weight: 500; }
 
-  .pick {
-    border: 1px solid $grey-lighten-1;
+  .pick-wrapper {
     float: left;
-    font-size: 0.8em;
-    margin: 0.1em;
-    padding: 0.5em;
-    width: 18em;
+    padding: 0.1em;
+
+    .pick {
+      border: 1px solid $grey-lighten-1;
+      font-size: 0.8em;
+      padding: 0.5em;
+    }
   }
 
   .row {

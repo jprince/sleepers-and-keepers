@@ -2,10 +2,12 @@
   render: ->
     pick = @props.pick
     player = if @props.showPlayer then "Player: #{pick.player}" else null
-    `<div className="pick">
-      Round {pick.round} | Pick {pick.roundPick} ({pick.overallPick} overall)<br/>
-      Team: {this.props.teamName}<br/>
-      {player}
+    `<div className="pick-wrapper col s3">
+      <div className="pick">
+        Round {pick.round} | Pick {pick.roundPick} ({pick.overallPick} overall)<br/>
+        Team: {this.props.teamName}<br/>
+        {player}
+      </div>
     </div>`
 
 @TradePicksForm = React.createClass

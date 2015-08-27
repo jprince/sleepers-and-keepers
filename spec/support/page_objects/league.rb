@@ -18,5 +18,11 @@ module Pages
     def league_team_with_pick(league, round_pick_number)
       league.teams.where(draft_pick: round_pick_number).first
     end
+
+    def set_keeper(pick, player)
+      pick.player_id = player.id
+      pick.keeper = true
+      pick.save
+    end
   end
 end

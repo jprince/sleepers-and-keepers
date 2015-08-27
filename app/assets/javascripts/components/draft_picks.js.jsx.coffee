@@ -1,7 +1,7 @@
 @Pick = React.createClass
   render: ->
     pick = @props.pick
-    player = if @props.showPlayer then "Player: #{pick.player}" else null
+    player = if pick.player then "Player: #{pick.player}" else `<span>&nbsp;</span>`
     `<div className="pick-wrapper col s3">
       <div className="pick">
         Round {pick.round} | Pick {pick.roundPick} ({pick.overallPick} overall)<br/>

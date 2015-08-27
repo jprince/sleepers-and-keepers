@@ -71,18 +71,17 @@ feature 'League manager' do
 
     first_team = Team.first
     first_qb = Player.where(position: 'QB').first
-    first_qb_name = "#{first_qb.last_name}, #{first_qb.first_name}"
 
     expect(keeper_page).to have_selected_team(first_team.name)
     expect(keeper_page).to have_selected_pick('Rd: 1, Pick: 12 (12 overall)')
     expect(keeper_page).to have_selected_position('ALL')
 
     keeper_page.select_position('QB')
-    expect(keeper_page).to have_selected_player(first_qb_name)
+    expect(keeper_page).to have_selected_player league_on_page.get_player_name(first_qb)
 
     last_team = Team.last
     first_rb = Player.where(position: 'RB').first
-    first_rb_name = "#{first_rb.last_name}, #{first_rb.first_name}"
+    first_rb_name = league_on_page.get_player_name(first_rb)
     last_teams_first_pick = 'Rd: 1, Pick: 1 (1 overall)'
 
     keeper_page.select_team(last_team.name)

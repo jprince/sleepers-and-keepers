@@ -16,7 +16,7 @@ feature 'League members' do
     click_link 'Teams'
     click_link team.name
 
-    drafted_player_name = "#{drafted_player.last_name}, #{drafted_player.first_name}"
+    drafted_player_name = team_page.get_player_name(drafted_player)
     expect(team_page).to have_player_at_position(drafted_player_name, drafted_player.position)
   end
 

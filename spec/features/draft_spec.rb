@@ -39,7 +39,7 @@ feature 'League draft room', js: true do
       league_on_page.enter_draft
 
       Player.first(8).each do |player|
-        draft_room.select_player("#{ player.last_name}, #{ player.first_name }")
+        draft_room.select_player draft_room.get_player_name(player)
       end
     end
 
@@ -56,6 +56,16 @@ feature 'League draft room', js: true do
     scenario 'shows upcoming draft picks' do
       picks_ten_thru_seventeen = Pick.where(overall_pick: 10..17).map { |pick| pick.team.name }
       expect(draft_room).to have_upcoming_picks_in_ticker(picks_ten_thru_seventeen)
+    end
+
+    scenario 'keepers are shown in upcoming picks' do
+      tenth_overall_pick = Pick.find_by(overall_pick: 10)
+      first_qb = Player.where(position: 'QB').first
+
+      league_on_page.set_keeper(tenth_overall_pick, first_qb)
+      navigate_to_league_home
+      league_on_page.enter_draft
+      expect(draft_room).to have_keeper_in_upcoming_picks draft_room.get_player_name(first_qb)
     end
 
     scenario 'shows time remaining for current pick' do

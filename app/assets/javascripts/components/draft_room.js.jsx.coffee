@@ -78,7 +78,7 @@
     recentPicksArray = @props.picks.slice(startingPick, indexOfCurrentPick)
     upcomingPicksArray = @props.picks.slice(indexOfCurrentPick + 1, indexOfCurrentPick + 9)
     recentPicks = recentPicksArray.map ((pick, i) ->
-      `<Pick key={i} pick={pick} showPlayer="true" teamName={this.getTeamNameById(pick.teamId)} />`
+      `<Pick key={i} pick={pick} teamName={this.getTeamNameById(pick.teamId)} />`
     ).bind(@)
     upcomingPicks = upcomingPicksArray.map ((pick, i) ->
       `<Pick key={i} pick={pick} teamName={this.getTeamNameById(pick.teamId)} />`

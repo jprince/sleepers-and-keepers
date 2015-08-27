@@ -5,7 +5,13 @@ module Pages
     end
 
     def first_player_name
-      "#{ Player.first.last_name}, #{ Player.first.first_name }"
+      get_player_name(Player.first)
+    end
+
+    def has_keeper_in_upcoming_picks?(player_name)
+      within find('.upcoming-picks') do
+        has_player_in_ticker player_name
+      end
     end
 
     def has_no_selected_player?(player_name)
@@ -30,8 +36,7 @@ module Pages
     end
 
     def has_selected_player?(player_name)
-      first_ticker_box = first('.pick')
-      first_ticker_box.has_text? player_name
+      has_player_in_ticker player_name
     end
 
     def has_team_on_the_clock?(team_name)
@@ -68,6 +73,13 @@ module Pages
     def undo_last_pick
       find('#undo-last-pick').click
       sleep 0.25
+    end
+
+    private
+
+    def has_player_in_ticker(player_name)
+      first_ticker_box = first('.pick')
+      first_ticker_box.has_text? player_name
     end
   end
 end

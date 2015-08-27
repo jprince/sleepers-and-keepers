@@ -28,10 +28,6 @@ module Pages
       find('i.remove').click
     end
 
-    def select_position(position)
-      select(position, from: 'position-select')
-    end
-
     def select_team(team_name)
       select(team_name, from: 'team-select')
     end

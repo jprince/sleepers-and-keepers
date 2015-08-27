@@ -1,4 +1,11 @@
 #draft-ticker {
+  .btn {
+    float: left;
+    margin-right: 1em;
+
+    &:focus { background-color: $grey-darken-2; }
+  }
+
   .btn-icon { margin-top: 16px; }
 
   #current-pick { font-weight: 500; }

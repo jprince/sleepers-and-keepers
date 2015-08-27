@@ -57,6 +57,26 @@ feature 'League draft room', js: true do
       picks_ten_thru_seventeen = Pick.where(overall_pick: 10..17).map { |pick| pick.team.name }
       expect(draft_room).to have_upcoming_picks_in_ticker(picks_ten_thru_seventeen)
     end
+
+    scenario 'shows time remaining for current pick' do
+      expect(draft_room.time_remaining).to be_between(0, 120)
+    end
+
+    scenario 'time remaining resets after a pick is made' do
+      draft_room.let_pick_timer_run
+      time_remaining_before_making_pick = draft_room.time_remaining
+      draft_room.select_player(draft_room.first_available_player_name)
+      expect(draft_room.time_remaining).to be > time_remaining_before_making_pick
+    end
+
+    scenario 'time remaining does not reset when the user filters by position' do
+      draft_room.let_pick_timer_run
+      time_remaining_before_filtering = draft_room.time_remaining
+      draft_room.select_position 'QB'
+      wait_for_page_ready(1) do
+        expect(draft_room.time_remaining).to be < time_remaining_before_filtering
+      end
+    end
   end
 end
 

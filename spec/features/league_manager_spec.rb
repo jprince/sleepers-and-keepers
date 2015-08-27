@@ -141,25 +141,53 @@ feature 'League manager' do
     expect(league_on_page).to have_no_link 'Join Draft'
   end
 
-  scenario 'can undo picks during the draft', js: true do
-    league = create(:football_league, :with_draft_in_progress, rounds: 2, user: @manager)
-    create(:team, league: league, user: @manager)
-    create_player_pool
-    fill_league league
-    generate_draft_picks(league)
-    draft_room.select_player_with_first_pick
+  describe 'draft room', js: true do
+    before do
+      @league = create(:football_league, :with_draft_in_progress, rounds: 2, user: @manager)
+      create(:team, league: @league, user: @manager)
+      create_player_pool
+      fill_league @league
+      generate_draft_picks(@league)
+      sign_in @manager
 
-    sign_in @manager
-    navigate_to_league
-    league_on_page.enter_draft
-    team_with_second_pick = league_on_page.league_team_with_pick(league, 2).name
-    expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
-    expect(draft_room).to have_selected_player(draft_room.first_player_name)
+      navigate_to_league
+    end
 
-    draft_room.undo_last_pick
-    team_with_first_pick = league_on_page.league_team_with_pick(league, 1).name
-    expect(draft_room).to have_team_on_the_clock(team_with_first_pick)
-    expect(draft_room).to have_no_selected_player(draft_room.first_player_name)
+    scenario 'can undo picks during the draft' do
+      draft_room.select_player_with_first_pick
+      league_on_page.enter_draft
+
+      team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name
+      expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
+      expect(draft_room).to have_selected_player(draft_room.first_player_name)
+
+      draft_room.undo_last_pick
+      team_with_first_pick = league_on_page.league_team_with_pick(@league, 1).name
+      expect(draft_room).to have_team_on_the_clock(team_with_first_pick)
+      expect(draft_room).to have_no_selected_player(draft_room.first_player_name)
+    end
+
+    scenario 'can pause and resume the timer' do
+      league_on_page.enter_draft
+
+      draft_room.toggle_timer_pause
+      paused_time_remaining = draft_room.time_remaining
+      draft_room.let_pick_timer_run
+      expect(draft_room.time_remaining).to eq paused_time_remaining
+      draft_room.toggle_timer_pause
+      draft_room.let_pick_timer_run
+      expect(draft_room.time_remaining).to be < paused_time_remaining
+    end
+
+    scenario 'time remaining resets after a pick is undone' do
+      draft_room.select_player_with_first_pick
+      league_on_page.enter_draft
+
+      draft_room.let_pick_timer_run(3)
+      time_remaining_before_undoing_pick = draft_room.time_remaining
+      draft_room.undo_last_pick
+      expect(draft_room.time_remaining).to be > time_remaining_before_undoing_pick
+    end
   end
 end
 

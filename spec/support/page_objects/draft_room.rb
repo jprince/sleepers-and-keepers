@@ -1,5 +1,9 @@
 module Pages
   class DraftRoom < Base
+    def first_available_player_name
+      first('.player').find('.select').text
+    end
+
     def first_player_name
       "#{ Player.first.last_name}, #{ Player.first.first_name }"
     end
@@ -7,6 +11,10 @@ module Pages
     def has_no_selected_player?(player_name)
       first_ticker_box = first('.pick')
       first_ticker_box.has_no_text? player_name
+    end
+
+    def has_no_timer_pause_button?
+      has_no_css? '#toggle-pause-pick-timer'
     end
 
     def has_no_undo_pick_button?
@@ -34,6 +42,10 @@ module Pages
       team_names.all? { |team| has_css?('.upcoming-picks .pick', text: team) }
     end
 
+    def let_pick_timer_run(sec = 2)
+      sleep sec
+    end
+
     def select_player(player_name)
       click_link player_name
       sleep 0.25
@@ -45,8 +57,17 @@ module Pages
       first_pick.save
     end
 
+    def toggle_timer_pause
+      find('#toggle-pause-pick-timer').click
+    end
+
+    def time_remaining
+      find('#time-remaining').text.to_i
+    end
+
     def undo_last_pick
       find('#undo-last-pick').click
+      sleep 0.25
     end
   end
 end

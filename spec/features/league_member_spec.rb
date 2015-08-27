@@ -46,17 +46,28 @@ feature 'League members' do
     expect(page).to have_no_link 'Start draft'
   end
 
-  scenario 'cannot undo picks during the draft', js: true do
-    league = create(:football_league, :with_draft_in_progress, rounds: 2)
-    create(:team, league: league, user: @member)
-    create_player_pool
-    fill_league league
-    generate_draft_picks(league)
+  describe 'draft room', js: true do
+    before do
+      league = create(:football_league, :with_draft_in_progress, rounds: 2)
+      create(:team, league: league, user: @member)
+      create_player_pool
+      fill_league league
+      generate_draft_picks(league)
 
-    navigate_to_league
-    league_on_page.enter_draft
-    wait_for_page_ready do
-      expect(draft_room).to have_no_undo_pick_button
+      navigate_to_league
+      league_on_page.enter_draft
+    end
+
+    scenario 'cannot undo picks during the draft' do
+      wait_for_page_ready do
+        expect(draft_room).to have_no_undo_pick_button
+      end
+    end
+
+    scenario 'cannot pause the draft' do
+      wait_for_page_ready do
+        expect(draft_room).to have_no_timer_pause_button
+      end
     end
   end
 end

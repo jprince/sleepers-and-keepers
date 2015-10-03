@@ -14,6 +14,10 @@ module Pages
       end
     end
 
+    def has_link_to_draft_results?
+      has_link? 'View Results'
+    end
+
     def has_no_selected_player?(player_name)
       first_ticker_box = first('.pick')
       first_ticker_box.has_no_text? player_name

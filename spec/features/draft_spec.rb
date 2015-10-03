@@ -32,6 +32,16 @@ feature 'League draft room', js: true do
     expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
   end
 
+  scenario 'completes the draft when no picks remain' do
+    sign_in @league_member
+    navigate_to_league
+    use_league_draft_picks(@league)
+    league_on_page.enter_draft
+
+    expect(draft_room).to have_link_to_draft_results
+    expect(League.last.draft_status_id).to eq DraftStatus.find_by(description: 'Complete').id
+  end
+
   describe 'draft ticker' do
     before do
       sign_in @league_member

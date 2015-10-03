@@ -8,6 +8,10 @@ FactoryGirl.define do
   end
 
   factory :league do
+    after(:create) { DraftStatus.find_or_create_by(description: 'Complete') }
+    after(:create) { DraftStatus.find_or_create_by(description: 'In Progress') }
+    after(:create) { DraftStatus.find_or_create_by(description: 'Not Started') }
+
     draft_status
     name 'Fantasy Sports Dojo'
     password 'password'
@@ -24,7 +28,6 @@ FactoryGirl.define do
     end
 
     trait :with_draft_in_progress do
-      before(:create) { create(:draft_status) }
       draft_status { create(:draft_status, description: 'In Progress') }
     end
   end

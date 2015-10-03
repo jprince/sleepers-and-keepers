@@ -6,6 +6,7 @@
     selectedPosition = getFirstOption(@props.positions)
 
     currentPick: @getFirstUnusedPick(picks)
+    draftStatus: @props.draftStatus
     picks: picks
     players: @filterPlayersByPosition(selectedPosition)
     selectedPosition: selectedPosition
@@ -13,6 +14,7 @@
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   refreshData: (updatedData) ->
     @setState({ currentPick: @getFirstUnusedPick(updatedData.picks) })
+    @setState({ draftStatus: updatedData.draftStatus })
     @setState({ picks: updatedData.picks })
     @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedData.players) })
   selectPlayer: (selectedPlayerId, e) ->
@@ -44,26 +46,34 @@
       success: ((updatedData) => @refreshData(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   render: ->
-    `<div>
-      <DraftTicker
-        currentPick={this.state.currentPick}
-        picks={this.state.picks}
-        showAdminButtons={this.props.userIsLeagueManager}
-        teams={this.props.teams}
-        undoLastPick={this.undoLastPick}
-      />
-      <div className="clear-floats"></div>
-      <div className="divider"></div>
-      <div>
-        <Select
-          class="position-select"
-          label="Position"
-          options={this.props.positions}
-          onChange={this.selectPosition}
+    if @state.draftStatus is 'Complete' or @state.currentPick is undefined
+      `<div className="row">
+        <div className="col s12 center-align">
+          <h4>Draft Complete!</h4>
+          <h5><a href="./draft_results">View Results</a></h5>
+        </div>
+      </div>`
+    else
+      `<div>
+        <DraftTicker
+          currentPick={this.state.currentPick}
+          picks={this.state.picks}
+          showAdminButtons={this.props.userIsLeagueManager}
+          teams={this.props.teams}
+          undoLastPick={this.undoLastPick}
         />
-      </div>
-      <PlayersIndex players={this.state.players} selectPlayer={this.selectPlayer}/>
-     </div>`
+        <div className="clear-floats"></div>
+        <div className="divider"></div>
+        <div>
+          <Select
+            class="position-select"
+            label="Position"
+            options={this.props.positions}
+            onChange={this.selectPosition}
+          />
+        </div>
+        <PlayersIndex players={this.state.players} selectPlayer={this.selectPlayer}/>
+       </div>`
 
 @DraftTicker = React.createClass
   componentWillReceiveProps: (newProps) -> @setState({ currentPickId: newProps.currentPick.id })

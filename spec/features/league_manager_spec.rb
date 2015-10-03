@@ -107,7 +107,6 @@ feature 'League manager' do
   end
 
   scenario 'can start the draft when the league is full and picks have been generated' do
-    create(:draft_status, description: 'In Progress')
     league = create(:football_league, user: @manager)
     create(:team, league: league, user: @manager)
 

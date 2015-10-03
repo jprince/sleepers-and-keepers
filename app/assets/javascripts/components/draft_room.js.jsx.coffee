@@ -32,7 +32,10 @@
           playerId: selectedPlayerId
       method: 'POST'
       url: url
-      success: ((updatedData) => @refreshData(updatedData)).bind(@)
+      success: ((updatedData) =>
+        @refreshData(updatedData)
+        $(document).scrollTop( $("#draft-ticker").offset().top )
+      ).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPosition: (selectedPosition) ->
     @setState(players: @filterPlayersByPosition(selectedPosition))

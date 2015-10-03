@@ -10,8 +10,8 @@ class Player < ActiveRecord::Base
   has_many :teams, through: :picks
 
   def self.undrafted(league)
-    players = league.sport.players
-    drafted_players = league.picks.map(&:player)
+    players = league.sport.players.to_a
+    drafted_players = league.picks.map(&:player).compact
     players - drafted_players
   end
 

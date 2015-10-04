@@ -30,7 +30,7 @@ FactoryGirl.define do
 
   factory :pick do
     overall_pick 1
-    player
+    player nil
     round 1
     round_pick 1
     team

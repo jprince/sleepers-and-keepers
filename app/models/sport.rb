@@ -2,7 +2,6 @@ class Sport < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   has_many :leagues
   has_many :players
-  serialize :positions, Array
 
   def self.get_positions(sport)
     sport.positions.unshift 'ALL'

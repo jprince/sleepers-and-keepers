@@ -6,9 +6,9 @@ gem 'dotenv-rails'
 gem 'httparty'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
+gem 'pg'
 gem 'rails', '4.2.1'
 gem 'react-rails', '~> 1.0'
-gem 'sqlite3'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'turbolinks'
 gem 'unicorn'
@@ -54,3 +54,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
 end
+
+ruby '2.0.0'

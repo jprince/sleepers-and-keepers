@@ -10,7 +10,7 @@ class Sport < ActiveRecord::Base
   def self.seed
     supported_sports.each do |sport|
       sport_record = Sport.find_by(name: sport[:name])
-      if sport_record.blank?
+      unless sport_record
         sport_record = Sport.new
         sport_record.name = sport[:name]
         sport_record.positions = sport[:positions]

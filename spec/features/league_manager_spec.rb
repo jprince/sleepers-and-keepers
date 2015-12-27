@@ -29,10 +29,11 @@ feature 'League manager' do
 
     navigate_to_league
     click_link 'Set Draft Order'
-
-    fill_in 'teams[1][draft_pick]', with: 10
-    fill_in 'teams[3][draft_pick]', with: 12
-    click_button 'Save'
+    wait_for_page_ready do
+      fill_in 'teams[1][draft_pick]', with: 10
+      fill_in 'teams[3][draft_pick]', with: 12
+      click_button 'Save'
+    end
 
     expect(page).to have_revised_draft_order
   end

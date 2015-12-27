@@ -21,7 +21,7 @@ class Player < ActiveRecord::Base
     Sport.supported_sports.each do |sport|
       sport = Sport.find_by(name: sport[:name])
 
-      unless sport.nil?
+      if sport
         api = CBSSportsAPI.new(sport.name)
         data = ActiveSupport::JSON.decode(api.players)['body']['players']
         allowed_positions = sport.positions
@@ -31,13 +31,13 @@ class Player < ActiveRecord::Base
           player_record = Player.find_by(orig_id: player_orig_id)
 
           if player_record.blank?
-            logger.info "Added #{ player['lastname'] }, #{ player['firstname'] }"
+            logger.info "Added #{player['lastname']}, #{player['firstname']}"
             player_record = Player.new
             set_player_attributes(player_record, player)
             player_record.orig_id = player_orig_id
             player_record.sport_id = sport.id
           else
-            logger.info "Updated #{ player['lastname'] }, #{ player['firstname'] }"
+            logger.info "Updated #{player['lastname']}, #{player['firstname']}"
             set_player_attributes(player_record, player)
           end
 
@@ -46,8 +46,6 @@ class Player < ActiveRecord::Base
       end
     end
   end
-
-  private
 
   def self.set_player_attributes(player_record, player)
     player_record.first_name = player['firstname']

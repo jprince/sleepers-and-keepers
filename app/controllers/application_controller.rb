@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_filter :configure_permitted_parameters, if: :devise_controller?
-  before_filter :deep_snake_case_params!
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :deep_snake_case_params!
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) do |user|

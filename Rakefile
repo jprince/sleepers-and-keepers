@@ -4,7 +4,7 @@ Rails.application.load_tasks
 
 if Rails.env.test? || Rails.env.development?
   require 'rubocop/rake_task'
-  Rubocop::RakeTask.new
+  RuboCop::RakeTask.new
 end
 
 task checks: [:rubocop, :coffeelint, :whitespace]

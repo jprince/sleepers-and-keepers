@@ -10,9 +10,9 @@ module Pages
 
     def has_empty_draft_results?
       has_text_in_column?('round', 1) &&
-      has_text_in_column?('round-pick', 1) &&
-      has_text_in_column?('team', Team.first.name) &&
-      has_text_in_column?('player', '')
+        has_text_in_column?('round-pick', 1) &&
+        has_text_in_column?('team', Team.first.name) &&
+        has_text_in_column?('player', '')
     end
 
     def league_team_with_pick(league, round_pick_number)

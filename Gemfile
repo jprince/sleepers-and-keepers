@@ -32,7 +32,7 @@ group :development, :test do
   gem 'launchy'
   gem 'pry'
   gem 'rspec-rails'
-  gem 'rubocop'
+  gem 'rubocop', '~> 0.35.1'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'quiet_assets'
@@ -56,4 +56,4 @@ group :test do
   gem 'shoulda-matchers'
 end
 
-ruby '2.0.0'
+ruby '2.2.3'

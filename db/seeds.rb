@@ -42,20 +42,20 @@ if Rails.env == 'development'
 
     league.size.times do |n|
       user = User.new(
-              email: "user-#{n + 1}@example.com",
-              first_name: 'User',
-              last_name: "#{n + 1}",
-              password: 'asdASD123!@#'
-            )
+        email: "user-#{n + 1}@example.com",
+        first_name: 'User',
+        last_name: "#{n + 1}",
+        password: 'asdASD123!@#'
+      )
       user.save
 
       team = teams[n]
       team = user.teams.create(
-                          name: team[:name],
-                          short_name: team[:short_name],
-                          draft_pick: n + 1,
-                          league_id: league.id
-                        )
+        name: team[:name],
+        short_name: team[:short_name],
+        draft_pick: n + 1,
+        league_id: league.id
+      )
       team.save
     end
   end

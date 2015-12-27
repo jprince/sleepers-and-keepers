@@ -1,13 +1,12 @@
 AllCops:
-  Excludes:
+  Exclude:
     - db/schema.rb
     - script/rails
-    - config/*
-    - tmp/*
-  Includes:
-    - '*.rake'
+    - config/**/*
+    - tmp/**/*
+  Include:
+    - '**/*.rake'
     - Gemfile
-    - Guardfile
     - Rakefile
     - config.ru
   RunRailsCops: true
@@ -52,19 +51,30 @@ MethodLength:
 
 PredicateName:
   Exclude:
-    - spec/features/*
-    - spec/support/features/*
-    - spec/support/page_objects/*
+    - spec/features/**/*
+    - spec/support/features/**/*
+    - spec/support/page_objects/**/*
 
 Output:
   Exclude:
     - bin/setup
-
-RegexpLiteral:
-  MaxSlashes: 0
 
 SymbolArray:
   Enabled: false
 
 TrailingComma:
   Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  Exclude:
+    - app/controllers/drafts_controller.rb
+
+Style/Next:
+  Enabled: false
+
+Style/SingleSpaceBeforeFirstArg:
+  Exclude:
+    - db/migrate/**/*

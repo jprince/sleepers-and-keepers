@@ -17,7 +17,7 @@ feature 'Team owners' do
     click_button 'Create'
     expect(page).to have_content 'Created successfully'
     expect(page).to have_content 'My New Team'
-    expect(page).to have_content "Owner: #{ @member.first_name } #{ @member.last_name }"
+    expect(page).to have_content "Owner: #{@member.first_name} #{@member.last_name}"
   end
 
   scenario 'cannot create a team in a league if they already have one' do

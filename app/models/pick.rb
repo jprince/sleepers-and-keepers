@@ -13,12 +13,12 @@ class Pick < ActiveRecord::Base
     league.rounds.times do |round|
       league.size.times do |pick|
         create(
-            league: league,
-            overall_pick: (round * league.size) + (pick + 1),
-            round: round + 1,
-            round_pick: pick + 1,
-            team: (round + 1).odd? ? draft_order[pick] : draft_order[-(pick + 1)]
-          )
+          league: league,
+          overall_pick: (round * league.size) + (pick + 1),
+          round: round + 1,
+          round_pick: pick + 1,
+          team: (round + 1).odd? ? draft_order[pick] : draft_order[-(pick + 1)]
+        )
       end
     end
   end
@@ -41,8 +41,6 @@ class Pick < ActiveRecord::Base
       pick.save
     end
   end
-
-  private
 
   def self.remove_picks(league)
     league.teams.each do |team|

@@ -6,7 +6,7 @@ namespace :benchmark do
   task :sample do
     data = render_file * 10_000
     times = 100
-    Logger.new(STDOUT).info "timing #{ data.length } rows #{ times } times"
+    Logger.new(STDOUT).info "timing #{data.length} rows #{times} times"
 
     Benchmark.bm do |bm|
       bm.report 'each' do

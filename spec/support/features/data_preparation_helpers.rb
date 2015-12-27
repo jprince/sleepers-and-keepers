@@ -1,13 +1,14 @@
 module Features
   module DataPreparationHelpers
     def create_player_pool
-      FactoryGirl.create(:player, sport: Sport.last)
-      2.times { FactoryGirl.create(:player, position: 'QB', sport: Sport.last) }
-      2.times { FactoryGirl.create(:player, position: 'RB', sport: Sport.last) }
-      2.times { FactoryGirl.create(:player, position: 'WR', sport: Sport.last) }
-      2.times { FactoryGirl.create(:player, position: 'TE', sport: Sport.last) }
-      2.times { FactoryGirl.create(:player, position: 'K', sport: Sport.last) }
-      2.times { FactoryGirl.create(:player, position: 'DST', sport: Sport.last) }
+      football = Sport.find_by(name: 'Football')
+      FactoryGirl.create(:player, sport: football)
+      2.times { FactoryGirl.create(:player, position: 'QB', sport: football) }
+      2.times { FactoryGirl.create(:player, position: 'RB', sport: football) }
+      2.times { FactoryGirl.create(:player, position: 'WR', sport: football) }
+      2.times { FactoryGirl.create(:player, position: 'TE', sport: football) }
+      2.times { FactoryGirl.create(:player, position: 'K', sport: football) }
+      2.times { FactoryGirl.create(:player, position: 'DST', sport: football) }
     end
 
     def fill_league(league)

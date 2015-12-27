@@ -9,6 +9,10 @@ describe Sport do
 end
 
 describe Sport, '.seed' do
+  before do
+    Sport.destroy_all
+  end
+
   it 'inserts new sports' do
     sports = Sport.all
     expect(sports).to be_empty

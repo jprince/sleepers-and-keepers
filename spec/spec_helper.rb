@@ -24,4 +24,8 @@ RSpec.configure do |config|
   config.include Features::NavigationHelpers, type: :feature
   config.include Features::SessionHelpers, type: :feature
   config.include Features::TimingHelpers, type: :feature
+
+  config.before(:suite) do
+    Rails.application.load_seed
+  end
 end

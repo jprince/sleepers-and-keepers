@@ -1,17 +1,17 @@
 RSpec.configure do |config|
+  config.add_setting(:seed_tables)
+  config.seed_tables = %w(draft_statuses sports)
+
   config.before(:suite) do
     DatabaseCleaner.clean_with(:deletion)
   end
 
   config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
+    if example.metadata[:js]
+      DatabaseCleaner.strategy = :truncation, { except: config.seed_tables }
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
     DatabaseCleaner.start
   end
 

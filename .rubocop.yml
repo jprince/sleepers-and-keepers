@@ -11,10 +11,6 @@ AllCops:
     - config.ru
   RunRailsCops: true
 
-AssignmentInCondition:
-  Exclude:
-    - bin/spring
-
 ClassLength:
   Enabled: false
 
@@ -70,7 +66,7 @@ Metrics/AbcSize:
 
 Style/MultilineOperationIndentation:
   Exclude:
-    - app/controllers/drafts_controller.rb
+    - app/models/league.rb
 
 Style/Next:
   Enabled: false

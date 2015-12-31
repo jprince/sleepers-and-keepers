@@ -17,6 +17,6 @@ class DraftOrderController < ApplicationController
   end
 
   def update_params
-    params.permit(teams: [:draft_pick]).require(:teams)
+    params.require(:teams).permit!
   end
 end

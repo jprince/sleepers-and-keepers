@@ -3,7 +3,7 @@ class DraftPicksController < ApplicationController
     pick = Pick.find(create_params['pick_id'])
     pick.player_id = create_params['player_id']
     if pick.save
-      redirect_to :back
+      redirect_back(fallback_location: league_draft_path)
     else
       flash.alert = 'Unable to save pick'
     end
@@ -16,7 +16,7 @@ class DraftPicksController < ApplicationController
   end
 
   def update
-    if trade_params.any?
+    if trade_params.to_h.any?
       Pick.execute_trade(trade_params)
       redirect_to action: :edit, status: 303
     else

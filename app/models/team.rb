@@ -8,6 +8,6 @@ class Team < ActiveRecord::Base
   has_many :players, through: :picks
 
   def self.bulk_update(data)
-    Team.update(data.keys, data.values)
+    Team.update(data.keys, data.to_h.values)
   end
 end

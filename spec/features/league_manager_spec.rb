@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature 'League manager' do
   before do
@@ -30,12 +30,12 @@ feature 'League manager' do
     navigate_to_league
     click_link 'Set Draft Order'
     wait_for_page_ready do
-      fill_in 'teams[1][draft_pick]', with: 10
-      fill_in 'teams[3][draft_pick]', with: 12
+      fill_in "teams[#{Team.all.order(:id)[0].id}][draft_pick]", with: 10
+      fill_in "teams[#{Team.all.order(:id)[2].id}][draft_pick]", with: 12
       click_button 'Save'
     end
 
-    expect(page).to have_revised_draft_order
+    expect(draft_order_page).to have_revised_draft_order
   end
 
   scenario 'can trade draft picks after picks are generated', js: true do
@@ -190,20 +190,8 @@ feature 'League manager' do
   end
 end
 
-def has_revised_draft_order?
-  team_one_pick = find('input#team-1')
-  team_three_pick = find('input#team-3')
-
-  teams_have_correct_draft_picks_set =
-    team_one_pick.value == '10' &&
-    team_three_pick.value == '12'
-
-  draft_order_inputs = all('#draft-order input')
-  teams_in_correct_order =
-    draft_order_inputs[9] == team_one_pick &&
-    draft_order_inputs[11] == team_three_pick
-
-  teams_have_correct_draft_picks_set && teams_in_correct_order
+def draft_order_page
+  @draft_order_page ||= Pages::DraftOrderPage.new
 end
 
 def draft_room

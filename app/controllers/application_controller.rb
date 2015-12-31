@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :deep_snake_case_params!
 
@@ -13,7 +14,7 @@ class ApplicationController < ActionController::Base
     case val
     when Array
       val.map { |v| deep_snake_case_params!(v) }
-    when Hash
+    when Hash, ActionController::Parameters
       val.keys.each do |k, v = val[k]|
         val.delete k
         val[k.underscore] = deep_snake_case_params!(v)

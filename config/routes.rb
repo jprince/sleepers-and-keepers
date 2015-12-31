@@ -21,4 +21,7 @@ Rails.application.routes.draw do
     # draft_spec/can undo picks will fail without this route
     put '/draft', to: 'drafts#show'
   end
+
+  # Serve websocket cable requests in-
+  # mount ActionCable.server => '/cable'
 end

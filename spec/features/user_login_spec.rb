@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature 'Non-authenticated user visits the application' do
   scenario 'can log in with an existing account' do

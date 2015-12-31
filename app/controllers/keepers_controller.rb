@@ -6,7 +6,7 @@ class KeepersController < ApplicationController
 
     if keeper_pick.save
       flash.alert = 'Saved successfully'
-      redirect_to :back
+      redirect_back(fallback_location: league_keepers_edit_path)
     else
       flash.alert = 'Unable to save keeper'
     end

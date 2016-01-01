@@ -50,7 +50,7 @@ group :test do
   gem 'database_cleaner'
   gem 'faker'
   gem 'minitest'
-  gem 'poltergeist', git: 'git://github.com/teampoltergeist/poltergeist', ref: '063fb3f'
+  gem 'poltergeist', '~> 1.8.1'
   gem 'rspec-instafail'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'

@@ -2,6 +2,15 @@
   componentWillReceiveProps: (newProps) -> @setState({ userIsPicking: newProps.userIsPicking })
   getInitialState: -> userIsPicking: @props.userIsPicking
   render: ->
+    player = @props.player
+    playerName = getPlayerName(player)
+    playerNameCellContent =
+      if @props.userIsPicking
+        `<a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
+          {playerName}
+        </a>`
+      else
+        `<span>{playerName}</span>`
     icons =
       if player.injury
         `<i
@@ -14,25 +23,7 @@
         null
 
     `<tr className="player">
-      <td>
-        <a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
-          {playerName}
-        </a>
-        {icons}
-      </td>
-    `
-    player = @props.player
-    playerName = getPlayerName(player)
-    playerNameCellContent =
-      if @props.userIsPicking
-        `<a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
-          {playerName}
-        </a>`
-      else
-        `<span>{playerName}</span>`
-
-    `<tr className="player">
-      <td>{playerNameCellContent}</td>
+      <td>{playerNameCellContent} {icons}</td>
       <td>{player.position}</td>
       <td>{player.team}</td>
       <td>{player.headline}</td>

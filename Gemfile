@@ -7,12 +7,12 @@ gem 'httparty'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'pg'
+gem 'puma'
 gem 'rack-timeout'
 gem 'rails', '4.2.1'
 gem 'react-rails', '~> 1.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'turbolinks'
-gem 'unicorn'
 
 # Asset related gems
 gem 'bourbon'

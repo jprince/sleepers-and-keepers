@@ -7,6 +7,6 @@ class DraftRoomBroadcastJob < ActiveJob::Base
 
   private
     def render_draft_room(league_id)
-      ApplicationController.renderer.render(template: 'drafts/show.json.jbuilder', locals: { data: Draft.state(league_id) })
+      ApplicationController.renderer.render(template: 'drafts/show.json.jbuilder', assigns: { data: Draft.state(league_id) })
     end
 end

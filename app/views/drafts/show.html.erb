@@ -3,4 +3,4 @@
 <% end %>
 
 <h3><%= @data[:league].name %> Draft</h3>
-<%= react_component 'DraftRoom', render(template: 'drafts/show.json.jbuilder', locals: { data: @data }) %>
+<%= react_component 'DraftRoom', render(template: 'drafts/show.json.jbuilder', assigns: { data: @data }) %>

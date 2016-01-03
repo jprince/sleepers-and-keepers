@@ -1,4 +1,4 @@
-json.currentTeamId(@current_team_id || 0)
+json.currentTeamId(@current_team_id)
 json.draftStatus(DraftStatus.find(@league.draft_status_id).description)
 json.league(@league.id)
 json.picks(@picks) do |pick|

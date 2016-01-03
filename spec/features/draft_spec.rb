@@ -46,7 +46,7 @@ feature 'League draft room', js: true do
   scenario 'completes the draft when no picks remain' do
     sign_in @league_member
     navigate_to_league
-    use_league_draft_picks(@league)
+    select_players_with_picks(@league, @league.picks)
     league_on_page.enter_draft
 
     expect(draft_room).to have_link_to_draft_results
@@ -54,34 +54,28 @@ feature 'League draft room', js: true do
   end
 
   describe 'draft ticker' do
-    scenario 'shows the team that is currently on the clock' do
-      make_first_eight_draft_picks(@league)
-      sign_in @league_member
-      navigate_to_league
-      league_on_page.enter_draft
+    context 'showing recent, current, and upcoming picks -' do
+      before do
+        select_players_with_picks(@league, @league.picks.first(8))
+        sign_in @league_member
+        navigate_to_league
+        league_on_page.enter_draft
+      end
 
-      team_with_ninth_pick = league_on_page.league_team_with_pick(@league, 9).name
-      expect(draft_room).to have_team_on_the_clock(team_with_ninth_pick)
-    end
+      scenario 'shows the team that is currently on the clock' do
+        team_with_ninth_pick = league_on_page.league_team_with_pick(@league, 9).name
+        expect(draft_room).to have_team_on_the_clock(team_with_ninth_pick)
+      end
 
-    scenario 'shows recent draft picks' do
-      make_first_eight_draft_picks(@league)
-      sign_in @league_member
-      navigate_to_league
-      league_on_page.enter_draft
+      scenario 'shows recent draft picks' do
+        top_eight_picks = Pick.first(8).map { |pick| pick.team.name }
+        expect(draft_room).to have_recent_picks_in_ticker(top_eight_picks)
+      end
 
-      top_eight_picks = Pick.first(8).map { |pick| pick.team.name }
-      expect(draft_room).to have_recent_picks_in_ticker(top_eight_picks)
-    end
-
-    scenario 'shows upcoming draft picks' do
-      make_first_eight_draft_picks(@league)
-      sign_in @league_member
-      navigate_to_league
-      league_on_page.enter_draft
-
-      picks_ten_thru_seventeen = Pick.where(overall_pick: 10..17).map { |pick| pick.team.name }
-      expect(draft_room).to have_upcoming_picks_in_ticker(picks_ten_thru_seventeen)
+      scenario 'shows upcoming draft picks' do
+        picks_ten_thru_seventeen = Pick.where(overall_pick: 10..17).map { |pick| pick.team.name }
+        expect(draft_room).to have_upcoming_picks_in_ticker(picks_ten_thru_seventeen)
+      end
     end
 
     scenario 'keepers are shown in upcoming picks' do
@@ -89,7 +83,7 @@ feature 'League draft room', js: true do
       first_qb = Player.where(position: 'QB').first
       league_on_page.set_keeper(tenth_overall_pick, first_qb)
 
-      make_first_eight_draft_picks(@league)
+      select_players_with_picks(@league, @league.picks.first(8))
       sign_in @league_member
       navigate_to_league
       league_on_page.enter_draft

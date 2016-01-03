@@ -1,4 +1,4 @@
-App.draft_room = App.cable.subscriptions.create "DraftRoomChannel",
+App.draftRoom = App.cable.subscriptions.create "DraftRoomChannel",
   connected: ->
     # Called when the subscription is ready for use on the server
 
@@ -6,7 +6,7 @@ App.draft_room = App.cable.subscriptions.create "DraftRoomChannel",
     # Called when the subscription has been terminated by the server
 
   received: (data) ->
-    # Called when there's incoming data on the websocket for this channel
+    console.log data
 
-  refresh: ->
-    @perform 'refresh'
+  refresh: (data) ->
+    @perform 'refresh', refreshedData: data

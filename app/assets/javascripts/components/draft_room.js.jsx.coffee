@@ -11,7 +11,7 @@
     picks: picks
     players: @filterPlayersByPosition(selectedPosition)
     selectedPosition: selectedPosition
-    userIsPicking: @props.currentTeamId is currentPick.teamId
+    userIsPicking: @props.currentTeamId is currentPick?.teamId
   filterPlayersByPosition: (selectedPosition, players = @props.players) ->
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   refreshData: (updatedData) ->

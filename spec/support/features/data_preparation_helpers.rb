@@ -23,6 +23,13 @@ module Features
       Pick.create_picks(League.find(league.id))
     end
 
+    def make_first_eight_draft_picks(league)
+      league.picks.first(8).each do |pick|
+        pick.player_id = Player.undrafted(league).first.id
+        pick.save
+      end
+    end
+
     def use_league_draft_picks(league)
       league.picks.each do |pick|
         pick.player_id = Player.first.id

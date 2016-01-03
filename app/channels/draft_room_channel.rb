@@ -8,8 +8,4 @@ class DraftRoomChannel < ApplicationCable::Channel
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
   end
-
-  def refresh(data)
-    ActionCable.server.broadcast 'draft_room_channel', data: data['refreshedData']
-  end
 end

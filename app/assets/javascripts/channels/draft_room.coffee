@@ -7,6 +7,3 @@ App.draftRoom = App.cable.subscriptions.create "DraftRoomChannel",
 
   received: (data) ->
     console.log data
-
-  refresh: (data) ->
-    @perform 'refresh', refreshedData: data

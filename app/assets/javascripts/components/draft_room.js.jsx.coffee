@@ -33,7 +33,6 @@
       method: 'POST'
       url: url
       success: ((updatedData) =>
-        App.draftRoom.refresh(updatedData)
         @refreshData(updatedData)
         $(document).scrollTop( $("#draft-ticker").offset().top )
       ).bind(@)

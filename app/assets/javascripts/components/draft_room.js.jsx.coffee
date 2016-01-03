@@ -7,7 +7,7 @@
     selectedPosition = getFirstOption(@props.positions)
 
     currentPick: currentPick
-    draftStatus: @props.draftStatus
+    draftComplete: @props.draftStatus is 'Complete' or currentPick is undefined
     picks: picks
     players: @filterPlayersByPosition(selectedPosition)
     selectedPosition: selectedPosition
@@ -18,7 +18,7 @@
     currentPick = @getFirstUnusedPick(updatedData.picks)
 
     @setState({ currentPick: currentPick })
-    @setState({ draftStatus: updatedData.draftStatus })
+    @setState({ draftComplete: updatedData.draftStatus is 'Complete' or currentPick is undefined })
     @setState({ picks: updatedData.picks })
     @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedData.players) })
     @setState({ userIsPicking: @props.currentTeamId is currentPick.teamId })
@@ -54,7 +54,7 @@
       success: ((updatedData) => @refreshData(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   render: ->
-    if @state.draftStatus is 'Complete' or @state.currentPick is undefined
+    if @state.draftComplete
       `<div className="row">
         <div className="col s12 center-align">
           <h4>Draft Complete!</h4>

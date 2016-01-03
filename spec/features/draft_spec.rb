@@ -39,7 +39,7 @@ feature 'League draft room', js: true do
     navigate_to_league
     league_on_page.enter_draft
 
-    first_player_name = "#{ Player.first.last_name}, #{ Player.first.first_name }"
+    first_player_name = "#{Player.first.last_name}, #{Player.first.first_name}"
     expect(draft_room).to have_no_link first_player_name
   end
 

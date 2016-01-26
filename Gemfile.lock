@@ -10,18 +10,6 @@ GIT
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
 
-GIT
-  remote: git://github.com/plataformatec/devise
-  revision: 00a0b8e516fbe8fa2bd842b69fd1f294020e323f
-  ref: 00a0b8e
-  specs:
-    devise (3.5.3)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 5.1)
-      responders
-      warden (~> 1.2.3)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -106,6 +94,13 @@ GEM
     connection_pool (2.2.0)
     database_cleaner (1.5.1)
     debug_inspector (0.0.2)
+    devise (3.5.5)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     dotenv (2.0.1)
     dotenv-rails (2.0.1)
@@ -312,7 +307,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   coffeelint
   database_cleaner
-  devise!
+  devise (>= 3.5.3)
   dotenv-rails
   factory_girl_rails
   faker

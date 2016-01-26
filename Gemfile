@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'awesome_print'
-gem 'devise', '>= 3.5.3'
+gem 'devise', git: 'git://github.com/plataformatec/devise', ref: '00a0b8e'
 gem 'dotenv-rails'
 gem 'httparty'
 gem 'jbuilder', '~> 2.0'

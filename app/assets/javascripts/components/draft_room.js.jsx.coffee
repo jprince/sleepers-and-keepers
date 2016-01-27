@@ -69,7 +69,7 @@
         <DraftTicker
           currentPick={this.state.currentPick}
           picks={this.state.picks}
-          showAdminButtons={this.props.userIsLeagueManager}
+          showAdminButtons={this.state.userIsLeagueManager}
           teams={this.props.teams}
           undoLastPick={this.undoLastPick}
         />

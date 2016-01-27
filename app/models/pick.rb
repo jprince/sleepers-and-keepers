@@ -1,6 +1,4 @@
 class Pick < ActiveRecord::Base
-  after_update_commit { DraftRoomBroadcastJob.perform_later self }
-
   validates :overall_pick, presence: true
   validates :round, presence: true
   validates :round_pick, presence: true

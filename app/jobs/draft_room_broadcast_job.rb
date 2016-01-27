@@ -9,10 +9,11 @@ class DraftRoomBroadcastJob < ActiveJob::Base
   end
 
   private
-    def render_draft_room(league_id)
-      ApplicationController.renderer.render(
-        template: 'drafts/show.json.jbuilder',
-        assigns: { channel_broadcast: true, data: Draft.state(league_id) }
-      )
-    end
+
+  def render_draft_room(league_id)
+    ApplicationController.renderer.render(
+      template: 'drafts/show.json.jbuilder',
+      assigns: { channel_broadcast: true, data: Draft.state(league_id) }
+    )
+  end
 end

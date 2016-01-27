@@ -3,6 +3,7 @@ class DraftPicksController < ApplicationController
     pick = Pick.find(create_params['pick_id'])
     pick.player_id = create_params['player_id']
     if pick.save
+      DraftRoomBroadcastJob.perform_later(pick)
       redirect_back(fallback_location: league_draft_path)
     else
       flash.alert = 'Unable to save pick'
@@ -23,6 +24,7 @@ class DraftPicksController < ApplicationController
       last_pick = League.find(undo_params).picks.where.not(player_id: nil, keeper: true).last
       last_pick.player_id = nil
       if last_pick.save
+        DraftRoomBroadcastJob.perform_later(last_pick)
         redirect_to league_draft_path(undo_params), status: 303
       else
         flash.alert = 'Unable to undo pick'

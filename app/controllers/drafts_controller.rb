@@ -1,5 +1,6 @@
 class DraftsController < ApplicationController
   def show
+    @channel_broadcast = false
     @data = Draft.state(draft_params)
   end
 

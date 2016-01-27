@@ -42,17 +42,11 @@
     @setState(players: @filterPlayersByPosition(selectedPosition))
     @setState(selectedPosition: selectedPosition)
   setupSubscription: ->
-    App.draftRoom = App.cable.subscriptions.create("DraftRoomChannel",
-      connected: ->
-        # Called when the subscription is ready for use on the server
-
-      disconnected: ->
-        # Called when the subscription has been terminated by the server
-
-      received: (response) ->
-        @refreshData(JSON.parse(response.data))
-
-      refreshData: @refreshData)
+    App.cable.subscriptions.create { channel: 'DraftRoomChannel', league_id: @props.league },
+      connected: -> # Called when the subscription is ready for use on the server
+      disconnected: -> # Called when the subscription has been terminated by the server
+      received: (response) -> @refreshData(JSON.parse(response.data))
+      refreshData: @refreshData
   undoLastPick: ->
     url = "/leagues/#{@props.league}/draft_picks"
     $.ajax

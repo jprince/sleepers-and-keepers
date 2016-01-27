@@ -22,4 +22,5 @@ json.teams(@data[:teams]) do |team|
   json.extract! team, :id, :name
 end
 
-json.userIsLeagueManager(current_user.id == @data[:league].user_id)
+#how can I pass current_user.id to React? Controller doesn't load when this template is rendered from ActiveJob
+json.userIsLeagueManager(1 == @data[:league].user_id)

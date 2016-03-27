@@ -1,6 +1,8 @@
-<%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
-  <i class="material-icons">arrow_back</i>
-<% end %>
+<div id="keepers-page">
+  <%= link_to league_path(@league), id: 'league-home-button', class: "btn btn-icon waves-effect waves-light" do %>
+    <i class="material-icons">arrow_back</i>
+  <% end %>
 
-<h3>Set Keepers</h3>
-<%= react_component 'KeeperPage', render(template: 'keepers/edit.json.jbuilder') %>
+  <h3>Set Keepers</h3>
+  <%= react_component 'KeeperPage', render(template: 'keepers/edit.json.jbuilder') %>
+</div>

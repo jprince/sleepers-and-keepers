@@ -1,10 +1,9 @@
-unless @channel_broadcast
-  json.currentUser(current_user.id)
-end
-json.draftStatus(DraftStatus.find(@data[:league].draft_status_id).description)
-json.league(@data[:league].id)
-json.leagueManager(@data[:league].user_id)
-json.picks(@data[:picks]) do |pick|
+json.currentPick(@league.current_pick.try(:attributes).try(:camelize))
+json.currentUser(current_user.id)
+json.draftStatus(DraftStatus.find(@league.draft_status_id).description)
+json.league(@league.id)
+json.leagueManager(@league.user_id)
+json.picks(@picks) do |pick|
   json.id pick.id
   json.overallPick pick.overall_pick
   json.player pick.player_first_name.blank? ? pick.player_last_name : "#{pick.player_last_name}, #{pick.player_first_name}"
@@ -13,15 +12,15 @@ json.picks(@data[:picks]) do |pick|
   json.teamId pick.team_id
 end
 
-json.players(@data[:players]) do |player|
+json.players(@players) do |player|
   json.extract! player, :first_name, :id, :last_name, :position, :team, :injury, :headline
 end
 
-json.positions(@data[:positions]) do |position|
+json.positions(@positions) do |position|
   json.value position
   json.name position
 end
 
-json.teams(@data[:teams]) do |team|
+json.teams(@teams) do |team|
   json.extract! team, :id, :name
 end

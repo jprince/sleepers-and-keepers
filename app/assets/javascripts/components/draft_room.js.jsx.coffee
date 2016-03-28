@@ -1,24 +1,28 @@
 @pickDuration = 120
 @DraftRoom = React.createClass
   componentDidMount: -> @setupSubscription()
-  getFirstUnusedPick: (picks) -> _(picks).filter(player: null)[0]
   getInitialState: ->
-    picks = @props.picks
     selectedPosition = getFirstOption(@props.positions)
 
-    currentPick: @getFirstUnusedPick(picks)
+    currentPick: @props.currentPick
     draftStatus: @props.draftStatus
-    picks: picks
+    picks: @props.picks
     players: @filterPlayersByPosition(selectedPosition)
     selectedPosition: selectedPosition
     userIsLeagueManager: @props.currentUser is @props.leagueManager
   filterPlayersByPosition: (selectedPosition, players = @props.players) ->
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   refreshData: (updatedData) ->
-    @setState({ currentPick: @getFirstUnusedPick(updatedData.picks) })
+    updatedPlayers =
+      if updatedData.isUndo
+        @state.players.unshift updatedData.lastSelectedPlayer
+        @state.players
+      else if updatedData.lastSelectedPlayer?
+        _(@state.players).reject (player) -> player.id is updatedData.lastSelectedPlayer.id
     @setState({ draftStatus: updatedData.draftStatus })
-    @setState({ picks: updatedData.picks })
-    @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedData.players) })
+    @setState({ currentPick: updatedData.currentPick })
+    @setState({ picks: @updatePicks(updatedData.lastSelectedPlayer, updatedData.isUndo) })
+    @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedPlayers) })
   selectPlayer: (selectedPlayerId, e) ->
     e.preventDefault()
     player = _(@state.players).findWhere({id: selectedPlayerId})
@@ -36,7 +40,9 @@
       url: url
       success: ((updatedData) =>
         @refreshData(updatedData)
-        $(document).scrollTop( $("#draft-ticker").offset().top )
+        draftTicker = $("#draft-ticker")
+        if draftTicker.length
+          $(document).scrollTop(draftTicker.offset().top)
       ).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPosition: (selectedPosition) ->
@@ -56,6 +62,18 @@
       url: url
       success: ((updatedData) => @refreshData(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
+  updatePicks: (lastSelectedPlayer, isUndo) ->
+    return unless lastSelectedPlayer?
+    currentPick = @state.currentPick.id
+    picks = @state.picks
+    picks.forEach (pick) ->
+      if pick.id is currentPick
+        pick.player =
+          if isUndo
+            undefined
+          else
+            "#{lastSelectedPlayer.last_name}, #{lastSelectedPlayer.first_name}"
+    picks
   render: ->
     if @state.draftStatus is 'Complete' or @state.currentPick is undefined
       `<div className="row">
@@ -87,7 +105,7 @@
        </div>`
 
 @DraftTicker = React.createClass
-  componentWillReceiveProps: (newProps) -> @setState({ currentPickId: newProps.currentPick.id })
+  componentWillReceiveProps: (newProps) -> @setState({ currentPickId: newProps.currentPick?.id })
   getInitialState: ->
     currentPickId: @props.currentPick?.id
     timerPaused: false

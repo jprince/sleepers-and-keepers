@@ -13,31 +13,61 @@ describe League do
   it { should have_many(:picks) }
   it { should have_many(:teams) }
 
-  describe '.update_draft_status' do
-    it 'starts the draft if it has not been started yet' do
+  describe '.begin_draft' do
+    before do
+      @league = create(:football_league, :with_draft_not_started)
+      expect(@league.draft_status.description).to eq 'Not Started'
+    end
+
+    it "sets draft status 'in progress' if it hasn't started yet" do
+      @league.begin_draft
+      expect(@league.draft_status.description).to eq 'In Progress'
+    end
+  end
+
+  describe '.complete_draft' do
+    before do
+      @league = create(:football_league, :with_draft_in_progress)
+      expect(@league.draft_status.description).to eq 'In Progress'
+    end
+
+    it "sets draft status 'in progress' if it hasn't started yet" do
+      @league.complete_draft
+      expect(@league.draft_status.description).to eq 'Complete'
+    end
+  end
+
+  describe '.current_pick' do
+    it "returns the current pick for the selected league's draft" do
       league = create(:football_league)
-      expect(league.draft_status_id).to eq DraftStatus.find_by(description: 'Not Started').id
+      team_with_first_pick = create(:team, league: league)
+      team_with_second_pick = create(:team, league: league)
+      first_pick = create(:pick, team: team_with_first_pick)
+      second_pick = create(:pick, team: team_with_second_pick)
 
-      league.update_draft_status
-      expect(League.last.draft_status_id).to eq DraftStatus.find_by(description: 'In Progress').id
+      expect(league.current_pick.id).to eq first_pick.id
+
+      first_pick.player = create(:player, sport: league.sport)
+      first_pick.save!
+
+      expect(league.current_pick.id).to eq second_pick.id
+    end
+  end
+
+  describe '.draft_not_started?' do
+    it 'returns true if the draft has not started' do
+      league = create(:football_league, :with_draft_not_started)
+      expect(league.draft_not_started?).to be_truthy
     end
 
-    it 'completes the draft after all picks have been made' do
+    it 'returns false if the draft is in progress' do
       league = create(:football_league, :with_draft_in_progress)
-      expect(league.draft_status_id).to eq DraftStatus.find_by(description: 'In Progress').id
-
-      league.update_draft_status
-      expect(League.last.draft_status_id).to eq DraftStatus.find_by(description: 'Complete').id
+      expect(league.draft_not_started?).to be_falsy
     end
 
-    it 'will undo completion if there are picks to be made' do
+    it 'returns false if the draft is complete' do
       league = create(:football_league, :with_draft_complete)
-      team = create(:team, league: league)
-      create(:pick, player: nil, team: team)
-      expect(league.draft_status_id).to eq DraftStatus.find_by(description: 'Complete').id
-
-      league.update_draft_status
-      expect(League.last.draft_status_id).to eq DraftStatus.find_by(description: 'In Progress').id
+      expect(league.draft_not_started?).to be_falsy
     end
   end
 end

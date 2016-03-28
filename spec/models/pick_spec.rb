@@ -9,6 +9,40 @@ describe Pick do
   it { should belong_to(:team) }
   it { should have_one(:league) }
 
+  describe '.last_pick_of_draft?' do
+    before do
+      @league = create(:football_league, :with_draft_in_progress)
+      @team = create(:team, league: @league)
+      @pick = create(:pick, team: @team)
+    end
+
+    it 'returns true if is last pick in draft' do
+      expect(@pick.last_pick_of_draft?).to be_truthy
+    end
+
+    it 'returns false if there are picks remaining' do
+      create(:pick, team: @team)
+      expect(@pick.last_pick_of_draft?).to be_falsy
+    end
+  end
+
+  describe '.previous' do
+    before do
+      @league = create(:football_league, :with_draft_in_progress)
+      @team = create(:team, league: @league)
+      @pick = create(:pick, team: @team)
+    end
+
+    it 'returns the previous pick, if it exists' do
+      pick = create(:pick, team: @team)
+      expect(pick.previous).to eq @pick
+    end
+
+    it 'returns nil if there is no previous pick' do
+      expect(@pick.previous).to be_nil
+    end
+  end
+
   describe '.create_picks' do
     before do
       @league = create(:football_league, rounds: 16)

@@ -11,7 +11,9 @@ gem 'puma'
 gem 'rack-timeout'
 gem 'rails', '5.0.0.beta2'
 gem 'react-rails', '~> 1.0'
+gem 'redis'
 gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sidekiq'
 gem 'turbolinks'
 
 # Asset related gems

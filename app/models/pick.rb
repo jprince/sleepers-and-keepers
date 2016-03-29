@@ -7,6 +7,14 @@ class Pick < ActiveRecord::Base
   belongs_to :team
   has_one :league, through: :team
 
+  def last_pick_of_draft?
+    self.class.find_by('id > ?', id).nil?
+  end
+
+  def previous
+    self.class.where('id < ?', id).last
+  end
+
   def self.create_picks(league)
     remove_picks(league)
     draft_order = league.teams.sort_by(&:draft_pick)

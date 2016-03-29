@@ -1,22 +1,28 @@
 @pickDuration = 120
 @DraftRoom = React.createClass
-  getFirstUnusedPick: (picks) -> _(picks).filter(player: null)[0]
+  componentDidMount: -> @setupSubscription()
   getInitialState: ->
-    picks = @props.picks
     selectedPosition = getFirstOption(@props.positions)
 
-    currentPick: @getFirstUnusedPick(picks)
+    currentPick: @props.currentPick
     draftStatus: @props.draftStatus
-    picks: picks
+    picks: @props.picks
     players: @filterPlayersByPosition(selectedPosition)
     selectedPosition: selectedPosition
+    userIsLeagueManager: @props.currentUser is @props.leagueManager
   filterPlayersByPosition: (selectedPosition, players = @props.players) ->
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   refreshData: (updatedData) ->
-    @setState({ currentPick: @getFirstUnusedPick(updatedData.picks) })
+    updatedPlayers =
+      if updatedData.isUndo
+        @state.players.push updatedData.lastSelectedPlayer
+        _(@state.players).sortBy (player) -> player.lastName
+      else if updatedData.lastSelectedPlayer?
+        _(@state.players).reject (player) -> player.id is updatedData.lastSelectedPlayer.id
     @setState({ draftStatus: updatedData.draftStatus })
-    @setState({ picks: updatedData.picks })
-    @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedData.players) })
+    @setState({ picks: @updatePicks(updatedData.lastSelectedPlayer, updatedData.isUndo) })
+    @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedPlayers) })
+    @setState({ currentPick: updatedData.currentPick })
   selectPlayer: (selectedPlayerId, e) ->
     e.preventDefault()
     player = _(@state.players).findWhere({id: selectedPlayerId})
@@ -34,12 +40,22 @@
       url: url
       success: ((updatedData) =>
         @refreshData(updatedData)
-        $(document).scrollTop( $("#draft-ticker").offset().top )
+        draftTicker = $("#draft-ticker")
+        if draftTicker.length
+          $(document).scrollTop(draftTicker.offset().top)
       ).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPosition: (selectedPosition) ->
     @setState(players: @filterPlayersByPosition(selectedPosition))
     @setState(selectedPosition: selectedPosition)
+  setupSubscription: ->
+    App.cable.subscriptions.create { channel: 'DraftRoomChannel', league_id: @props.league },
+      connected: -> # Called when the subscription is ready for use on the server
+      disconnected: -> # Called when the subscription has been terminated by the server
+      received: (response) ->
+        debugger
+        @refreshData(response.data)
+      refreshData: @refreshData
   undoLastPick: ->
     url = "/leagues/#{@props.league}/draft_picks"
     $.ajax
@@ -48,6 +64,18 @@
       url: url
       success: ((updatedData) => @refreshData(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
+  updatePicks: (lastSelectedPlayer, isUndo) ->
+    return unless lastSelectedPlayer?
+    currentPick = @state.currentPick.id
+    picks = @state.picks
+    picks.forEach (pick) ->
+      if pick.id is currentPick
+        pick.player =
+          if isUndo
+            undefined
+          else
+            "#{lastSelectedPlayer.lastName}, #{lastSelectedPlayer.firstName}"
+    picks
   render: ->
     if @state.draftStatus is 'Complete' or @state.currentPick is undefined
       `<div className="row">
@@ -61,7 +89,7 @@
         <DraftTicker
           currentPick={this.state.currentPick}
           picks={this.state.picks}
-          showAdminButtons={this.props.userIsLeagueManager}
+          showAdminButtons={this.state.userIsLeagueManager}
           teams={this.props.teams}
           undoLastPick={this.undoLastPick}
         />
@@ -79,7 +107,7 @@
        </div>`
 
 @DraftTicker = React.createClass
-  componentWillReceiveProps: (newProps) -> @setState({ currentPickId: newProps.currentPick.id })
+  componentWillReceiveProps: (newProps) -> @setState({ currentPickId: newProps.currentPick?.id })
   getInitialState: ->
     currentPickId: @props.currentPick?.id
     timerPaused: false

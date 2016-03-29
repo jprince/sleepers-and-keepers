@@ -26,6 +26,10 @@ FactoryGirl.define do
     trait :with_draft_in_progress do
       draft_status { DraftStatus.find_or_create_by(description: 'In Progress') }
     end
+
+    trait :with_draft_not_started do
+      draft_status { DraftStatus.find_or_create_by(description: 'Not Started') }
+    end
   end
 
   factory :pick do

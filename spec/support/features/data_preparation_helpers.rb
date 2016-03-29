@@ -22,12 +22,5 @@ module Features
     def generate_draft_picks(league)
       Pick.create_picks(League.find(league.id))
     end
-
-    def use_league_draft_picks(league)
-      league.picks.each do |pick|
-        pick.player_id = Player.first.id
-        pick.save
-      end
-    end
   end
 end

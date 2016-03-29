@@ -37,6 +37,7 @@ class League < ActiveRecord::Base
     {
       current_pick: current_pick.try(:attributes),
       last_selected_player: last_pick ? player_info(last_pick.player_id) : nil,
+      league_id: id,
       draft_status: draft_status.description
     }
   end

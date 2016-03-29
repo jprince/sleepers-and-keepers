@@ -3,7 +3,7 @@ class DraftRoomBroadcastJob < ActiveJob::Base
 
   def perform(draft_state)
     ActionCable.server.broadcast(
-      "draft_room_channel_#{pick.league.id}",
+      "draft_room_channel_#{draft_state['leagueId']}",
       data: draft_state
     )
   end

@@ -54,7 +54,7 @@
       disconnected: -> # Called when the subscription has been terminated by the server
       received: (response) ->
         debugger
-        @refreshData(JSON.parse(response.data))
+        @refreshData(response.data)
       refreshData: @refreshData
   undoLastPick: ->
     url = "/leagues/#{@props.league}/draft_picks"

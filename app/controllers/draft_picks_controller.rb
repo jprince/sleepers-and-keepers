@@ -8,8 +8,8 @@ class DraftPicksController < ApplicationController
         league.complete_draft
       end
       draft_state = league.draft_state.try(:camelize)
-      render json: draft_state
       DraftRoomBroadcastJob.perform_later(draft_state)
+      render json: draft_state
     else
       flash.alert = 'Unable to save pick'
     end

@@ -7,7 +7,9 @@ class DraftPicksController < ApplicationController
       if league.picks.where(player_id: nil).count == 0
         league.complete_draft
       end
-      render json: league.draft_state.try(:camelize)
+      draft_state = league.draft_state.try(:camelize)
+      render json: draft_state
+      DraftRoomBroadcastJob.perform_later(draft_state)
     else
       flash.alert = 'Unable to save pick'
     end
@@ -31,10 +33,20 @@ class DraftPicksController < ApplicationController
         if last_pick.last_pick_of_draft?
           last_pick.league.begin_draft
         end
-        render json: last_pick.league.draft_state.merge(
+        draft_state = last_pick.league.draft_state.merge(
           is_undo: true,
-          last_selected_player: last_pick_player
+          last_selected_player: {
+            id: last_pick_player.id,
+            first_name: last_pick_player.first_name,
+            last_name: last_pick_player.last_name,
+            position: last_pick_player.position,
+            team: last_pick_player.team,
+            injury: last_pick_player.injury,
+            headline: last_pick_player.headline
+          }
         ).camelize
+        render json: draft_state
+        DraftRoomBroadcastJob.perform_later(draft_state)
       else
         flash.alert = 'Unable to undo pick'
       end

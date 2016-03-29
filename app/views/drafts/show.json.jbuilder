@@ -1,3 +1,4 @@
+json.key_format! camelize: :lower
 json.currentPick(@league.current_pick.try(:attributes).try(:camelize))
 json.currentUser(current_user.id)
 json.draftStatus(DraftStatus.find(@league.draft_status_id).description)

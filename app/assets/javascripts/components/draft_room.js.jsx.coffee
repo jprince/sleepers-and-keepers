@@ -16,7 +16,7 @@
     updatedPlayers =
       if updatedData.isUndo
         @state.players.push updatedData.lastSelectedPlayer
-        _(@state.players).sortBy (player) -> player.last_name
+        _(@state.players).sortBy (player) -> player.lastName
       else if updatedData.lastSelectedPlayer?
         _(@state.players).reject (player) -> player.id is updatedData.lastSelectedPlayer.id
     @setState({ draftStatus: updatedData.draftStatus })
@@ -52,7 +52,9 @@
     App.cable.subscriptions.create { channel: 'DraftRoomChannel', league_id: @props.league },
       connected: -> # Called when the subscription is ready for use on the server
       disconnected: -> # Called when the subscription has been terminated by the server
-      received: (response) -> @refreshData(JSON.parse(response.data))
+      received: (response) ->
+        debugger
+        @refreshData(JSON.parse(response.data))
       refreshData: @refreshData
   undoLastPick: ->
     url = "/leagues/#{@props.league}/draft_picks"
@@ -72,7 +74,7 @@
           if isUndo
             undefined
           else
-            "#{lastSelectedPlayer.last_name}, #{lastSelectedPlayer.first_name}"
+            "#{lastSelectedPlayer.lastName}, #{lastSelectedPlayer.firstName}"
     picks
   render: ->
     if @state.draftStatus is 'Complete' or @state.currentPick is undefined

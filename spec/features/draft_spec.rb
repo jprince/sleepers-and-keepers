@@ -33,13 +33,17 @@ feature 'League draft room', js: true do
   end
 
   scenario 'completes the draft when no picks remain' do
-    sign_in @league_member
-    navigate_to_league
-    use_league_draft_picks(@league)
+    league = create(:football_league, :with_draft_in_progress, name: 'Completed draft')
+    league_member = create(:user)
+    team = create(:team, league: league, user: league_member)
+    create(:pick, team: team)
+
+    sign_in league_member
+    navigate_to_league(league.name)
     league_on_page.enter_draft
+    draft_room.select_player(draft_room.first_player_name)
 
     expect(draft_room).to have_link_to_draft_results
-    expect(League.last.draft_status_id).to eq DraftStatus.find_by(description: 'Complete').id
   end
 
   describe 'draft ticker' do

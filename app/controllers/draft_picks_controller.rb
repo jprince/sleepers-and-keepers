@@ -1,9 +1,13 @@
 class DraftPicksController < ApplicationController
   def create
-    pick = Pick.find(create_params['pick_id'])
-    pick.player_id = create_params['player_id']
+    pick = Pick.find(create_params[:pick_id])
+    league = pick.league
+    pick.player_id = create_params[:player_id]
     if pick.save
-      redirect_back(fallback_location: league_draft_path)
+      if league.picks.where(player_id: nil).count == 0
+        league.complete_draft
+      end
+      render json: league.draft_state.try(:camelize)
     else
       flash.alert = 'Unable to save pick'
     end
@@ -20,10 +24,27 @@ class DraftPicksController < ApplicationController
       Pick.execute_trade(trade_params)
       redirect_to action: :edit, status: 303
     else
-      last_pick = League.find(undo_params).picks.where.not(player_id: nil, keeper: true).last
+      league = League.find(undo_params)
+      last_pick = league.picks.where.not(keeper: true, player_id: nil).last
+      last_pick_player = last_pick.player
       last_pick.player_id = nil
       if last_pick.save
-        redirect_to league_draft_path(undo_params), status: 303
+        if last_pick.last_pick_of_draft?
+          league.begin_draft
+        end
+        draft_state = league.draft_state.merge(
+          is_undo: true,
+          last_selected_player: {
+            id: last_pick_player.id,
+            first_name: last_pick_player.first_name,
+            last_name: last_pick_player.last_name,
+            position: last_pick_player.position,
+            team: last_pick_player.team,
+            injury: last_pick_player.injury,
+            headline: last_pick_player.headline
+          }
+        ).camelize
+        render json: draft_state
       else
         flash.alert = 'Unable to undo pick'
       end

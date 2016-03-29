@@ -1,5 +1,9 @@
+json.key_format! camelize: :lower
+json.currentPick(@league.current_pick.try(:attributes).try(:camelize))
+json.currentUser(current_user.id)
 json.draftStatus(DraftStatus.find(@league.draft_status_id).description)
 json.league(@league.id)
+json.leagueManager(@league.user_id)
 json.picks(@picks) do |pick|
   json.id pick.id
   json.overallPick pick.overall_pick
@@ -21,5 +25,3 @@ end
 json.teams(@teams) do |team|
   json.extract! team, :id, :name
 end
-
-json.userIsLeagueManager(current_user.id == @league.user_id)

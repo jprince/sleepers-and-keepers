@@ -15,14 +15,14 @@
   refreshData: (updatedData) ->
     updatedPlayers =
       if updatedData.isUndo
-        @state.players.unshift updatedData.lastSelectedPlayer
-        @state.players
+        @state.players.push updatedData.lastSelectedPlayer
+        _(@state.players).sortBy (player) -> player.last_name
       else if updatedData.lastSelectedPlayer?
         _(@state.players).reject (player) -> player.id is updatedData.lastSelectedPlayer.id
     @setState({ draftStatus: updatedData.draftStatus })
-    @setState({ currentPick: updatedData.currentPick })
     @setState({ picks: @updatePicks(updatedData.lastSelectedPlayer, updatedData.isUndo) })
     @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedPlayers) })
+    @setState({ currentPick: updatedData.currentPick })
   selectPlayer: (selectedPlayerId, e) ->
     e.preventDefault()
     player = _(@state.players).findWhere({id: selectedPlayerId})

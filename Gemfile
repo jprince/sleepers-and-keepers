@@ -11,7 +11,9 @@ gem 'puma'
 gem 'rack-timeout'
 gem 'rails', '5.0.0.beta3'
 gem 'react-rails', '~> 1.0'
+gem 'redis'
 gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sidekiq'
 gem 'turbolinks'
 
 # Asset related gems
@@ -45,7 +47,7 @@ end
 
 group :test do
   gem 'byebug'
-  gem 'capybara', git: 'git://github.com/jnicklas/capybara', ref: '4b3093f'
+  gem 'capybara', git: 'git://github.com/jnicklas/capybara', ref: '2a51b81'
   gem 'capybara-screenshot', '~> 1.0.9'
   gem 'database_cleaner'
   gem 'faker'

@@ -9,6 +9,6 @@ Capybara.register_driver :poltergeist do |app|
     extensions: ['vendor/assets/javascripts/poltergeist/bind_polyfill.js']
   )
 end
-
+Capybara.server = :puma
 Capybara.javascript_driver = :poltergeist
 Capybara::Screenshot.prune_strategy = :keep_last_run

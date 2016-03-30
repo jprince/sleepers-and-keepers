@@ -44,4 +44,7 @@ Rails.application.configure do
 
   # Which React.js build (development, production, with or without add-ons) to serve
   config.react.variant = :development
+
+  # Allow requests from any origin
+  config.action_cable.disable_request_forgery_protection = true
 end

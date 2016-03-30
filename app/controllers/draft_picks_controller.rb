@@ -7,7 +7,8 @@ class DraftPicksController < ApplicationController
       if league.picks.where(player_id: nil).count == 0
         league.complete_draft
       end
-      render json: league.draft_state.try(:camelize)
+      DraftRoomBroadcastJob.perform_later(league.draft_state.try(:camelize))
+      head :no_content
     else
       flash.alert = 'Unable to save pick'
     end
@@ -44,7 +45,8 @@ class DraftPicksController < ApplicationController
             headline: last_pick_player.headline
           }
         ).camelize
-        render json: draft_state
+        DraftRoomBroadcastJob.perform_later(draft_state)
+        head :no_content
       else
         flash.alert = 'Unable to undo pick'
       end

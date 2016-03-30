@@ -1,5 +1,6 @@
 @pickDuration = 120
 @DraftRoom = React.createClass
+  componentDidMount: -> @setupSubscription()
   getInitialState: ->
     selectedPosition = getFirstOption(@props.positions)
 
@@ -12,6 +13,7 @@
   filterPlayersByPosition: (selectedPosition, players = @props.players) ->
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   refreshData: (updatedData) ->
+    return unless updatedData?
     updatedPlayers =
       if updatedData.isUndo
         @state.players.push updatedData.lastSelectedPlayer
@@ -47,6 +49,13 @@
   selectPosition: (selectedPosition) ->
     @setState(players: @filterPlayersByPosition(selectedPosition))
     @setState(selectedPosition: selectedPosition)
+  setupSubscription: ->
+    App.cable.subscriptions.create { channel: 'DraftRoomChannel', league_id: @props.league },
+      connected: -> # Called when the subscription is ready for use on the server
+      disconnected: -> # Called when the subscription has been terminated by the server
+      received: (response) ->
+        @refreshData(response.data)
+      refreshData: @refreshData
   undoLastPick: ->
     url = "/leagues/#{@props.league}/draft_picks"
     $.ajax

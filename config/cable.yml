@@ -1,0 +1,9 @@
+# Action Cable uses Redis to administer connections, channels, and sending/receiving messages over the WebSocket.
+production:
+  url: <%= Rails.application.secrets.redis_to_go_url %>
+
+local: &local
+  url: redis://localhost:6379
+
+development: *local
+test: *local

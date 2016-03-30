@@ -26,8 +26,10 @@ describe DraftPicksController do
       expect(Pick.find(@pick.id).player).to eq @player
     end
 
-    it 'renders the draft state' do
+    it 'creates a background job for refreshing the draft state' do
+      allow(DraftRoomBroadcastJob).to receive(:perform_later)
       create(:pick, team: @team)
+
       post :create, params: {
         league_id: @league.id,
         pick: {
@@ -35,7 +37,9 @@ describe DraftPicksController do
           player_id: @player.id
         }
       }
-      expect(@response.body).to eq @league.draft_state.camelize.to_json
+
+      draft_state = League.find(@league.id).draft_state.camelize
+      expect(DraftRoomBroadcastJob).to have_received(:perform_later).with(draft_state)
     end
 
     it 'completes the draft if no picks remain' do
@@ -77,7 +81,8 @@ describe DraftPicksController do
       expect(Pick.find(pick.id).player).to be_nil
     end
 
-    it 'renders the draft state (with some additional data)' do
+    it 'creates a background job for refreshing the draft state (plus some additional data)' do
+      allow(DraftRoomBroadcastJob).to receive(:perform_later)
       league = create(:football_league, :with_draft_in_progress)
       team = create(:team, league: league)
       player = create(:player, sport: league.sport)
@@ -85,7 +90,7 @@ describe DraftPicksController do
 
       post :update, params: { league_id: league.id }
 
-      draft_state = league.draft_state.merge(
+      draft_state = League.find(league.id).draft_state.merge(
         is_undo: true,
         last_selected_player: {
           id: player.id,
@@ -96,8 +101,8 @@ describe DraftPicksController do
           injury: player.injury,
           headline: player.headline
         }
-      )
-      expect(@response.body).to eq draft_state.camelize.to_json
+      ).camelize
+      expect(DraftRoomBroadcastJob).to have_received(:perform_later).with(draft_state)
     end
 
     it 'does not undo keepers' do

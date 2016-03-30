@@ -32,7 +32,10 @@
 
 @PlayersIndex = React.createClass
   render: ->
-    players = @props.players.map ((player, i) ->
+    searchText = @props.searchText.trim().toLowerCase()
+    filteredPlayers = _(@props.players).filter (player) ->
+      getPlayerName(player).trim().toLowerCase().match searchText
+    players = filteredPlayers.map ((player, i) ->
       `<Player
         key={i}
         player={player}

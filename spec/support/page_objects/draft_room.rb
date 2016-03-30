@@ -18,6 +18,10 @@ module Pages
       has_link? 'View Results'
     end
 
+    def has_no_player?(player)
+      has_no_css?('.player', text: get_player_name(player))
+    end
+
     def has_no_selected_player?(player_name)
       first_ticker_box = first('.pick')
       first_ticker_box.has_no_text? player_name
@@ -31,12 +35,20 @@ module Pages
       has_no_css? '#undo-last-pick'
     end
 
+    def has_player?(player)
+      has_css?('.player', text: get_player_name(player))
+    end
+
     def has_players?
       has_css? '.player'
     end
 
     def has_recent_picks_in_ticker?(team_names)
       team_names.all? { |team| has_css?('.recent-picks .pick', text: team) }
+    end
+
+    def has_search_text?(search_text)
+      has_field?('player-search', with: search_text)
     end
 
     def has_selected_player?(player_name)
@@ -53,6 +65,10 @@ module Pages
 
     def let_pick_timer_run(sec = 2)
       sleep sec
+    end
+
+    def search_for(search_text)
+      fill_in('player-search', with: search_text)
     end
 
     def select_player(player_name)

@@ -1,6 +1,11 @@
 @pickDuration = 120
 @DraftRoom = React.createClass
+  clearSearch: ->
+    @setState({ searchText: '' })
+    @refs.playerSearch.value = '' if @refs.playerSearch?
   componentDidMount: -> @setupSubscription()
+  componentWillMount: -> @updateSearchText = _.debounce(@updateSearchText, 300)
+  componentWillUnmount: -> @updateSearchText.cancel()
   getInitialState: ->
     selectedPosition = getFirstOption(@props.positions)
 
@@ -8,6 +13,7 @@
     draftStatus: @props.draftStatus
     picks: @props.picks
     players: @filterPlayersByPosition(selectedPosition)
+    searchText: ''
     selectedPosition: selectedPosition
     userIsLeagueManager: @props.currentTeam.userId is @props.leagueManagerId
     userIsOnTheClock: @props.currentTeam.id is @props.currentPick?.teamId
@@ -42,6 +48,7 @@
       method: 'POST'
       url: url
       success: ((updatedData) =>
+        @clearSearch()
         @refreshData(updatedData)
         draftTicker = $("#draft-ticker")
         if draftTicker.length
@@ -78,6 +85,8 @@
           else
             "#{lastSelectedPlayer.lastName}, #{lastSelectedPlayer.firstName}"
     picks
+  updateSearchText: (e) -> @setState({ searchText: e.target.value })
+
   render: ->
     if @state.draftStatus is 'Complete' or @state.currentPick is undefined
       `<div className="row">
@@ -105,8 +114,16 @@
             onChange={this.selectPosition}
           />
         </div>
+        <input
+          id="player-search"
+          onChange={this.updateSearchText}
+          placeholder="Player name"
+          ref="playerSearch"
+          type="text"
+        />
         <PlayersIndex
           players={this.state.players}
+          searchText={this.state.searchText}
           selectPlayer={this.selectPlayer}
           userCanSelectPlayers={this.state.userIsLeagueManager || this.state.userIsOnTheClock}
         />

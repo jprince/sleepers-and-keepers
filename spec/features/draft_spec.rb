@@ -18,9 +18,30 @@ feature 'League draft room', js: true do
     expect(draft_room).to have_players
   end
 
+  scenario 'allows users to search for players' do
+    matched_player = create(:player, last_name: 'match', sport: @league.sport)
+    unmatched_player = create(:player, last_name: 'nope', sport: @league.sport)
+    user_with_first_pick = league_on_page.league_team_with_pick(@league, 1).user
+    sign_in user_with_first_pick
+    navigate_to_league
+    league_on_page.enter_draft
+
+    expect(draft_room).to have_player matched_player
+    expect(draft_room).to have_player unmatched_player
+
+    draft_room.search_for 'mat'
+    wait_for_page_ready do
+      expect(draft_room).to have_player matched_player
+      expect(draft_room).to have_no_player unmatched_player
+    end
+
+    draft_room.select_player(draft_room.get_player_name(matched_player))
+    expect(draft_room).to have_player unmatched_player
+    expect(draft_room).to have_search_text ''
+  end
+
   scenario 'team on the clock can draft a player' do
-    team_with_first_pick = league_on_page.league_team_with_pick(@league, 1)
-    user_with_first_pick = team_with_first_pick.user
+    user_with_first_pick = league_on_page.league_team_with_pick(@league, 1).user
     sign_in user_with_first_pick
     navigate_to_league
     league_on_page.enter_draft
@@ -33,8 +54,7 @@ feature 'League draft room', js: true do
   end
 
   scenario 'team not on the clock cannot draft a player' do
-    team_with_second_pick = @league.teams.where(draft_pick: 2).first
-    user_with_second_pick = team_with_second_pick.user
+    user_with_second_pick = league_on_page.league_team_with_pick(@league, 2).user
     sign_in user_with_second_pick
     navigate_to_league
     league_on_page.enter_draft
@@ -105,8 +125,7 @@ feature 'League draft room', js: true do
     end
 
     scenario 'time remaining resets after a pick is made' do
-      team_with_first_pick = league_on_page.league_team_with_pick(@league, 1)
-      user_with_first_pick = team_with_first_pick.user
+      user_with_first_pick = league_on_page.league_team_with_pick(@league, 1).user
       sign_in user_with_first_pick
       navigate_to_league
       league_on_page.enter_draft
@@ -118,8 +137,7 @@ feature 'League draft room', js: true do
     end
 
     scenario 'time remaining does not reset when the user filters by position' do
-      team_with_first_pick = league_on_page.league_team_with_pick(@league, 1)
-      user_with_first_pick = team_with_first_pick.user
+      user_with_first_pick = league_on_page.league_team_with_pick(@league, 1).user
       sign_in user_with_first_pick
       navigate_to_league
       league_on_page.enter_draft

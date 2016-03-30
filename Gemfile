@@ -9,7 +9,7 @@ gem 'jquery-rails'
 gem 'pg'
 gem 'puma'
 gem 'rack-timeout'
-gem 'rails', '5.0.0.beta2'
+gem 'rails', '5.0.0.beta3'
 gem 'react-rails', '~> 1.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'turbolinks'

@@ -9,7 +9,8 @@
     picks: @props.picks
     players: @filterPlayersByPosition(selectedPosition)
     selectedPosition: selectedPosition
-    userIsLeagueManager: @props.currentUser is @props.leagueManager
+    userIsLeagueManager: @props.currentTeam.userId is @props.leagueManagerId
+    userIsOnTheClock: @props.currentTeam.id is @props.currentPick?.teamId
   filterPlayersByPosition: (selectedPosition, players = @props.players) ->
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   refreshData: (updatedData) ->
@@ -24,6 +25,7 @@
     @setState({ picks: @updatePicks(updatedData.lastSelectedPlayer, updatedData.isUndo) })
     @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedPlayers) })
     @setState({ currentPick: updatedData.currentPick })
+    @setState({ userIsOnTheClock: @props.currentTeam.id is updatedData.currentPick?.teamId })
   selectPlayer: (selectedPlayerId, e) ->
     e.preventDefault()
     player = _(@state.players).findWhere({id: selectedPlayerId})
@@ -103,7 +105,11 @@
             onChange={this.selectPosition}
           />
         </div>
-        <PlayersIndex players={this.state.players} selectPlayer={this.selectPlayer}/>
+        <PlayersIndex
+          players={this.state.players}
+          selectPlayer={this.selectPlayer}
+          userCanSelectPlayers={this.state.userIsLeagueManager || this.state.userIsOnTheClock}
+        />
        </div>`
 
 @DraftTicker = React.createClass

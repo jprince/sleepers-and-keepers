@@ -152,6 +152,15 @@ feature 'League manager' do
       navigate_to_league
     end
 
+    scenario 'can draft players even when not on the clock' do
+      league_on_page.enter_draft
+      draft_room.select_player(draft_room.first_player_name)
+      expect(draft_room).to have_selected_player(draft_room.first_player_name)
+
+      team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name
+      expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
+    end
+
     scenario 'can undo picks during the draft' do
       draft_room.select_player_with_first_pick
       league_on_page.enter_draft

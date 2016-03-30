@@ -1,9 +1,9 @@
 json.key_format! camelize: :lower
 json.currentPick(@league.current_pick.try(:attributes).try(:camelize))
-json.currentUser(current_user.id)
+json.currentTeam(@league.teams.find_by(user_id: current_user.id).try(:attributes).try(:camelize))
 json.draftStatus(DraftStatus.find(@league.draft_status_id).description)
 json.league(@league.id)
-json.leagueManager(@league.user_id)
+json.leagueManagerId(@league.user_id)
 json.picks(@picks) do |pick|
   json.id pick.id
   json.overallPick pick.overall_pick

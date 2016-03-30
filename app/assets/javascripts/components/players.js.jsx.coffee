@@ -1,7 +1,17 @@
 @Player = React.createClass
+  componentWillReceiveProps: (newProps) ->
+    @setState({ userCanSelectPlayers: newProps.userCanSelectPlayers })
+  getInitialState: -> userCanSelectPlayers: @props.userCanSelectPlayers
   render: ->
     player = @props.player
     playerName = getPlayerName(player)
+    playerNameCellContent =
+      if @state.userCanSelectPlayers
+        `<a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
+          {playerName}
+        </a>`
+      else
+        `<span>{playerName}</span>`
     icons =
       if player.injury
         `<i
@@ -14,12 +24,7 @@
         null
 
     `<tr className="player">
-      <td>
-        <a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
-          {playerName}
-        </a>
-        {icons}
-      </td>
+      <td>{playerNameCellContent} {icons}</td>
       <td>{player.position}</td>
       <td>{player.team}</td>
       <td>{player.headline}</td>
@@ -28,7 +33,12 @@
 @PlayersIndex = React.createClass
   render: ->
     players = @props.players.map ((player, i) ->
-      `<Player key={i} player={player} onSelect={this.props.selectPlayer} />`
+      `<Player
+        key={i}
+        player={player}
+        onSelect={this.props.selectPlayer}
+        userCanSelectPlayers={this.props.userCanSelectPlayers}
+      />`
     ).bind(@)
 
     `<table className="hoverable">

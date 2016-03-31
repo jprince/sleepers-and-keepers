@@ -27,12 +27,7 @@
 }
 
 .player {
+  height: 34px;
   td { padding: 5px; }
-
-  .material-icons {
-    cursor: pointer;
-    margin-left: 5px;
-    position: relative;
-    top: 7px;
-  }
+  .material-icons { margin-left: 5px; }
 }

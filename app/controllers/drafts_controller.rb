@@ -8,7 +8,7 @@ class DraftsController < ApplicationController
       'picks.*, players.first_name as player_first_name, players.last_name as player_last_name'
     ).order(:id)
     @players = Player.undrafted(league).sort_by { |p| [p.last_name, p.first_name] }
-    @positions = Sport.get_positions(Sport.find(league.sport.id))
+    @positions = Sport.find(league.sport.id).position_options
   end
 
   private

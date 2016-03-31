@@ -3,8 +3,10 @@ class Sport < ActiveRecord::Base
   has_many :leagues
   has_many :players
 
-  def self.get_positions(sport)
-    sport.positions.unshift 'ALL'
+  def position_options
+    position_options =
+      name == 'Baseball' ? positions.reject { |pos| %w(LF CF RF).include? pos } : positions
+    position_options.unshift 'ALL'
   end
 
   def self.seed

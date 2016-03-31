@@ -47,15 +47,24 @@ class Player < ActiveRecord::Base
     end
   end
 
+  private
+
+  def self.outfield_positions
+    %w(CF LF OF RF)
+  end
+  private_class_method :outfield_positions
+
   def self.set_player_attributes(player_record, player)
     player_record.first_name = player['firstname']
     player_record.headline = player.try(:[], 'icons').try(:[], 'headline')
     player_record.injury = player.try(:[], 'icons').try(:[], 'injury')
     player_record.last_name = player['lastname']
     player_record.photo_url = player['photo']
-    player_record.position = player['position']
+    player_record.position =
+      outfield_positions.include?(player['position']) ? 'OF' : player['position']
     player_record.pro_status = player['pro_status']
     player_record.team = player['pro_team']
     player_record
   end
+  private_class_method :set_player_attributes
 end

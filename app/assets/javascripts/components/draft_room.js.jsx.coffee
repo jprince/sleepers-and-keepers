@@ -102,6 +102,7 @@
           showAdminButtons={this.state.userIsLeagueManager}
           teams={this.props.teams}
           undoLastPick={this.undoLastPick}
+          userIsOnTheClock={this.state.userIsOnTheClock}
         />
         <div className="clear-floats"></div>
         <div className="divider"></div>
@@ -183,7 +184,11 @@
         <div className="col s4 offset-s4 center-align valign">
           <div>Round {this.props.currentPick.round} | Pick {this.props.currentPick.roundPick}</div>
           <div>On the clock: {this.getTeamNameById(this.props.currentPick.teamId)}</div>
-          <PickTimer currentPickId={this.state.currentPickId} isPaused={this.state.timerPaused} />
+          <PickTimer
+            currentPickId={this.state.currentPickId}
+            isPaused={this.state.timerPaused}
+            userIsOnTheClock={this.props.userIsOnTheClock}
+          />
         </div>
         <div className="col s2 valign">{adminButtons}</div>
         <div className="col s2 valign"></div>
@@ -221,7 +226,7 @@
   tick: ->
     @setState({ secondsRemaining: @state.secondsRemaining - 1 })
     if @state.secondsRemaining <= 0
-      alert("Time's up, bitch. Pick somebody!")
+      alert("Time's up, bitch. Pick somebody!") if @props.userIsOnTheClock
       @setState({ timeExpired: true })
       clearInterval(@interval)
   runTimer: -> @interval = setInterval(@tick, 1000)

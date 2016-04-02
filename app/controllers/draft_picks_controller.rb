@@ -16,7 +16,7 @@ class DraftPicksController < ApplicationController
 
   def edit
     @league = League.find(edit_params)
-    @available_picks = @league.picks.where(player_id: nil)
+    @available_picks = @league.picks.where(player_id: nil).sort_by(&:overall_pick)
     @teams = @league.teams.sort_by(&:draft_pick)
   end
 

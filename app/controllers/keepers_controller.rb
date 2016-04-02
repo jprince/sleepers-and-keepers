@@ -27,8 +27,8 @@ class KeepersController < ApplicationController
   def edit
     @league = League.find(league_id)
     sport = Sport.find(@league.sport.id)
-    @available_picks = @league.picks.where(player_id: nil)
-    @keepers = @league.picks.where(keeper: true).map(&:player)
+    @available_picks = @league.picks.where(player_id: nil).sort_by(&:overall_pick)
+    @keepers = @league.picks.where(keeper: true).sort_by(&:overall_pick).map(&:player)
     kept_player_ids = @keepers.map(&:id)
     @available_players = sport.players.where.not(id: kept_player_ids)
     @positions = sport.position_options

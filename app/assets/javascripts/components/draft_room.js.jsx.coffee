@@ -5,7 +5,6 @@
     @refs.playerSearch.value = '' if @refs.playerSearch?
   componentDidMount: -> @setupSubscription()
   componentWillMount: -> @updateSearchText = _.debounce(@updateSearchText, 300)
-  componentWillUnmount: -> @updateSearchText.cancel()
   getInitialState: ->
     selectedPosition = getFirstOption(@props.positions)
 

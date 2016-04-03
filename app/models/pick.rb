@@ -12,7 +12,7 @@ class Pick < ActiveRecord::Base
   end
 
   def previous
-    self.class.where('id < ?', id).last
+    self.class.where(keeper: false).where('id < ?', id).last
   end
 
   def self.create_picks(league)

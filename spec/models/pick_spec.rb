@@ -28,12 +28,19 @@ describe Pick do
 
   describe '#previous' do
     before do
-      league = create(:football_league, :with_draft_in_progress)
-      @team = create(:team, league: league)
+      @league = create(:football_league, :with_draft_in_progress)
+      @team = create(:team, league: @league)
       @pick = create(:pick, team: @team)
     end
 
     it 'returns the previous pick, if it exists' do
+      pick = create(:pick, team: @team)
+      expect(pick.previous).to eq @pick
+    end
+
+    it 'skips keepers' do
+      player = create(:player, sport: @league.sport)
+      create(:pick, keeper: true, player: player, team: @team)
       pick = create(:pick, team: @team)
       expect(pick.previous).to eq @pick
     end

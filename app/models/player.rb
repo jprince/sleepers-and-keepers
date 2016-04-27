@@ -10,7 +10,7 @@ class Player < ActiveRecord::Base
   has_many :teams, through: :picks
 
   def self.undrafted(league)
-    players = league.sport.players.to_a
+    players = league.sport.players.where(deleted_at: nil).to_a
     drafted_player_ids = league.picks.map(&:player).compact.map(&:id)
     players.reject { |player| drafted_player_ids.include? player.id }
   end
@@ -26,6 +26,16 @@ class Player < ActiveRecord::Base
         data = ActiveSupport::JSON.decode(api.players)['body']['players']
         allowed_positions = sport.positions
         filtered_players = data.select { |player| allowed_positions.include? player['position'] }
+
+        filtered_player_ids = filtered_players.map { |player| player['id'] }
+        today = Time.zone.now
+        sport.players.each do |player|
+          unless filtered_player_ids.include? player.orig_id
+            player.deleted_at = today
+            player.save!
+          end
+        end
+
         filtered_players.each do |player|
           player_orig_id = player['id']
           player_record = Player.find_by(orig_id: player_orig_id)

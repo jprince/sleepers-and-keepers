@@ -24,22 +24,33 @@ describe Player do
       end
 
       it 'inserts new players' do
-        expect(Player.all).to be_empty
+        expect(Player.where(deleted_at: nil)).to be_empty
 
         Player.update_player_pool
-
-        expect(Player.all.length).to eq 1
       end
 
       it 'updates existing players' do
         create(:player, sport: @football)
 
-        expect(Player.all.length).to eq 1
+        expect(Player.where(deleted_at: nil).count).to eq 1
 
         Player.update_player_pool
       end
 
+      it 'marks old players as deleted' do
+        old_player =
+          create(:player, sport: @football, first_name: 'Josh', last_name: 'Prince', orig_id: '-1')
+
+        expect(Player.where(deleted_at: nil).count).to eq 1
+
+        Player.update_player_pool
+
+        expect(old_player.reload.deleted_at).to be_truthy
+      end
+
       after do
+        expect(Player.where(deleted_at: nil).count).to eq 1
+
         player = Player.last
         expect(player.first_name).to eq 'Tom'
         expect(player.last_name).to eq 'Brady'
@@ -63,9 +74,19 @@ describe Player do
         league = create(:league, sport: @football)
         team = create(:team, league: league)
 
-        expect(Player.undrafted(League.last).length).to eq 2
+        expect(Player.undrafted(League.last).count).to eq 2
         create(:pick, player: drafted_player, team: team)
-        expect(Player.undrafted(League.last).length).to eq 1
+        expect(Player.undrafted(League.last).count).to eq 1
+      end
+
+      it 'does not return deleted players' do
+        create(:player, last_name: 'undrafted', sport: @football)
+        create(:player, last_name: 'deleted', sport: @football, deleted_at: Time.zone.now)
+
+        league = create(:league, sport: @football)
+        undrafted_players = Player.undrafted(league)
+        expect(undrafted_players.count).to eq 1
+        expect(undrafted_players.first.last_name).to eq 'undrafted'
       end
     end
   end

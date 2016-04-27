@@ -1,13 +1,5 @@
 module Pages
   class DraftRoom < Base
-    def first_available_player_name
-      first('.player').find('.select').text
-    end
-
-    def first_player_name
-      get_player_name(Player.first)
-    end
-
     def has_keeper_in_upcoming_picks?(player_name)
       within find('.upcoming-picks') do
         has_player_in_ticker player_name

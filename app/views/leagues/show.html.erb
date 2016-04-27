@@ -9,39 +9,40 @@
     <i class="material-icons right">assignment</i><%= if @draft_status == 'Not Started' then 'View Draft Order' else 'Draft Results' end %>
   <% end %>
 
-  <%
-    unless @user.teams.any? { |team| team.league_id == @league.id } ||
-      @league.teams.length >= @league.size
-  %>
+  <% unless @user.teams.any? { |team| team.league_id == @league.id } || @league.teams.length >= @league.size %>
     <%= link_to new_league_team_path(@league.id), class: "btn waves-effect waves-light" do %>
       <i class="material-icons right">plus_one</i>New Team
     <% end %>
   <% end %>
 
-  <% if @user.id == @owner_id %>
-    <% if @draft_status == 'Not Started' and @league_full %>
-      <%= link_to league_draft_order_path(@league.id), class: "btn waves-effect waves-light" do %>
-        <i class="material-icons right">format_list_numbered</i>Set Draft Order
+  <% if @league_full %>
+    <% if @user.id == @owner_id %>
+      <% if @draft_status == 'Not Started' %>
+        <%= link_to league_draft_order_path(@league.id), class: "btn waves-effect waves-light" do %>
+          <i class="material-icons right">format_list_numbered</i>Set Draft Order
+        <% end %>
       <% end %>
-    <% end %>
-    <% if @has_generated_picks %>
-      <%= link_to edit_league_keepers_path(@league.id), class: "btn waves-effect waves-light" do %>
-        <i class="material-icons right">person_add</i>Set Keepers
-      <% end %>
-      <%= link_to edit_league_draft_picks_path(@league.id), class: "btn waves-effect waves-light" do %>
-        <i class="material-icons right">swap_horiz</i>Trade Picks
-      <% end %>
-      <% if @draft_status == 'Not Started' and @league_full %>
-        <%= link_to league_draft_path(@league.id), class: "btn waves-effect waves-light" do %>
-          <i class="material-icons right">play_circle_outline</i>Start Draft
+      <% if @has_generated_picks %>
+        <% if @draft_status != 'Complete' %>
+          <%= link_to edit_league_draft_picks_path(@league.id), class: "btn waves-effect waves-light" do %>
+            <i class="material-icons right">swap_horiz</i>Trade Picks
+          <% end %>
+        <% end %>
+        <% if @draft_status == 'Not Started' %>
+          <%= link_to edit_league_keepers_path(@league.id), class: "btn waves-effect waves-light" do %>
+            <i class="material-icons right">person_add</i>Set Keepers
+          <% end %>
+          <%= link_to league_draft_path(@league.id), class: "btn waves-effect waves-light" do %>
+            <i class="material-icons right">play_circle_outline</i>Start Draft
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
-  <% end %>
 
-  <% if @draft_status == 'In Progress' %>
-    <%= link_to league_draft_path(@league.id), class: "btn waves-effect waves-light" do %>
-      <i class="material-icons right">open_in_browser</i>Join Draft
+    <% if @draft_status == 'In Progress' %>
+      <%= link_to league_draft_path(@league.id), class: "btn waves-effect waves-light" do %>
+        <i class="material-icons right">open_in_browser</i>Join Draft
+      <% end %>
     <% end %>
   <% end %>
 </div>

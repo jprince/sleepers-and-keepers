@@ -46,8 +46,8 @@ feature 'League draft room', js: true do
     navigate_to_league
     league_on_page.enter_draft
 
-    draft_room.select_player(draft_room.first_player_name)
-    expect(draft_room).to have_selected_player(draft_room.first_player_name)
+    draft_room.select_player(draft_room.get_player_name(Player.first))
+    expect(draft_room).to have_selected_player(draft_room.get_player_name(Player.first))
 
     team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name
     expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
@@ -60,19 +60,22 @@ feature 'League draft room', js: true do
     league_on_page.enter_draft
 
     expect(draft_room).to have_text 'Fantasy Sports Dojo Draft'
-    expect(draft_room).to have_no_link draft_room.first_player_name
+    expect(draft_room).to have_no_link draft_room.get_player_name(Player.first)
   end
 
   scenario 'completes the draft when no picks remain' do
-    league = create(:football_league, :with_draft_in_progress, name: 'Completed draft')
+    league =
+      create(:football_league, :with_draft_in_progress, name: 'Nearly completed draft', rounds: 1)
     league_member = create(:user)
-    team = create(:team, league: league, user: league_member)
-    create(:pick, team: team)
+    create(:team, league: league, user: league_member)
+    fill_league league
+    generate_draft_picks league
+    select_players_with_picks(league, league.picks.first(11))
 
     sign_in league_member
     navigate_to_league(league.name)
     league_on_page.enter_draft
-    draft_room.select_player(draft_room.first_player_name)
+    draft_room.select_player(draft_room.get_player_name(Player.last))
 
     expect(draft_room).to have_link_to_draft_results
   end
@@ -132,7 +135,7 @@ feature 'League draft room', js: true do
 
       draft_room.let_pick_timer_run(4)
       time_remaining_before_making_pick = draft_room.time_remaining
-      draft_room.select_player(draft_room.first_available_player_name)
+      draft_room.select_player(draft_room.get_player_name(Player.first))
       expect(draft_room.time_remaining).to be > time_remaining_before_making_pick
     end
 

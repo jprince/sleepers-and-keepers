@@ -11,8 +11,8 @@ class Player < ActiveRecord::Base
 
   def self.undrafted(league)
     players = league.sport.players.to_a
-    drafted_players = league.picks.map(&:player).compact
-    players - drafted_players
+    drafted_player_ids = league.picks.map(&:player).compact.map(&:id)
+    players.reject { |player| drafted_player_ids.include? player.id }
   end
 
   def self.update_player_pool

@@ -32,7 +32,7 @@ class KeepersController < ApplicationController
     kept_player_ids = @keepers.map(&:id)
     @available_players = sport.players.where.not(id: kept_player_ids)
     @positions = sport.position_options
-    @teams = @league.teams
+    @teams = @league.teams.sort_by(&:draft_pick)
   end
 
   private

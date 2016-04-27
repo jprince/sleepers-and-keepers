@@ -1,7 +1,7 @@
 class Sport < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   has_many :leagues
-  has_many :players
+  has_many :players, -> { order(last_name: :asc, first_name: :asc) }
 
   def position_options
     position_options =

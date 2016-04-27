@@ -70,20 +70,18 @@ feature 'League manager' do
     navigate_to_league_home
     click_link 'Set Keepers'
 
-    first_team = Team.first
-    first_qb = Player.where(position: 'QB').first
-
-    expect(keeper_page).to have_selected_team(first_team.name)
-    expect(keeper_page).to have_selected_pick('Rd: 1, Pick: 12 (12 overall)')
+    expect(keeper_page).to have_selected_team(Team.last.name)
+    expect(keeper_page).to have_selected_pick('Rd: 1, Pick: 1 (1 overall)')
     expect(keeper_page).to have_selected_position('ALL')
 
     keeper_page.select_position('QB')
+    first_qb = league.sport.players.where(position: 'QB').first
     expect(keeper_page).to have_selected_player league_on_page.get_player_name(first_qb)
 
-    last_team = Team.last
-    first_rb = Player.where(position: 'RB').first
+    last_team = Team.first
+    first_rb = league.sport.players.where(position: 'RB').first
     first_rb_name = league_on_page.get_player_name(first_rb)
-    last_teams_first_pick = 'Rd: 1, Pick: 1 (1 overall)'
+    last_teams_first_pick = 'Rd: 1, Pick: 12 (12 overall)'
 
     keeper_page.select_team(last_team.name)
     expect(keeper_page).to have_selected_pick(last_teams_first_pick)

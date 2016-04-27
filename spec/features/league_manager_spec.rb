@@ -39,7 +39,7 @@ feature 'League manager' do
   end
 
   scenario 'can trade draft picks after picks are generated', js: true do
-    league = create(:football_league, user: @manager)
+    league = create(:football_league, user: @manager, rounds: 2)
     fill_league league
     navigate_to_league
     expect(league_on_page).to have_no_link 'Trade Picks'
@@ -124,18 +124,40 @@ feature 'League manager' do
   end
 
   scenario 'can join a draft in progress' do
-    create(:football_league, :with_draft_in_progress, user: @manager)
+    league = create(:football_league, :with_draft_in_progress, user: @manager)
+    fill_league league
+    generate_draft_picks league
 
     navigate_to_league
     expect(league_on_page).to have_link 'Join Draft'
   end
 
   scenario 'cannot start or join a completed draft' do
-    create(:football_league, :with_draft_complete, user: @manager)
+    league = create(:football_league, :with_draft_complete, user: @manager)
+    fill_league league
+    generate_draft_picks league
 
     navigate_to_league
     expect(league_on_page).to have_no_link 'Start Draft'
     expect(league_on_page).to have_no_link 'Join Draft'
+  end
+
+  scenario 'cannot set keepers if the draft has started' do
+    league = create(:football_league, :with_draft_in_progress, user: @manager)
+    fill_league league
+    generate_draft_picks league
+
+    navigate_to_league
+    expect(league_on_page).to have_no_link 'Set Keepers'
+  end
+
+  scenario 'cannot trade picks if the draft is complete' do
+    league = create(:football_league, :with_draft_complete, user: @manager)
+    fill_league league
+    generate_draft_picks league
+
+    navigate_to_league
+    expect(league_on_page).to have_no_link 'Trade Picks'
   end
 
   describe 'draft room', js: true do
@@ -152,25 +174,27 @@ feature 'League manager' do
 
     scenario 'can draft players even when not on the clock' do
       league_on_page.enter_draft
-      draft_room.select_player(draft_room.first_player_name)
-      expect(draft_room).to have_selected_player(draft_room.first_player_name)
+      player_name = draft_room.get_player_name(Player.first)
+      draft_room.select_player(player_name)
+      expect(draft_room).to have_selected_player(player_name)
 
       team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name
       expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
     end
 
     scenario 'can undo picks during the draft' do
+      selected_player_name = draft_room.get_player_name(Player.first)
       draft_room.select_player_with_first_pick
       league_on_page.enter_draft
 
       team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name
       expect(draft_room).to have_team_on_the_clock(team_with_second_pick)
-      expect(draft_room).to have_selected_player(draft_room.first_player_name)
+      expect(draft_room).to have_selected_player(selected_player_name)
 
       draft_room.undo_last_pick
       team_with_first_pick = league_on_page.league_team_with_pick(@league, 1).name
       expect(draft_room).to have_team_on_the_clock(team_with_first_pick)
-      expect(draft_room).to have_no_selected_player(draft_room.first_player_name)
+      expect(draft_room).to have_no_selected_player(selected_player_name)
     end
 
     scenario 'can pause and resume the timer' do

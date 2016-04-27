@@ -23,6 +23,8 @@ feature 'League members' do
   scenario 'can join a draft in progress' do
     league = create(:football_league, :with_draft_in_progress)
     create(:team, league: league, user: @member)
+    fill_league league
+    generate_draft_picks league
 
     navigate_to_league
     expect(page).to have_link 'Join Draft'

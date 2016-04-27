@@ -11,7 +11,7 @@ FactoryGirl.define do
     draft_status { DraftStatus.find_or_create_by(description: 'Not Started') }
     name 'Fantasy Sports Dojo'
     password 'password'
-    rounds 15
+    rounds 1
     size 12
     user
 

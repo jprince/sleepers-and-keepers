@@ -29,8 +29,9 @@ class Player < ActiveRecord::Base
 
         filtered_player_ids = filtered_players.map { |player| player['id'] }
         today = Time.zone.now
-        sport.players.each do |player|
+        sport.players.where(deleted_at: nil).each do |player|
           unless filtered_player_ids.include? player.orig_id
+            logger.info "Removed #{player.last_name}, #{player.first_name}"
             player.deleted_at = today
             player.save!
           end
@@ -65,6 +66,7 @@ class Player < ActiveRecord::Base
   private_class_method :outfield_positions
 
   def self.set_player_attributes(player_record, player)
+    player_record.deleted_at = nil
     player_record.first_name = player['firstname']
     player_record.headline = player.try(:[], 'icons').try(:[], 'headline')
     player_record.injury = player.try(:[], 'icons').try(:[], 'injury')

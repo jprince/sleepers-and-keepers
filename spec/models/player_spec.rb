@@ -48,6 +48,14 @@ describe Player do
         expect(old_player.reload.deleted_at).to be_truthy
       end
 
+      it 'restores deleted players' do
+        create(:player, sport: @football, deleted_at: Time.zone.now)
+
+        expect(Player.where(deleted_at: nil).count).to eq 0
+
+        Player.update_player_pool
+      end
+
       after do
         expect(Player.where(deleted_at: nil).count).to eq 1
 
@@ -64,6 +72,7 @@ describe Player do
         expect(player.pro_status).to eq 'A'
         expect(player.sport_id).to eq @football.id.to_s
         expect(player.orig_id).to eq '1'
+        expect(player.deleted_at).to be_nil
       end
     end
 

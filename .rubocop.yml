@@ -9,7 +9,7 @@ AllCops:
     - Gemfile
     - Rakefile
     - config.ru
-  RunRailsCops: true
+  TargetRubyVersion: 2.2.3
 
 ClassLength:
   Enabled: false
@@ -58,9 +58,6 @@ Output:
 SymbolArray:
   Enabled: false
 
-TrailingComma:
-  Enabled: false
-
 Metrics/AbcSize:
   Enabled: false
 
@@ -71,6 +68,6 @@ Style/MultilineOperationIndentation:
 Style/Next:
   Enabled: false
 
-Style/SingleSpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Exclude:
     - db/migrate/**/*

@@ -21,8 +21,8 @@ class League < ActiveRecord::Base
 
   def current_pick
     picks.order(:id)
-      .select(:id, :overall_pick, :round, :round_pick, :team_id)
-      .find_by(player_id: nil)
+         .select(:id, :overall_pick, :round, :round_pick, :team_id)
+         .find_by(player_id: nil)
   end
 
   def draft_not_started?
@@ -43,7 +43,7 @@ class League < ActiveRecord::Base
 
   def player_info(player_id)
     Player.select(:id, :first_name, :last_name, :position, :team, :injury, :headline)
-      .find(player_id)
-      .attributes
+          .find(player_id)
+          .attributes
   end
 end

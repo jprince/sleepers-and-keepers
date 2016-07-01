@@ -66,7 +66,7 @@ describe DraftPicksController do
     end
   end
 
-  context '#update' do
+  context '#destroy' do
     before do
       sign_in create(:user)
     end
@@ -77,7 +77,7 @@ describe DraftPicksController do
       player = create(:player, sport: league.sport)
       pick = create(:pick, player: player, team: team)
 
-      post :update, params: { league_id: league.id }
+      delete :destroy, params: { league_id: league.id }
       expect(Pick.find(pick.id).player).to be_nil
     end
 
@@ -88,7 +88,7 @@ describe DraftPicksController do
       player = create(:player, sport: league.sport)
       create(:pick, player: player, team: team)
 
-      post :update, params: { league_id: league.id }
+      delete :destroy, params: { league_id: league.id }
 
       draft_state = League.find(league.id).draft_state.merge(
         is_undo: true,
@@ -113,7 +113,7 @@ describe DraftPicksController do
       pick = create(:pick, player: player_one, team: team)
       keeper = create(:pick, player: player_two, team: team, keeper: true)
 
-      post :update, params: { league_id: league.id }
+      delete :destroy, params: { league_id: league.id }
       expect(Pick.find(keeper.id).player).to eq player_two
       expect(Pick.find(pick.id).player).to be_nil
     end
@@ -126,7 +126,7 @@ describe DraftPicksController do
 
       expect(league.draft_status.description).to eq 'Complete'
 
-      post :update, params: { league_id: league.id }
+      delete :destroy, params: { league_id: league.id }
       expect(League.find(league.id).draft_status.description).to eq 'In Progress'
     end
 
@@ -139,7 +139,7 @@ describe DraftPicksController do
 
       expect(league.draft_status.description).to eq 'In Progress'
 
-      post :update, params: { league_id: league.id }
+      delete :destroy, params: { league_id: league.id }
       expect(League.find(league.id).draft_status.description).to eq 'In Progress'
     end
   end

@@ -18,12 +18,14 @@ describe ApplicationController do
         ]
 
         output = controller.send :deep_snake_case_params!, array
-        expect(output).to eq([
-          'camel_case_key' => {
-            'nested_camel_case_key' => [1, 2],
-            'key' => 1
-          }
-        ])
+        expect(output).to eq(
+          [
+            'camel_case_key' => {
+              'nested_camel_case_key' => [1, 2],
+              'key' => 1
+            }
+          ]
+        )
       end
     end
 

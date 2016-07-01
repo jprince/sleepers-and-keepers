@@ -6,7 +6,7 @@ class KeepersController < ApplicationController
 
     if keeper_pick.save
       flash.alert = 'Saved successfully'
-      redirect_back(fallback_location: league_keepers_edit_path)
+      render_edit
     else
       flash.alert = 'Unable to save keeper'
     end
@@ -18,21 +18,14 @@ class KeepersController < ApplicationController
     keeper_pick.keeper = false
     if keeper_pick.save
       flash.alert = 'Removed successfully'
-      redirect_to action: :edit, status: 303
+      render_edit
     else
       flash.alert = 'Unable to remove keeper'
     end
   end
 
   def edit
-    @league = League.find(league_id)
-    sport = Sport.find(@league.sport.id)
-    @available_picks = @league.picks.where(player_id: nil).sort_by(&:overall_pick)
-    @keepers = @league.picks.where(keeper: true).sort_by(&:overall_pick).map(&:player)
-    kept_player_ids = @keepers.map(&:id)
-    @available_players = sport.players.where.not(id: kept_player_ids)
-    @positions = sport.position_options
-    @teams = @league.teams.sort_by(&:draft_pick)
+    render_edit
   end
 
   private
@@ -47,5 +40,16 @@ class KeepersController < ApplicationController
 
   def league_id
     params.require(:league_id)
+  end
+
+  def render_edit
+    @league = League.find(league_id)
+    sport = Sport.find(@league.sport.id)
+    @available_picks = @league.picks.where(player_id: nil).sort_by(&:overall_pick)
+    @keepers = @league.picks.where(keeper: true).sort_by(&:overall_pick).map(&:player)
+    kept_player_ids = @keepers.map(&:id)
+    @available_players = sport.players.where.not(id: kept_player_ids)
+    @positions = sport.position_options
+    @teams = @league.teams.sort_by(&:draft_pick)
   end
 end

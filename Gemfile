@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'awesome_print'
-gem 'devise', git: 'git://github.com/plataformatec/devise', ref: '00a0b8e'
+gem 'devise'
 gem 'dotenv-rails'
 gem 'httparty'
 gem 'jbuilder', '~> 2.0'
@@ -9,7 +9,7 @@ gem 'jquery-rails'
 gem 'pg'
 gem 'puma'
 gem 'rack-timeout'
-gem 'rails', '5.0.0.beta3'
+gem 'rails', '5.0.0'
 gem 'react-rails', '~> 1.0'
 gem 'redis'
 gem 'sdoc', '~> 0.4.0', group: :doc
@@ -33,16 +33,11 @@ group :development, :test do
   gem 'pry'
   gem 'pry-byebug'
   gem 'rspec-rails'
-  gem 'rubocop', '~> 0.35.1'
-  gem 'quiet_assets'
+  gem 'rubocop', '~> 0.41'
 end
 
 group :development do
   gem 'web-console', '~> 3.0'
-end
-
-group :production do
-  gem 'rails_12factor'
 end
 
 group :test do

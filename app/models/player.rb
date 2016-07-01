@@ -47,8 +47,6 @@ class Player < ActiveRecord::Base
     end
   end
 
-  private
-
   def self.outfield_positions
     %w(CF LF OF RF)
   end

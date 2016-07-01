@@ -4,7 +4,8 @@
     @setState({ searchText: '' })
     @refs.playerSearch.value = '' if @refs.playerSearch?
   componentDidMount: -> @setupSubscription()
-  componentWillMount: -> @updateSearchText = _.debounce(@updateSearchText, 300)
+  componentWillMount: ->
+    @delayedSearchCallback = _.debounce(((e) -> @setState({ searchText: e.target.value })), 300)
   getInitialState: ->
     selectedPosition = getFirstOption(@props.positions)
 
@@ -68,7 +69,7 @@
     url = "/leagues/#{@props.league}/draft_picks"
     $.ajax
       dataType: 'json'
-      method: 'PUT'
+      method: 'DELETE'
       url: url
       success: ((updatedData) => @refreshData(updatedData)).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
@@ -84,7 +85,9 @@
           else
             "#{lastSelectedPlayer.lastName}, #{lastSelectedPlayer.firstName}"
     picks
-  updateSearchText: (e) -> @setState({ searchText: e.target.value })
+  updateSearchText: (e) ->
+    e.persist()
+    @delayedSearchCallback(e)
 
   render: ->
     if @state.draftStatus is 'Complete' or @state.currentPick is undefined

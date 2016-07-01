@@ -34,8 +34,8 @@ class TeamsController < ApplicationController
 
   def team_params
     params.require(:team)
-      .permit(:name, :short_name)
-      .merge(draft_pick: league.size - league.teams.length)
-      .merge(user_id: current_user.id)
+          .permit(:name, :short_name)
+          .merge(draft_pick: league.size - league.teams.length)
+          .merge(user_id: current_user.id)
   end
 end

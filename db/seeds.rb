@@ -44,7 +44,7 @@ if Rails.env == 'development'
       user = User.new(
         email: "user-#{n + 1}@example.com",
         first_name: 'User',
-        last_name: "#{n + 1}",
+        last_name: (n + 1).to_s,
         password: 'asdASD123!@#'
       )
       user.save

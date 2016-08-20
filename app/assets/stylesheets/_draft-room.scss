@@ -31,3 +31,19 @@
   td { padding: 5px; }
   .material-icons { margin-left: 5px; }
 }
+
+#player-modal {
+  height: 360px;
+
+  #player-photo {
+    padding-top: 3em;
+    text-align: center;
+
+    img { padding-bottom: 1.5em; }
+  }
+
+  #pick-info {
+    padding: 4.2em 6em 0 0;
+    text-align: right;
+  }
+}

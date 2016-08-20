@@ -47,6 +47,10 @@ module Pages
       has_player_in_ticker player_name
     end
 
+    def has_selected_player_modal?(player_name)
+      has_css?('#player-modal h2', text: player_name)
+    end
+
     def has_team_on_the_clock?(team_name)
       has_text? "On the clock: #{team_name}"
     end

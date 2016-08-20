@@ -29,6 +29,7 @@ class DraftPicksController < ApplicationController
           id: last_pick_player.id,
           first_name: last_pick_player.first_name,
           last_name: last_pick_player.last_name,
+          photo_url: last_pick_player.photo_url,
           position: last_pick_player.position,
           team: last_pick_player.team,
           injury: last_pick_player.injury,

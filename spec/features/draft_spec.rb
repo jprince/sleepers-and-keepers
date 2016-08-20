@@ -46,8 +46,10 @@ feature 'League draft room', js: true do
     navigate_to_league
     league_on_page.enter_draft
 
-    player_name = draft_room.get_player_name(Player.first)
+    player = Player.first
+    player_name = draft_room.get_player_name(player)
     draft_room.select_player(player_name)
+    expect(draft_room).to have_selected_player_modal("#{player.first_name} #{player.last_name}")
     expect(draft_room).to have_selected_player(player_name)
 
     team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name

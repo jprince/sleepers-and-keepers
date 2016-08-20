@@ -11,6 +11,7 @@
 
     currentPick: @props.currentPick
     draftStatus: @props.draftStatus
+    lastSelectedPlayer: {}
     picks: @props.picks
     players: @filterPlayersByPosition(selectedPosition)
     searchText: ''
@@ -38,6 +39,15 @@
     playerName = getPlayerName(player)
     confirmedResponse = confirm("Are you sure you want to draft #{playerName}")
     return unless confirmedResponse
+    pickInfo = "Pick #{@state.currentPick.roundPick} (#{@state.currentPick.overallPick} overall)"
+    selectedPlayerInfo =
+      draftPosition: "Round #{@state.currentPick.round} | #{pickInfo}"
+      info: "#{player.team} #{player.position}"
+      name: "#{player.firstName} #{player.lastName}"
+      photo: player.photoUrl
+      team: _(@props.teams).findWhere(id: @state.currentPick.teamId).name
+    @setState({ lastSelectedPlayer: selectedPlayerInfo })
+
     url = "/leagues/#{@props.league}/draft_picks"
     $.ajax
       dataType: 'json'
@@ -50,6 +60,8 @@
       success: ((updatedData) =>
         @clearSearch()
         @refreshData(updatedData)
+        $('#player-modal').openModal()
+        setTimeout((-> $('#player-modal').closeModal()), 12000)
         draftTicker = $("#draft-ticker")
         if draftTicker.length
           $(document).scrollTop(draftTicker.offset().top)
@@ -99,6 +111,21 @@
       </div>`
     else
       `<div>
+        <div id="player-modal" className="modal">
+          <div className="modal-content">
+            <div className="row">
+              <span id="player-photo" className="col s4">
+                <img src={this.state.lastSelectedPlayer.photo} />
+                <h4>{this.state.lastSelectedPlayer.info}</h4>
+              </span>
+              <span id="pick-info" className="col s8">
+                <h2>{this.state.lastSelectedPlayer.name}</h2>
+                <h4>{this.state.lastSelectedPlayer.team}</h4>
+                <h5>{this.state.lastSelectedPlayer.draftPosition}</h5>
+              </span>
+            </div>
+          </div>
+        </div>
         <DraftTicker
           currentPick={this.state.currentPick}
           picks={this.state.picks}

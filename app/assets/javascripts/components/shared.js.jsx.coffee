@@ -1,5 +1,6 @@
 @getFirstOption = (options) -> if _(options).any() then options[0].value else null
 @getPlayerName = (player) ->
+  return unless player?
   if !!player.firstName
     "#{player.lastName}, #{player.firstName}"
   else

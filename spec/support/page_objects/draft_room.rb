@@ -69,6 +69,7 @@ module Pages
 
     def select_player(player_name)
       click_link player_name
+      click_link 'Yes'
       sleep 0.25
     end
 

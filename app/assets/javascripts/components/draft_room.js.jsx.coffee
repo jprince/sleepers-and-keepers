@@ -3,6 +3,9 @@
   clearSearch: ->
     @setState({ searchText: '' })
     @refs.playerSearch.value = '' if @refs.playerSearch?
+  closeConfirmationModal: (e) ->
+    e.preventDefault()
+    $('#confirm-modal').closeModal()
   componentDidMount: -> @setupSubscription()
   componentWillMount: ->
     @delayedSearchCallback = _.debounce(((e) -> @setState({ searchText: e.target.value })), 300)
@@ -20,6 +23,10 @@
     userIsOnTheClock: @props.currentTeam.id is @props.currentPick?.teamId
   filterPlayersByPosition: (selectedPosition, players = @props.players) ->
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
+  openSelectPlayerModal: (selectedPlayerId, e) ->
+    e.preventDefault()
+    @setState({ playerToBeDrafted: _(@state.players).findWhere({id: selectedPlayerId}) })
+    $('#confirm-modal').openModal()
   refreshData: (updatedData) ->
     return unless updatedData?
     updatedPlayers =
@@ -31,20 +38,17 @@
     @setState({ draftStatus: updatedData.draftStatus })
     @setState({ picks: @updatePicks(updatedData.lastSelectedPlayer, updatedData.isUndo) })
     @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedPlayers) })
+    @setState({ playerToBeDrafted: undefined })
     @setState({ currentPick: updatedData.currentPick })
     @setState({ userIsOnTheClock: @props.currentTeam.id is updatedData.currentPick?.teamId })
-  selectPlayer: (selectedPlayerId, e) ->
+  selectPlayer: (e) ->
     e.preventDefault()
-    player = _(@state.players).findWhere({id: selectedPlayerId})
-    playerName = getPlayerName(player)
-    confirmedResponse = confirm("Are you sure you want to draft #{playerName}")
-    return unless confirmedResponse
     pickInfo = "Pick #{@state.currentPick.roundPick} (#{@state.currentPick.overallPick} overall)"
     selectedPlayerInfo =
       draftPosition: "Round #{@state.currentPick.round} | #{pickInfo}"
-      info: "#{player.team} #{player.position}"
-      name: "#{player.firstName} #{player.lastName}"
-      photo: player.photoUrl
+      info: "#{@state.playerToBeDrafted.team} #{@state.playerToBeDrafted.position}"
+      name: "#{@state.playerToBeDrafted.firstName} #{@state.playerToBeDrafted.lastName}"
+      photo: @state.playerToBeDrafted.photoUrl
       team: _(@props.teams).findWhere(id: @state.currentPick.teamId).name
     @setState({ lastSelectedPlayer: selectedPlayerInfo })
 
@@ -54,17 +58,15 @@
       data:
         pick:
           pickId: @state.currentPick.id
-          playerId: selectedPlayerId
+          playerId: @state.playerToBeDrafted.id
       method: 'POST'
       url: url
       success: ((updatedData) =>
         @clearSearch()
+        $('#confirm-modal').closeModal()
         @refreshData(updatedData)
-        $('#player-modal').openModal()
-        setTimeout((-> $('#player-modal').closeModal()), 12000)
-        draftTicker = $("#draft-ticker")
-        if draftTicker.length
-          $(document).scrollTop(draftTicker.offset().top)
+        playerModalTimeout = setTimeout((-> $('#player-modal').closeModal()), 12000)
+        $('#player-modal').openModal(complete: -> clearTimeout(playerModalTimeout))
       ).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPosition: (selectedPosition) ->
@@ -126,6 +128,23 @@
             </div>
           </div>
         </div>
+        <div id="confirm-modal" className="modal">
+          <div className="modal-content">
+            Are you sure you want to draft {getPlayerName(this.state.playerToBeDrafted)}?
+          </div>
+          <div className="modal-footer">
+            <a
+              href="#!"
+              className="modal-action waves-effect waves-green btn-flat"
+              onClick={this.selectPlayer}>
+            Yes</a>
+            <a
+              href="#!"
+              className="modal-action waves-effect waves-red btn-flat"
+              onClick={this.closeConfirmationModal}>
+            No</a>
+          </div>
+        </div>
         <DraftTicker
           currentPick={this.state.currentPick}
           picks={this.state.picks}
@@ -154,7 +173,7 @@
         <PlayersIndex
           players={this.state.players}
           searchText={this.state.searchText}
-          selectPlayer={this.selectPlayer}
+          selectPlayer={this.openSelectPlayerModal}
           userCanSelectPlayers={this.state.userIsLeagueManager || this.state.userIsOnTheClock}
         />
        </div>`
@@ -164,7 +183,7 @@
   getInitialState: ->
     currentPickId: @props.currentPick?.id
     timerPaused: false
-  getTeamNameById: (id) -> _(@props.teams).findWhere(id: id).name
+  getTeamNameById: (id) -> _(@props.teams).findWhere(id: id)?.name
   togglePause: -> @setState({ timerPaused: not @state.timerPaused })
   render: ->
     indexOfCurrentPick = (@props.picks.map (pick) -> pick.id).indexOf(@state.currentPickId)

@@ -98,6 +98,7 @@ describe League do
         'first_name' => selected_player.first_name,
         'last_name' => selected_player.last_name,
         'position' => selected_player.position,
+        'photo_url' => selected_player.photo_url,
         'team' => selected_player.team,
         'injury' => selected_player.injury,
         'headline' => selected_player.headline

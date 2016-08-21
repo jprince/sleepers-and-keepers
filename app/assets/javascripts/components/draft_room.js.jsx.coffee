@@ -5,6 +5,7 @@
     @refs.playerSearch.value = '' if @refs.playerSearch?
   closeConfirmationModal: (e) ->
     e.preventDefault()
+    @setState({ playerToBeDrafted: { id: undefined, name: undefined } })
     $('#confirm-modal').closeModal()
   componentDidMount: -> @setupSubscription()
   componentWillMount: ->
@@ -17,6 +18,7 @@
     lastSelectedPlayer: {}
     picks: @props.picks
     players: @filterPlayersByPosition(selectedPosition)
+    playerToBeDrafted: { id: undefined, name: undefined }
     searchText: ''
     selectedPosition: selectedPosition
     userIsLeagueManager: @props.currentTeam.userId is @props.leagueManagerId
@@ -25,32 +27,35 @@
     if selectedPosition is 'ALL' then players else _(players).filter(position: selectedPosition)
   openSelectPlayerModal: (selectedPlayerId, e) ->
     e.preventDefault()
-    @setState({ playerToBeDrafted: _(@state.players).findWhere({id: selectedPlayerId}) })
+    playerName = getPlayerName(_(@state.players).findWhere({id: selectedPlayerId}))
+    @setState({ playerToBeDrafted: { id: selectedPlayerId, name: playerName }})
     $('#confirm-modal').openModal()
   refreshData: (updatedData) ->
     return unless updatedData?
-    updatedPlayers =
-      if updatedData.isUndo
-        @state.players.push updatedData.lastSelectedPlayer
-        _(@state.players).sortBy (player) -> player.lastName
-      else if updatedData.lastSelectedPlayer?
-        _(@state.players).reject (player) -> player.id is updatedData.lastSelectedPlayer.id
+    if updatedData.isUndo
+      @state.players.push updatedData.lastSelectedPlayer
+      updatedPlayers = _(@state.players).sortBy (player) -> player.lastName
+    else if updatedData.lastSelectedPlayer?
+      selectedPlayer = updatedData.lastSelectedPlayer
+      updatedPlayers = _(@state.players).reject (player) -> player.id is selectedPlayer.id
+      pickInfo = "Pick #{@state.currentPick.roundPick} (#{@state.currentPick.overallPick} overall)"
+      selectedPlayerInfo =
+        draftPosition: "Round #{@state.currentPick.round} | #{pickInfo}"
+        info: "#{selectedPlayer.team} #{selectedPlayer.position}"
+        name: "#{selectedPlayer.firstName} #{selectedPlayer.lastName}"
+        photo: selectedPlayer.photoUrl
+        team: _(@props.teams).findWhere(id: @state.currentPick.teamId).name
+      @setState({ lastSelectedPlayer: selectedPlayerInfo })
+      playerModalTimeout = setTimeout((-> $('#player-modal').closeModal()), 12000)
+      $('#player-modal').openModal(complete: -> clearTimeout(playerModalTimeout))
     @setState({ draftStatus: updatedData.draftStatus })
     @setState({ picks: @updatePicks(updatedData.lastSelectedPlayer, updatedData.isUndo) })
     @setState({ players: @filterPlayersByPosition(@state.selectedPosition, updatedPlayers) })
-    @setState({ playerToBeDrafted: undefined })
+    @setState({ playerToBeDrafted: { id: undefined, name: undefined } })
     @setState({ currentPick: updatedData.currentPick })
     @setState({ userIsOnTheClock: @props.currentTeam.id is updatedData.currentPick?.teamId })
   selectPlayer: (e) ->
     e.preventDefault()
-    pickInfo = "Pick #{@state.currentPick.roundPick} (#{@state.currentPick.overallPick} overall)"
-    selectedPlayerInfo =
-      draftPosition: "Round #{@state.currentPick.round} | #{pickInfo}"
-      info: "#{@state.playerToBeDrafted.team} #{@state.playerToBeDrafted.position}"
-      name: "#{@state.playerToBeDrafted.firstName} #{@state.playerToBeDrafted.lastName}"
-      photo: @state.playerToBeDrafted.photoUrl
-      team: _(@props.teams).findWhere(id: @state.currentPick.teamId).name
-    @setState({ lastSelectedPlayer: selectedPlayerInfo })
 
     url = "/leagues/#{@props.league}/draft_picks"
     $.ajax
@@ -65,8 +70,6 @@
         @clearSearch()
         $('#confirm-modal').closeModal()
         @refreshData(updatedData)
-        playerModalTimeout = setTimeout((-> $('#player-modal').closeModal()), 12000)
-        $('#player-modal').openModal(complete: -> clearTimeout(playerModalTimeout))
       ).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)
   selectPosition: (selectedPosition) ->
@@ -130,7 +133,7 @@
         </div>
         <div id="confirm-modal" className="modal">
           <div className="modal-content">
-            Are you sure you want to draft {getPlayerName(this.state.playerToBeDrafted)}?
+            Are you sure you want to draft {this.state.playerToBeDrafted.name}?
           </div>
           <div className="modal-footer">
             <a

@@ -15,8 +15,8 @@
     icons =
       if player.injury
         `<i
-           className="injury material-icons red-text text-darken-4"
-           title={player.injury}
+           className="injury material-icons red-text text-darken-4 tooltipped"
+           data-tooltip={player.injury}
          >
            add_box
          </i>`
@@ -31,6 +31,8 @@
     </tr>`
 
 @PlayersIndex = React.createClass
+  componentDidMount: -> $('.tooltipped').tooltip({delay: 100})
+  componentDidUpdate: -> $('.tooltipped').tooltip({delay: 100})
   render: ->
     searchText = @props.searchText.trim().toLowerCase()
     filteredPlayers = _(@props.players).filter (player) ->

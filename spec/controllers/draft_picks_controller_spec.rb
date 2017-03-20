@@ -94,8 +94,7 @@ describe DraftPicksController do
         is_undo: true,
         last_selected_player: {
           id: player.id,
-          first_name: player.first_name,
-          last_name: player.last_name,
+          name: "#{player.last_name}, #{player.first_name}",
           photo_url: player.photo_url,
           position: player.position,
           team: player.team,

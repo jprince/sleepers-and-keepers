@@ -13,7 +13,7 @@
     <div class="position-section <%= position.downcase %>">
       <% @players.select{|player| player['position'] == position}.each do |player| %>
         <ul>
-          <li><%= player.first_name.blank? ? player.last_name : "#{player.last_name}, #{player.first_name}" %></li>
+          <li><%= player.name %></li>
         </ul>
       <% end %>
     </div>

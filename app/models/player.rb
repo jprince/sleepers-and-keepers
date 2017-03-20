@@ -9,10 +9,14 @@ class Player < ActiveRecord::Base
   has_many :picks
   has_many :teams, through: :picks
 
+  def name
+    first_name.blank? ? last_name : "#{last_name}, #{first_name}"
+  end
+
   def self.undrafted(league)
     players = league.sport.players.to_a
-    drafted_player_ids = league.picks.map(&:player).compact.map(&:id)
-    players.reject { |player| drafted_player_ids.include? player.id }
+    drafted_player_ids = league.picks.where.not(player_id: nil).pluck(:player_id)
+    players.reject! { |player| drafted_player_ids.include? player.id } || players
   end
 
   def self.update_player_pool

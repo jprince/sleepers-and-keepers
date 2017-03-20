@@ -27,8 +27,7 @@ class DraftPicksController < ApplicationController
         is_undo: true,
         last_selected_player: {
           id: last_pick_player.id,
-          first_name: last_pick_player.first_name,
-          last_name: last_pick_player.last_name,
+          name: last_pick_player.name,
           photo_url: last_pick_player.photo_url,
           position: last_pick_player.position,
           team: last_pick_player.team,

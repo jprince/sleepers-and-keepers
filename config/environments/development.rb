@@ -55,5 +55,6 @@ Rails.application.configure do
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # Which React.js build (development, production, with or without add-ons) to serve
+  config.react.addons = true
   config.react.variant = :development
 end

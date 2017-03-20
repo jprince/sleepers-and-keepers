@@ -14,7 +14,20 @@ describe Player do
   context 'All sports' do
     before do
       allow(STDOUT).to receive(:write)
-      @football = Sport.find_by(name: 'Football')
+    end
+
+    let(:football) { Sport.find_by(name: 'Football') }
+
+    describe '#name' do
+      it "formats as 'last_name, first_name'" do
+        player = create(:player, first_name: 'Josh', last_name: 'Prince', sport: football)
+        expect(player.name).to eq 'Prince, Josh'
+      end
+
+      it "returns the last_name if the player's first_name is blank" do
+        player = create(:player, first_name: nil, last_name: 'Patriots', sport: football)
+        expect(player.name).to eq 'Patriots'
+      end
     end
 
     describe '.update_player_pool' do
@@ -32,7 +45,7 @@ describe Player do
       end
 
       it 'updates existing players' do
-        create(:player, sport: @football)
+        create(:player, sport: football)
 
         expect(Player.all.length).to eq 1
 
@@ -51,16 +64,16 @@ describe Player do
           'http://sports.cbsimg.net/images/blogs/Tom-brady.turkey.400.jpg'
         )
         expect(player.pro_status).to eq 'A'
-        expect(player.sport_id).to eq @football.id.to_s
+        expect(player.sport_id).to eq football.id.to_s
         expect(player.orig_id).to eq '1'
       end
     end
 
     describe '.undrafted' do
       it 'returns only undrafted players for a league' do
-        create(:player, last_name: 'undrafted', sport: @football)
-        drafted_player = create(:player, last_name: 'drafted', sport: @football)
-        league = create(:league, sport: @football)
+        create(:player, last_name: 'undrafted', sport: football)
+        drafted_player = create(:player, last_name: 'drafted', sport: football)
+        league = create(:league, sport: football)
         team = create(:team, league: league)
 
         expect(Player.undrafted(League.last).length).to eq 2

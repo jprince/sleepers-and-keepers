@@ -30,6 +30,7 @@ module Pages
 
     def select_team(team_name)
       select(team_name, from: 'team-select')
+      sleep 0.5
     end
   end
 end

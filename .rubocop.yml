@@ -9,7 +9,6 @@ AllCops:
     - Gemfile
     - Rakefile
     - config.ru
-  TargetRubyVersion: 2.2.3
 
 ClassLength:
   Enabled: false

@@ -3,7 +3,7 @@ json.keepers(@keepers) do |keeper|
 
   json.pick "Rd: #{pick.round}, Pick: #{pick.round_pick} (#{pick.overall_pick} overall)"
   json.pickId pick.id
-  json.playerName keeper.first_name.empty? ? keeper.last_name : "#{keeper.last_name}, #{keeper.first_name}"
+  json.playerName keeper.name
   json.teamId pick.team_id
 end
 
@@ -17,7 +17,7 @@ end
 
 json.players(@available_players) do |player|
   json.value player.id
-  json.name player.first_name.empty? ? player.last_name : "#{player.last_name}, #{player.first_name}"
+  json.name player.name
   json.position player.position
 end
 

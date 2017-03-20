@@ -42,8 +42,9 @@ class League < ActiveRecord::Base
   private
 
   def player_info(player_id)
-    Player.select(:id, :first_name, :last_name, :position, :team, :injury, :headline, :photo_url)
-          .find(player_id)
-          .attributes
+    player =
+      Player.select(:id, :first_name, :last_name, :position, :team, :injury, :headline, :photo_url)
+            .find(player_id)
+    player.attributes.merge('name' => player.name)
   end
 end

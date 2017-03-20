@@ -1,19 +1,15 @@
 @Player = React.createClass
-  componentWillReceiveProps: (newProps) ->
-    @setState({ userCanSelectPlayers: newProps.userCanSelectPlayers })
-  getInitialState: -> userCanSelectPlayers: @props.userCanSelectPlayers
   render: ->
     player = @props.player
-    playerName = getPlayerName(player)
     playerNameCellContent =
-      if @state.userCanSelectPlayers
+      if @props.userCanSelectPlayers
         `<a href="" className="select" onClick={this.props.onSelect.bind(null, player.id)}>
-          {playerName}
+          {player.name}
         </a>`
       else
-        `<span>{playerName}</span>`
+        `<span>{player.name}</span>`
     icons =
-      if player.injury
+      if player.injury?
         `<i
            className="injury material-icons red-text text-darken-4 tooltipped"
            data-tooltip={player.injury}
@@ -33,11 +29,15 @@
 @PlayersIndex = React.createClass
   componentDidMount: -> $('.tooltipped').tooltip({delay: 100})
   componentDidUpdate: -> $('.tooltipped').tooltip({delay: 100})
+  shouldComponentUpdate: (nextProps, nextState) ->
+    @props.players isnt nextProps.players or @props.searchText isnt nextProps.searchText
   render: ->
     searchText = @props.searchText.trim().toLowerCase()
     filteredPlayers = _(@props.players).filter (player) ->
-      getPlayerName(player).trim().toLowerCase().match searchText
-    players = filteredPlayers.map ((player, i) ->
+      player.name.trim().toLowerCase().match searchText
+    displayedPlayers = filteredPlayers.slice(0, 100)
+
+    players = displayedPlayers.map ((player, i) ->
       `<Player
         key={i}
         player={player}
@@ -46,16 +46,27 @@
       />`
     ).bind(@)
 
-    `<table className="hoverable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Position</th>
-          <th>Team</th>
-          <th>News</th>
-        </tr>
-      </thead>
-      <tbody>
-        {players}
-      </tbody>
-    </table>`
+    truncationMessage =
+      if filteredPlayers.length > displayedPlayers.length
+        `<div id="truncation-message">
+          Showing top 100 results. Please filter or search to see more.
+        </div>`
+      else
+        null
+
+    `<div>
+      <table className="hoverable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Team</th>
+            <th>News</th>
+          </tr>
+        </thead>
+        <tbody>
+          {players}
+        </tbody>
+      </table>
+      {truncationMessage}
+    </div>`

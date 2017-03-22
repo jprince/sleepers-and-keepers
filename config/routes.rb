@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+
   devise_for :users
   root to: 'home#show'
 
@@ -24,4 +26,8 @@ Rails.application.routes.draw do
 
   # Serve websocket cable requests in-
   mount ActionCable.server => '/cable'
+
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end

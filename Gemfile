@@ -12,6 +12,7 @@ gem 'rack-timeout'
 gem 'rails', '5.0.0'
 gem 'react-rails', '~> 1.0'
 gem 'redis'
+gem 'scout_apm'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'sidekiq'
 gem 'turbolinks'

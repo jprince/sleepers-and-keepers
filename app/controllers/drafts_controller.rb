@@ -2,13 +2,27 @@ class DraftsController < ApplicationController
   before_action :ensure_draft_has_started
 
   def show
+    @current_pick = league.current_pick.try(:attributes).try(:camelize)
+    @current_team = league.teams
+                          .select(:id, :user_id)
+                          .find_by(user_id: current_user.id)
+                          .try(:attributes).try(:camelize)
     @league = league
-    @teams = league.teams.sort_by(&:draft_pick)
-    @picks = league.picks.joins('LEFT JOIN players ON picks.player_id = players.id').select(
-      'picks.*, players.first_name as player_first_name, players.last_name as player_last_name'
-    ).order(:id)
-    @players = Player.undrafted(league).sort_by { |p| [p.last_name, p.first_name] }
-    @positions = Sport.find(league.sport.id).position_options
+    @teams = league.teams.order(:draft_pick).select(:id, :name)
+    @picks = league.picks.order(:id).includes(:player)
+    @players = league.undrafted_players
+                     .order(:last_name, :first_name)
+                     .select(
+                       :first_name,
+                       :id,
+                       :last_name,
+                       :position,
+                       :team,
+                       :injury,
+                       :headline,
+                       :photo_url
+                     )
+    @positions = league.sport.position_options
   end
 
   private

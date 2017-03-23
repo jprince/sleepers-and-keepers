@@ -77,7 +77,7 @@ feature 'League draft room', js: true do
     sign_in league_member
     navigate_to_league(league.name)
     league_on_page.enter_draft
-    draft_room.select_player(draft_room.get_player_name(Player.undrafted(league).first))
+    draft_room.select_player(draft_room.get_player_name(league.undrafted_players.first))
 
     expect(draft_room).to have_link_to_draft_results
   end

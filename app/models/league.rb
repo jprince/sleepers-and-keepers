@@ -39,6 +39,11 @@ class League < ActiveRecord::Base
     }
   end
 
+  def undrafted_players
+    drafted_player_ids = picks.where.not(player_id: nil).pluck(:player_id)
+    sport.players.where.not(id: drafted_player_ids)
+  end
+
   private
 
   def player_info(player_id)

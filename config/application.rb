@@ -1,6 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'multi_json'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -18,5 +19,7 @@ module SleepersAndKeepers
     config.generators do |g|
       g.factory_girl false
     end
+
+    MultiJson.use :yajl
   end
 end

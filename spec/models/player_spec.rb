@@ -68,19 +68,6 @@ describe Player do
         expect(player.orig_id).to eq '1'
       end
     end
-
-    describe '.undrafted' do
-      it 'returns only undrafted players for a league' do
-        create(:player, last_name: 'undrafted', sport: football)
-        drafted_player = create(:player, last_name: 'drafted', sport: football)
-        league = create(:league, sport: football)
-        team = create(:team, league: league)
-
-        expect(Player.undrafted(League.last).length).to eq 2
-        create(:pick, player: drafted_player, team: team)
-        expect(Player.undrafted(League.last).length).to eq 1
-      end
-    end
   end
 
   context 'Baseball' do

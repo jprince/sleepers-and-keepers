@@ -16,6 +16,7 @@ gem 'scout_apm'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'sidekiq'
 gem 'turbolinks'
+gem 'yajl-ruby'
 
 # Asset related gems
 gem 'coffee-rails', '~> 4.1.0'

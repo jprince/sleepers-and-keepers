@@ -106,4 +106,17 @@ describe League do
       )
     end
   end
+
+  describe '#undrafted_players' do
+    it 'returns only undrafted players' do
+      league = create(:football_league)
+      team = create(:team, league: league)
+      create(:player, last_name: 'undrafted', sport: league.sport)
+      drafted_player = create(:player, last_name: 'drafted', sport: league.sport)
+
+      expect(league.undrafted_players.length).to eq 2
+      create(:pick, player: drafted_player, team: team)
+      expect(league.undrafted_players.length).to eq 1
+    end
+  end
 end

@@ -25,7 +25,7 @@ module Features
 
     def select_players_with_picks(league, picks)
       picks.each do |pick|
-        undrafted_player = Player.undrafted(league).first
+        undrafted_player = league.undrafted_players.first
         pick.player_id = undrafted_player ? undrafted_player.id : 1
         pick.save!
       end

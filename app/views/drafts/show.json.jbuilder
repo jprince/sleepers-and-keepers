@@ -1,27 +1,23 @@
 json.key_format! camelize: :lower
-json.currentPick(@league.current_pick.try(:attributes).try(:camelize))
-json.currentTeam(@league.teams.find_by(user_id: current_user.id).try(:attributes).try(:camelize))
-json.draftStatus(DraftStatus.find(@league.draft_status_id).description)
+json.currentPick(@current_pick)
+json.currentTeam(@current_team)
+json.draftStatus(@league.draft_status.description)
 json.league(@league.id)
 json.leagueManagerId(@league.user_id)
 json.picks(@picks) do |pick|
   json.id pick.id
   json.overallPick pick.overall_pick
-  json.player pick.player_first_name.blank? ? pick.player_last_name : "#{pick.player_last_name}, #{pick.player_first_name}"
+  json.player pick.player.try(:name)
   json.round pick.round
   json.roundPick pick.round_pick
   json.teamId pick.team_id
 end
 
-json.players(@players) do |player|
-  json.extract! player, :id, :name, :position, :team, :injury, :headline, :photo_url
-end
+json.players @players, :id, :name, :position, :team, :injury, :headline, :photo_url
 
 json.positions(@positions) do |position|
   json.value position
   json.name position
 end
 
-json.teams(@teams) do |team|
-  json.extract! team, :id, :name
-end
+json.teams(@teams)

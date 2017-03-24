@@ -1,4 +1,6 @@
 class Player < ActiveRecord::Base
+  acts_as_paranoid
+
   require 'logger'
 
   validates :last_name, presence: true
@@ -28,24 +30,34 @@ class Player < ActiveRecord::Base
       if sport
         api = CBSSportsAPI.new(sport.name)
         data = ActiveSupport::JSON.decode(api.players)['body']['players']
-        allowed_positions = sport.positions
-        filtered_players = data.select { |player| allowed_positions.include? player['position'] }
+        filtered_players = data.select { |player| sport.positions.include? player['position'] }
+
         filtered_players.each do |player|
           player_orig_id = player['id']
-          player_record = Player.find_by(orig_id: player_orig_id)
+          player_record = Player.with_deleted.find_by(orig_id: player_orig_id)
 
-          if player_record.blank?
+          if player_record
+            if player_record.deleted?
+              logger.info "Restored #{player_record.name}"
+              player_record.restore
+            end
+            logger.info "Updated #{player_record.name}"
+            set_player_attributes(player_record, player)
+          else
             logger.info "Added #{player['lastname']}, #{player['firstname']}"
             player_record = Player.new
             set_player_attributes(player_record, player)
             player_record.orig_id = player_orig_id
             player_record.sport_id = sport.id
-          else
-            logger.info "Updated #{player['lastname']}, #{player['firstname']}"
-            set_player_attributes(player_record, player)
           end
+          player_record.save!
+        end
 
-          player_record.save
+        sport.players.each do |player|
+          unless filtered_players.map { |p| p['id'] }.include? player.orig_id
+            logger.info "Removed #{player.last_name}, #{player.first_name}"
+            player.destroy
+          end
         end
       end
     end

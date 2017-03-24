@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427145830) do
+ActiveRecord::Schema.define(version: 20170324035439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,11 +31,10 @@ ActiveRecord::Schema.define(version: 20160427145830) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "draft_status_id"
+    t.index ["draft_status_id"], name: "index_leagues_on_draft_status_id", using: :btree
+    t.index ["sport_id"], name: "index_leagues_on_sport_id", using: :btree
+    t.index ["user_id"], name: "index_leagues_on_user_id", using: :btree
   end
-
-  add_index "leagues", ["draft_status_id"], name: "index_leagues_on_draft_status_id", using: :btree
-  add_index "leagues", ["sport_id"], name: "index_leagues_on_sport_id", using: :btree
-  add_index "leagues", ["user_id"], name: "index_leagues_on_user_id", using: :btree
 
   create_table "picks", force: :cascade do |t|
     t.integer  "overall_pick",                 null: false
@@ -47,11 +45,10 @@ ActiveRecord::Schema.define(version: 20160427145830) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "keeper",       default: false, null: false
+    t.index ["keeper"], name: "index_picks_on_keeper", using: :btree
+    t.index ["player_id"], name: "index_picks_on_player_id", using: :btree
+    t.index ["team_id"], name: "index_picks_on_team_id", using: :btree
   end
-
-  add_index "picks", ["keeper"], name: "index_picks_on_keeper", using: :btree
-  add_index "picks", ["player_id"], name: "index_picks_on_player_id", using: :btree
-  add_index "picks", ["team_id"], name: "index_picks_on_team_id", using: :btree
 
   create_table "players", force: :cascade do |t|
     t.string   "first_name"
@@ -67,10 +64,9 @@ ActiveRecord::Schema.define(version: 20160427145830) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_players_on_deleted_at", using: :btree
+    t.index ["sport_id"], name: "index_players_on_sport_id", using: :btree
   end
-
-  add_index "players", ["deleted_at"], name: "index_players_on_deleted_at", using: :btree
-  add_index "players", ["sport_id"], name: "index_players_on_sport_id", using: :btree
 
   create_table "sports", force: :cascade do |t|
     t.string   "name",                    null: false
@@ -87,9 +83,8 @@ ActiveRecord::Schema.define(version: 20160427145830) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "draft_pick"
+    t.index ["league_id"], name: "index_teams_on_league_id", using: :btree
   end
-
-  add_index "teams", ["league_id"], name: "index_teams_on_league_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -106,9 +101,8 @@ ActiveRecord::Schema.define(version: 20160427145830) do
     t.datetime "updated_at"
     t.string   "first_name",                          null: false
     t.string   "last_name",                           null: false
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

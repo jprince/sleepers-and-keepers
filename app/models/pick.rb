@@ -11,6 +11,10 @@ class Pick < ActiveRecord::Base
     self.class.find_by('id > ?', id).nil?
   end
 
+  def player
+    Player.unscoped { super }
+  end
+
   def previous
     self.class.where(keeper: false).where('id < ?', id).last
   end

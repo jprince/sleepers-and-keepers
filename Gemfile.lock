@@ -149,6 +149,8 @@ GEM
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
     orm_adapter (0.5.0)
+    paranoia (2.2.1)
+      activerecord (>= 4.0, < 5.1)
     parser (2.3.1.2)
       ast (~> 2.2)
     pg (0.18.4)
@@ -319,6 +321,7 @@ DEPENDENCIES
   launchy
   materialize-sass
   minitest
+  paranoia (~> 2.2)
   pg
   poltergeist (~> 1.8.1)
   pry

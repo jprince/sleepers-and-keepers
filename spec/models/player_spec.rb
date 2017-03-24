@@ -31,41 +31,65 @@ describe Player do
     end
 
     describe '.update_player_pool' do
+      let(:player_data) { mock_player_data('QB') }
+
       before do
-        player_data = mock_player_data('QB')
         allow(CBSSportsAPI).to receive(:new).and_return(player_data)
       end
 
-      it 'inserts new players' do
-        expect(Player.all).to be_empty
+      context 'inserts/updates' do
+        let(:player) { Player.last }
+
+        it 'inserts new players' do
+          expect(Player.all).to be_empty
+          Player.update_player_pool
+          expect(Player.all.length).to eq 1
+        end
+
+        it 'updates existing players' do
+          create(:player, orig_id: '1', sport: football)
+          expect(Player.all.length).to eq 1
+          Player.update_player_pool
+        end
+
+        after do
+          expect(player).to have_attributes(
+            first_name: 'Tom',
+            last_name: 'Brady',
+            position: 'QB',
+            team: 'NE',
+            headline: 'Brady wins Super Bowl MVP... again',
+            injury: nil,
+            photo_url: 'http://sports.cbsimg.net/images/blogs/Tom-brady.turkey.400.jpg',
+            pro_status: 'A',
+            sport_id: football.id.to_s,
+            orig_id: '1'
+          )
+        end
+      end
+
+      it 'marks players as deleted' do
+        create(:player, sport: football, orig_id: '-1')
+
+        expect(Player.all.length).to eq 1
+        expect(Player.deleted.length).to eq 0
 
         Player.update_player_pool
 
         expect(Player.all.length).to eq 1
+        expect(Player.deleted.length).to eq 1
       end
 
-      it 'updates existing players' do
-        create(:player, sport: football)
+      it 'restores previously deleted players' do
+        create(:player, sport: football, deleted_at: Time.zone.now, orig_id: '1')
 
-        expect(Player.all.length).to eq 1
+        expect(Player.all.length).to eq 0
+        expect(Player.deleted.length).to eq 1
 
         Player.update_player_pool
-      end
 
-      after do
-        player = Player.last
-        expect(player.first_name).to eq 'Tom'
-        expect(player.last_name).to eq 'Brady'
-        expect(player.position).to eq 'QB'
-        expect(player.team).to eq 'NE'
-        expect(player.headline).to eq 'Brady wins Super Bowl MVP'
-        expect(player.injury).to be_nil
-        expect(player.photo_url).to eq(
-          'http://sports.cbsimg.net/images/blogs/Tom-brady.turkey.400.jpg'
-        )
-        expect(player.pro_status).to eq 'A'
-        expect(player.sport_id).to eq football.id.to_s
-        expect(player.orig_id).to eq '1'
+        expect(Player.all.length).to eq 1
+        expect(Player.deleted.length).to eq 0
       end
     end
   end
@@ -96,7 +120,7 @@ def mock_player_data(position)
               \"position\":\"#{position}\",
               \"pro_team\":\"NE\",
               \"icons\": {
-                \"headline\":\"Brady wins Super Bowl MVP\"
+                \"headline\":\"Brady wins Super Bowl MVP... again\"
                 },
               \"photo\":\"http://sports.cbsimg.net/images/blogs/Tom-brady.turkey.400.jpg\",
               \"pro_status\":\"A\",

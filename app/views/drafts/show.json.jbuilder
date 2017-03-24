@@ -13,7 +13,9 @@ json.picks(@picks) do |pick|
   json.teamId pick.team_id
 end
 
-json.players @players, :id, :name, :position, :team, :injury, :headline, :photo_url
+json.players(@players) do |player|
+  json.extract! player, :id, :name, :position, :team, :injury, :headline, :photo_url
+end
 
 json.positions(@positions) do |position|
   json.value position

@@ -1,17 +1,12 @@
 AllCops:
   Exclude:
     - db/schema.rb
-    - script/rails
     - config/**/*
-    - tmp/**/*
   Include:
     - '**/*.rake'
     - Gemfile
     - Rakefile
     - config.ru
-
-ClassLength:
-  Enabled: false
 
 CollectionMethods:
   PreferredMethods:
@@ -24,49 +19,22 @@ CollectionMethods:
 Documentation:
   Enabled: false
 
-HandleExceptions:
-  Exclude:
-    - bin/rails
-    - bin/rake
-
 IfUnlessModifier:
   Enabled: false
 
 LineLength:
   Max: 99
   Exclude:
-    - db/seeds.rb
     - db/migrate/20150523204958_add_name_to_users.rb
 
-MethodCalledOnDoEndBlock:
-  Enabled: true
-
 MethodLength:
-  Enabled: false
-
-PredicateName:
-  Exclude:
-    - spec/features/**/*
-    - spec/support/features/**/*
-    - spec/support/page_objects/**/*
-
-Output:
-  Exclude:
-    - bin/setup
-
-SymbolArray:
   Enabled: false
 
 Metrics/AbcSize:
   Enabled: false
 
-Style/MultilineOperationIndentation:
-  Exclude:
-    - app/models/league.rb
+Metrics/BlockLength:
+  Enabled: false
 
 Style/Next:
   Enabled: false
-
-Style/SpaceBeforeFirstArg:
-  Exclude:
-    - db/migrate/**/*

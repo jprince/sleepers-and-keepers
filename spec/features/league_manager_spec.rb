@@ -76,6 +76,7 @@ feature 'League manager' do
 
     keeper_page.select_position('QB')
     first_qb = league.sport.players.where(position: 'QB').first
+    sleep 3
     expect(keeper_page).to have_selected_player league_on_page.get_player_name(first_qb)
 
     last_team = Team.first

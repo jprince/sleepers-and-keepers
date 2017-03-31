@@ -10,7 +10,7 @@ gem 'paranoia', '~> 2.2'
 gem 'pg'
 gem 'puma'
 gem 'rack-timeout'
-gem 'rails', '5.0.1'
+gem 'rails', '5.0.2'
 gem 'react-rails', '~> 1.0'
 gem 'redis'
 gem 'scout_apm'
@@ -21,7 +21,7 @@ gem 'yajl-ruby'
 
 # Asset related gems
 gem 'coffee-rails', '~> 4.1.0'
-gem 'materialize-sass'
+gem 'materialize-sass', '0.97.6'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'underscore-rails'
@@ -45,7 +45,7 @@ end
 
 group :test do
   gem 'byebug'
-  gem 'capybara'
+  gem 'capybara', '~> 2.10.0'
   gem 'capybara-screenshot', '~> 1.0.9'
   gem 'database_cleaner'
   gem 'faker'

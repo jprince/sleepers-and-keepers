@@ -19,3 +19,7 @@
 //= require react_ujs
 //= require components
 //= require_tree .
+
+// ReactRailsUJS.handleEvent('turbolinks:before-cache', function() {
+//   window.ReactRailsUJS.unmountComponents();
+// );

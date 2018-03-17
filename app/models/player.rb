@@ -64,7 +64,7 @@ class Player < ActiveRecord::Base
   end
 
   def self.outfield_positions
-    %w(CF LF OF RF)
+    %w[CF LF OF RF]
   end
   private_class_method :outfield_positions
 

@@ -1,4 +1,4 @@
-class CreateDraftStatus < ActiveRecord::Migration
+class CreateDraftStatus < ActiveRecord::Migration[5.0]
   def change
     create_table :draft_statuses do |t|
       t.string :description

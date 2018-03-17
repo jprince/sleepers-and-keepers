@@ -98,7 +98,7 @@ describe Player do
     it 'normalizes outfield positions' do
       allow(STDOUT).to receive(:write)
 
-      %w(CF LF OF RF).all? do |pos|
+      %w[CF LF OF RF].all? do |pos|
         player_data = mock_player_data(pos)
         allow(CBSSportsAPI).to receive(:new).and_return(player_data)
         Player.update_player_pool

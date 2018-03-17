@@ -176,6 +176,7 @@ feature 'League manager' do
       league_on_page.enter_draft
       player_name = draft_room.get_player_name(Player.first)
       draft_room.select_player(player_name)
+      draft_room.close_selected_player_modal
       expect(draft_room).to have_selected_player(player_name)
 
       team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name

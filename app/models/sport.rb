@@ -5,7 +5,7 @@ class Sport < ActiveRecord::Base
 
   def position_options
     position_options =
-      name == 'Baseball' ? positions.reject { |pos| %w(LF CF RF).include? pos } : positions
+      name == 'Baseball' ? positions.reject { |pos| %w[LF CF RF].include? pos } : positions
     position_options.unshift 'ALL'
   end
 
@@ -23,8 +23,8 @@ class Sport < ActiveRecord::Base
 
   def self.supported_sports
     [
-      { name: 'Baseball', positions: %w(C 1B 2B 3B SS LF CF RF OF SP RP DH) },
-      { name: 'Football', positions: %w(QB RB WR TE K DST) }
+      { name: 'Baseball', positions: %w[C 1B 2B 3B SS LF CF RF OF SP RP DH] },
+      { name: 'Football', positions: %w[QB RB WR TE K DST] }
     ]
   end
 end

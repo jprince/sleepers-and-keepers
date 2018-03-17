@@ -1,4 +1,4 @@
-@Player = React.createClass
+@Player = createReactClass
   render: ->
     player = @props.player
     playerNameCellContent =
@@ -26,7 +26,7 @@
       <td>{player.headline}</td>
     </tr>`
 
-@PlayersIndex = React.createClass
+@PlayersIndex = createReactClass
   componentDidMount: -> $('.tooltipped').tooltip({delay: 100})
   componentDidUpdate: -> $('.tooltipped').tooltip({delay: 100})
   shouldComponentUpdate: (nextProps, nextState) ->

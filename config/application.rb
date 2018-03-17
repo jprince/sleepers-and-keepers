@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 require 'multi_json'
@@ -9,15 +9,19 @@ Bundler.require(*Rails.groups)
 
 module SleepersAndKeepers
   class Application < Rails::Application
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    config.time_zone = 'Eastern Time (US & Canada)'
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.1
 
-    config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+    # Settings in config/environments/* take precedence over those specified here.
+
+    # Application configuration should go into files in config/initializers
+
+    # -- all .rb files in that directory are automatically loaded.
+
     config.active_job.queue_adapter = :sidekiq
 
     config.generators do |g|
-      g.factory_girl false
+      g.factory_bot false
     end
 
     MultiJson.use :yajl

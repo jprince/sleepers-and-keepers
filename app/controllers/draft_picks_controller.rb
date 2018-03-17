@@ -4,7 +4,7 @@ class DraftPicksController < ApplicationController
     league = pick.league
     pick.player_id = create_params[:player_id]
     if pick.save
-      if league.picks.where(player_id: nil).count == 0
+      if league.picks.where(player_id: nil).count.zero?
         league.complete_draft
       end
       DraftRoomBroadcastJob.perform_later(league.draft_state.try(:camelize))

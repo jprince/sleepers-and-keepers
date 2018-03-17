@@ -14,38 +14,6 @@ MRI 2.0.0-p247.
 
 [RVM Homepage]: http://rvm.io/
 
-### Install PhantomJS
-
-[PhantomJS][] is a headless webkit implementation used for running integration
-tests that require javascript.
-
-On **OS X**, install with [Homebrew][]
-
-``` sh
-$ brew install phantomjs
-```
-
-As of this commit, 2.0.0 binary packages for **Linux** are still being prepared. PhantomJS
-recommends building the Linux version from source in the meantime.
-
-``` sh
-$ cd /usr/local/share
-$ sudo apt-get install build-essential g++ flex bison gperf ruby perl \
-  libsqlite3-dev libfontconfig1-dev libicu-dev libfreetype6 libssl-dev \
-  libpng-dev libjpeg-dev
-$ git clone git://github.com/ariya/phantomjs.git
-$ cd phantomjs
-$ git checkout 2.0
-$ ./build.sh
-$ cd ..
-$ cd /usr/local/share && sudo ln -s /usr/local/share/phantomjs/bin/phantomjs
-$ cd /usr/local/bin && sudo ln -s /usr/local/share/phantomjs/bin/phantomjs
-$ cd /usr/bin && sudo ln -s /usr/local/share/phantomjs/bin/phantomjs
-```
-
-[PhantomJS]: http://phantomjs.org/
-[Homebrew]: http://brew.sh/
-
 ## Install Redis
 Redis is used to run Action Cable, which provides server-side reactivity.
 
@@ -85,7 +53,7 @@ Execute `redis-server` in a free terminal window and you should see redis
 start normally. Then, restart your dev server to start using redis!
 
 If you're looking to utilize the reactive behavior of Action Cable, remember to run your dev
-server using foreman, to ensure that Sidekiq workers are started as well. 
+server using foreman, to ensure that Sidekiq workers are started as well.
 
 ## Clone the application
 ```sh

@@ -1,4 +1,4 @@
-@Pick = React.createClass
+@Pick = createReactClass
   render: ->
     pick = @props.pick
     player = if pick.player then "Player: #{pick.player}" else `<span>&nbsp;</span>`
@@ -10,7 +10,7 @@
       </div>
     </div>`
 
-@TradePicksForm = React.createClass
+@TradePicksForm = createReactClass
   getAllTeamsExcept: (teamID) -> _(@props.teams).reject (team) -> team.value is teamID
   getInitialState: ->
     firstTeam = getFirstOption(@props.teams)

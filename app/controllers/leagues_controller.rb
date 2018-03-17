@@ -35,7 +35,7 @@ class LeaguesController < ApplicationController
   def league_params
     params.require(:league).permit(:name, :password, :size, :rounds)
           .merge(draft_status_id: DraftStatus.find_by(description: 'Not Started').id)
-          .merge(sport_id: Sport.find_by(name: params[:league][:sport]).id)
+          .merge(sport_id: Sport.find_by(name: params[:league][:sport].titleize).id)
           .merge(user_id: current_user.id)
   end
 end

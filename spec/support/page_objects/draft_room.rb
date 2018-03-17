@@ -1,5 +1,9 @@
 module Pages
   class DraftRoom < Base
+    def close_selected_player_modal
+      execute_script('$(document.elementFromPoint(1, 1)).click();')
+    end
+
     def has_keeper_in_upcoming_picks?(player_name)
       within find('.upcoming-picks') do
         has_player_in_ticker player_name

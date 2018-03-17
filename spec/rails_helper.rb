@@ -1,5 +1,5 @@
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'sidekiq/testing'
 
@@ -19,8 +19,8 @@ RSpec.configure do |config|
   config.order = 'random'
   config.seed = srand % 0xFFFF
   config.use_transactional_fixtures = false
-  config.include Devise::TestHelpers, type: :controller
-  config.include FactoryGirl::Syntax::Methods
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include FactoryBot::Syntax::Methods
   config.include Features::DataPreparationHelpers, type: :feature
   config.include Features::NavigationHelpers, type: :feature
   config.include Features::SessionHelpers, type: :feature

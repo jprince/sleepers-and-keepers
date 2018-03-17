@@ -1,6 +1,6 @@
 RSpec.configure do |config|
   config.add_setting(:seed_tables)
-  config.seed_tables = %w(draft_statuses sports)
+  config.seed_tables = %w[draft_statuses sports]
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:deletion)

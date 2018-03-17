@@ -1,4 +1,4 @@
-@DraftTicker = React.createClass
+@DraftTicker = createReactClass
   componentWillReceiveProps: (newProps) -> @setState({ currentPickId: newProps.currentPick?.id })
   getInitialState: ->
     currentPickId: @props.currentPick?.id

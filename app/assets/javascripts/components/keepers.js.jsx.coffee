@@ -1,4 +1,4 @@
-@KeepersForm = React.createClass
+@KeepersForm = createReactClass
   componentWillReceiveProps: (newProps) ->
     updatedPlayers = @getPlayersForSelectedPosition(@state.selectedPosition)
     @setState({ players: updatedPlayers })
@@ -61,7 +61,7 @@
       <button className="btn waves-effect waves-light" type="submit">Save</button>
     </form>`
 
-@KeeperList = React.createClass
+@KeeperList = createReactClass
   componentWillReceiveProps: (newProps) ->
     @setState({ selectedTeamKeepers: @getKeepersForTeam(newProps.keepers, newProps.selectedTeam) })
   getInitialState: ->
@@ -97,7 +97,7 @@
       </ol>
     </div>`
 
-@KeeperPage = React.createClass
+@KeeperPage = createReactClass
   getInitialState: ->
     keepers: @props.keepers
     picks: @props.picks

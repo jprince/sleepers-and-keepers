@@ -5,7 +5,7 @@
   selection.push(parseInt(option.value)) for option in options when option.selected
   selection
 
-@Select = React.createClass
+@Select = createReactClass
   changeHandler: (e) ->
     if typeof @props.onChange is 'function'
       selection = if @props.multiple then e.target.options else e.target.value

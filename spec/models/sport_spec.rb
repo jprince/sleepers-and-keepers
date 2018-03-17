@@ -11,12 +11,12 @@ end
 describe Sport, '#position_options' do
   it 'returns positions for baseball' do
     baseball = Sport.find_by(name: 'Baseball')
-    expect(baseball.position_options).to eq %w(ALL C 1B 2B 3B SS OF SP RP DH)
+    expect(baseball.position_options).to eq %w[ALL C 1B 2B 3B SS OF SP RP DH]
   end
 
   it 'returns positions for football' do
     football = Sport.find_by(name: 'Football')
-    expect(football.position_options).to eq %w(ALL QB RB WR TE K DST)
+    expect(football.position_options).to eq %w[ALL QB RB WR TE K DST]
   end
 end
 

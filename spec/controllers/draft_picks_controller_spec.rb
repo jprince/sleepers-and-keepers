@@ -135,7 +135,7 @@ describe DraftPicksController do
       team = create(:team, league: league)
       player = create(:player, sport: league.sport)
       create(:pick, player: player, team: team)
-      create(:pick, team: @team)
+      create(:pick, team: team)
 
       expect(league.draft_status.description).to eq 'In Progress'
 

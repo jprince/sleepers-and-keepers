@@ -1,9 +1,13 @@
-@DraftRoom = React.createClass
+@DraftRoom = createReactClass
   closeConfirmationModal: (e) ->
     e.preventDefault()
     @setState(playerToBeDrafted: { id: undefined, name: undefined })
-    $('#confirm-modal').closeModal()
-  componentDidMount: -> @setupSubscription()
+    $('#confirm-modal').modal('close')
+  componentDidMount: ->
+    @setupSubscription()
+    $('#confirm-modal').modal()
+    playerModalTimeout = setTimeout((-> $('#player-modal').modal('close')), 12000)
+    $('#player-modal').modal(complete: -> clearTimeout(playerModalTimeout))
   componentWillMount: ->
     @delayedSearchCallback = _.debounce(((e) -> @setState(searchText: e.target.value)), 300)
   getInitialState: ->
@@ -25,7 +29,7 @@
     e.preventDefault()
     playerName = _(@state.players).findWhere(id: selectedPlayerId).name
     @setState(playerToBeDrafted: { id: selectedPlayerId, name: playerName })
-    $('#confirm-modal').openModal()
+    $('#confirm-modal').modal('open')
   refreshData: (updatedData) ->
     return unless updatedData?
     lastSelectedPlayer = updatedData.lastSelectedPlayer
@@ -42,8 +46,7 @@
         name: "#{lastSelectedPlayer.firstName} #{lastSelectedPlayer.lastName}"
         photo: lastSelectedPlayer.photoUrl
         team: _(@props.teams).findWhere(id: @state.currentPick.teamId).name
-      playerModalTimeout = setTimeout((-> $('#player-modal').closeModal()), 12000)
-      $('#player-modal').openModal(complete: -> clearTimeout(playerModalTimeout))
+      $('#player-modal').modal('open')
     @setState(
       currentPick: updatedData.currentPick
       draftStatus: updatedData.draftStatus
@@ -68,7 +71,7 @@
       method: 'POST'
       url: url
       success: ((updatedData) =>
-        $('#confirm-modal').closeModal()
+        $('#confirm-modal').modal('close')
         @refreshData(updatedData)
       ).bind(@)
       error: ((xhr, status, err) -> console.error url, status, err.toString()).bind(@)

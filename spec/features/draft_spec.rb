@@ -36,6 +36,7 @@ feature 'League draft room', js: true do
     end
 
     draft_room.select_player(draft_room.get_player_name(matched_player))
+    draft_room.close_selected_player_modal
     expect(draft_room).to have_player unmatched_player
     expect(draft_room).to have_search_text ''
   end
@@ -50,6 +51,7 @@ feature 'League draft room', js: true do
     player_name = draft_room.get_player_name(player)
     draft_room.select_player(player_name)
     expect(draft_room).to have_selected_player_modal("#{player.first_name} #{player.last_name}")
+    draft_room.close_selected_player_modal
     expect(draft_room).to have_selected_player(player_name)
 
     team_with_second_pick = league_on_page.league_team_with_pick(@league, 2).name
@@ -138,6 +140,7 @@ feature 'League draft room', js: true do
       draft_room.let_pick_timer_run(4)
       time_remaining_before_making_pick = draft_room.time_remaining
       draft_room.select_player(draft_room.get_player_name(Player.first))
+      draft_room.close_selected_player_modal
       expect(draft_room.time_remaining).to be > time_remaining_before_making_pick
     end
 
@@ -150,7 +153,7 @@ feature 'League draft room', js: true do
       draft_room.let_pick_timer_run
       time_remaining_before_filtering = draft_room.time_remaining
       draft_room.select_position 'QB'
-      wait_for_page_ready(1.5) do
+      wait_for_page_ready(2) do
         expect(draft_room.time_remaining).to be < time_remaining_before_filtering
       end
     end

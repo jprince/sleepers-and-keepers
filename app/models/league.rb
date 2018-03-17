@@ -8,8 +8,8 @@ class League < ActiveRecord::Base
   belongs_to :draft_status
   belongs_to :sport
   belongs_to :user
-  has_many :picks, through: :teams
   has_many :teams, dependent: :delete_all
+  has_many :picks, through: :teams
 
   def begin_draft
     update_attributes(draft_status: DraftStatus.find_by(description: 'In Progress'))

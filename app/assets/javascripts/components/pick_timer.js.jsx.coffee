@@ -1,5 +1,5 @@
 @pickDuration = 120
-@PickTimer = React.createClass
+@PickTimer = createReactClass
   componentDidMount: -> @runTimer()
   componentWillReceiveProps: (newProps) ->
     if newProps.isPaused isnt @state.isPaused

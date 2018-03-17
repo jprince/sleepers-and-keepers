@@ -15,94 +15,94 @@ ActiveRecord::Schema.define(version: 20170324035439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "draft_statuses", force: :cascade do |t|
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "draft_statuses", id: :serial, force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "leagues", force: :cascade do |t|
-    t.string   "name",            null: false
-    t.integer  "sport_id",        null: false
-    t.string   "password",        null: false
-    t.integer  "size",            null: false
-    t.integer  "rounds",          null: false
-    t.integer  "user_id",         null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "draft_status_id"
-    t.index ["draft_status_id"], name: "index_leagues_on_draft_status_id", using: :btree
-    t.index ["sport_id"], name: "index_leagues_on_sport_id", using: :btree
-    t.index ["user_id"], name: "index_leagues_on_user_id", using: :btree
+  create_table "leagues", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "sport_id", null: false
+    t.string "password", null: false
+    t.integer "size", null: false
+    t.integer "rounds", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "draft_status_id"
+    t.index ["draft_status_id"], name: "index_leagues_on_draft_status_id"
+    t.index ["sport_id"], name: "index_leagues_on_sport_id"
+    t.index ["user_id"], name: "index_leagues_on_user_id"
   end
 
-  create_table "picks", force: :cascade do |t|
-    t.integer  "overall_pick",                 null: false
-    t.integer  "player_id"
-    t.integer  "round",                        null: false
-    t.integer  "round_pick",                   null: false
-    t.integer  "team_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "keeper",       default: false, null: false
-    t.index ["keeper"], name: "index_picks_on_keeper", using: :btree
-    t.index ["player_id"], name: "index_picks_on_player_id", using: :btree
-    t.index ["team_id"], name: "index_picks_on_team_id", using: :btree
+  create_table "picks", id: :serial, force: :cascade do |t|
+    t.integer "overall_pick", null: false
+    t.integer "player_id"
+    t.integer "round", null: false
+    t.integer "round_pick", null: false
+    t.integer "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "keeper", default: false, null: false
+    t.index ["keeper"], name: "index_picks_on_keeper"
+    t.index ["player_id"], name: "index_picks_on_player_id"
+    t.index ["team_id"], name: "index_picks_on_team_id"
   end
 
-  create_table "players", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name",  null: false
-    t.string   "position",   null: false
-    t.string   "team",       null: false
-    t.text     "injury"
-    t.text     "headline"
-    t.text     "photo_url"
-    t.string   "sport_id",   null: false
-    t.string   "pro_status"
-    t.string   "orig_id",    null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "players", id: :serial, force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name", null: false
+    t.string "position", null: false
+    t.string "team", null: false
+    t.text "injury"
+    t.text "headline"
+    t.text "photo_url"
+    t.string "sport_id", null: false
+    t.string "pro_status"
+    t.string "orig_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_players_on_deleted_at", using: :btree
-    t.index ["sport_id"], name: "index_players_on_sport_id", using: :btree
+    t.index ["deleted_at"], name: "index_players_on_deleted_at"
+    t.index ["sport_id"], name: "index_players_on_sport_id"
   end
 
-  create_table "sports", force: :cascade do |t|
-    t.string   "name",                    null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "positions",  default: [],              array: true
+  create_table "sports", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "positions", default: [], array: true
   end
 
-  create_table "teams", force: :cascade do |t|
-    t.string   "name",                  null: false
-    t.string   "short_name", limit: 10, null: false
-    t.integer  "user_id",               null: false
-    t.integer  "league_id",             null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "draft_pick"
-    t.index ["league_id"], name: "index_teams_on_league_id", using: :btree
+  create_table "teams", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "short_name", limit: 10, null: false
+    t.integer "user_id", null: false
+    t.integer "league_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "draft_pick"
+    t.index ["league_id"], name: "index_teams_on_league_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "first_name",                          null: false
-    t.string   "last_name",                           null: false
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end

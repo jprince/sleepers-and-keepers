@@ -1,5 +1,5 @@
-FactoryGirl.define do
-  FactoryGirl.define do
+FactoryBot.define do
+  FactoryBot.define do
     sequence(:email) { |n| "user-#{n}@example.com" }
   end
 
@@ -56,7 +56,7 @@ FactoryGirl.define do
 
   factory :sport do
     name 'Football'
-    positions %w(QB RB WR TE K DST)
+    positions %w[QB RB WR TE K DST]
   end
 
   factory :team do

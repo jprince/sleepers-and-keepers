@@ -3,7 +3,11 @@ class DraftPicksController < ApplicationController
     pick = Pick.find(create_params[:pick_id])
     league = pick.league
     pick.player_id = create_params[:player_id]
-    if pick.save
+
+    if league.picks.pluck(:player_id).compact.include? pick.player_id
+      flash.alert = 'Player has already been drafted. Please refresh your page and choose a different player.'
+      head :forbidden
+    elsif pick.save
       if league.picks.where(player_id: nil).count.zero?
         league.complete_draft
       end

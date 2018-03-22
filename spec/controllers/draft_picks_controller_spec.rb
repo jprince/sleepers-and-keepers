@@ -15,6 +15,18 @@ describe DraftPicksController do
       expect(@league.draft_status.description).to eq 'In Progress'
     end
 
+    it 'does not allow the user to draft and already-drafted player' do
+      create(:pick, player: @player, team: @team)
+      post :create, params: {
+        league_id: @league.id,
+        pick: {
+          pick_id: @pick.id,
+          player_id: @player.id
+        }
+      }
+      expect(response).to be_forbidden
+    end
+
     it 'assigns a player to the draft pick' do
       post :create, params: {
         league_id: @league.id,

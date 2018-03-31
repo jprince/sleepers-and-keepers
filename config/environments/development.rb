@@ -55,4 +55,11 @@ Rails.application.configure do
   # Which React.js build (development, production, with or without add-ons) to serve
   config.react.addons = true
   config.react.variant = :development
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+  end
 end

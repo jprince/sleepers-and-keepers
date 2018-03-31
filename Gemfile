@@ -29,6 +29,7 @@ gem 'underscore-rails'
 
 group :development, :test do
   gem 'better_errors'
+  gem 'bullet'
   gem 'bundler-audit'
   gem 'coffeelint'
   gem 'factory_bot_rails'

@@ -6,7 +6,7 @@ class DraftResultsController < ApplicationController
 
   def show
     @league = League.find(league_id)
-    @picks = @league.picks.order(:overall_pick)
+    @picks = @league.picks.order(:overall_pick).includes(:player, :team)
   end
 
   private

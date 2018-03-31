@@ -1,10 +1,8 @@
-json.keepers(@keepers) do |keeper|
-  pick = @league.picks.find_by(player_id: keeper.id)
-
-  json.pick "Rd: #{pick.round}, Pick: #{pick.round_pick} (#{pick.overall_pick} overall)"
-  json.pickId pick.id
-  json.playerName keeper.name
-  json.teamId pick.team_id
+json.keepers(@keeper_picks) do |keeper_pick|
+  json.pick "Rd: #{keeper_pick.round}, Pick: #{keeper_pick.round_pick} (#{keeper_pick.overall_pick} overall)"
+  json.pickId keeper_pick.id
+  json.playerName keeper_pick.player.name
+  json.teamId keeper_pick.team_id
 end
 
 json.league(@league.id)

@@ -33,7 +33,7 @@ IfUnlessModifier:
   Enabled: false
 
 LineLength:
-  Max: 99
+  Max: 130
   Exclude:
     - db/seeds.rb
     - db/migrate/20150523204958_add_name_to_users.rb

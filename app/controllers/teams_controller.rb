@@ -22,7 +22,7 @@ class TeamsController < ApplicationController
   def show
     @league = league
     @team = @league.teams.find(params[:id])
-    @players = @team.players
+    @players = @team.players.order('picks.overall_pick')
     @owner = User.find(@team[:user_id])
   end
 

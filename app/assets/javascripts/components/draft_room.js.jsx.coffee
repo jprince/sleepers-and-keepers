@@ -7,7 +7,9 @@
     @setupSubscription()
     $('#confirm-modal').modal()
     playerModalTimeout = setTimeout((-> $('#player-modal').modal('close')), 12000)
-    $('#player-modal').modal(complete: -> clearTimeout(playerModalTimeout))
+    $('#player-modal').modal(complete: ->
+      clearTimeout(playerModalTimeout)
+    )
   componentWillMount: ->
     @delayedSearchCallback = _.debounce(((e) -> @setState(searchText: e.target.value)), 300)
   getInitialState: ->

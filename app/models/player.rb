@@ -29,7 +29,7 @@ class Player < ActiveRecord::Base
 
       if sport
         api = CBSSportsAPI.new(sport.name)
-        data = ActiveSupport::JSON.decode(api.players)['body']['players']
+        data = api.players['body']['players']
         filtered_players = data.select { |player| sport.positions.include? player['position'] }
 
         filtered_players.each do |player|

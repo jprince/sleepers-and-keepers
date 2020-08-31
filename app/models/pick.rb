@@ -3,7 +3,7 @@ class Pick < ActiveRecord::Base
   validates :round, presence: true
   validates :round_pick, presence: true
 
-  belongs_to :player, optional: true
+  belongs_to :player, -> { with_deleted }, optional: true
   belongs_to :team
   has_one :league, through: :team
 

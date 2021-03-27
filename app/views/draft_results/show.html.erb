@@ -6,6 +6,7 @@
 <table class="hoverable">
   <thead>
     <tr>
+      <th>Overall</th>
       <th>Round</th>
       <th>Pick</th>
       <th>Team</th>
@@ -15,6 +16,7 @@
   <tbody>
     <% @picks.each do |pick| %>
       <tr class="pick">
+        <td class="overall"><%= pick.overall_pick %></td>
         <td class="round"><%= pick.round %></td>
         <td class="round-pick"><%= pick.round_pick %></td>
         <td class="team"><%= pick.team.name %></td>

@@ -60,4 +60,4 @@ group :test do
   gem 'shoulda-matchers', '~> 2.8.0'
 end
 
-ruby '2.5.7'
+ruby '2.7.2'
